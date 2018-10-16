@@ -18,5 +18,10 @@
   "homepage": "https://github.com/sjlutterbie/nonprofit-board-match#readme",
   "dependencies": {
     "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
