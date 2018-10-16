@@ -31,8 +31,11 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use('/api/users/', usersRouter);
+
 // Set up static file route
 app.use(express.static('./client/public'));
+
 
 
 // DEVELOPMENT ROUTE FOR TESTING AUTHENTICATION
