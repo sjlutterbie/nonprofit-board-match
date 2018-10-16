@@ -2,9 +2,12 @@
 
 // Load required modules
 const express = require('express');
+const morgan = require('morgan');
 
 // Create core app
 const app = express();
+
+app.use(morgan('common'));
 
 // Set port information
 const { PORT } = require('./config');
