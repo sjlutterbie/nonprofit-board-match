@@ -1,0 +1,22 @@
+{
+  "name": "nonprofit-board-match",
+  "version": "1.0.0",
+  "description": "A platform for connecting service-oriented individuals with local non-profit organizations looking for board members.",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjlutterbie/nonprofit-board-match.git"
+  },
+  "author": "Dr. Simon Lutterbie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sjlutterbie/nonprofit-board-match/issues"
+  },
+  "homepage": "https://github.com/sjlutterbie/nonprofit-board-match#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
