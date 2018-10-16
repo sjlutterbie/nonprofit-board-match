@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/sjlutterbie/nonprofit-board-match#readme",
   "dependencies": {
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "mongoose": "^5.3.4",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

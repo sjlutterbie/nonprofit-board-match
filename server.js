@@ -1,19 +1,32 @@
 'use strict';
 
 // Load required modules
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
   // Use ES6 promises
-  mongoose.Promise = global.Promise
+  mongoose.Promise = global.Promise;
+const passport = require('passport');
+
+// Set port & DB information
+const { PORT, DATABASE_URL } = require('./config');
 
 // Create core app
 const app = express();
 
 app.use(morgan('common'));
 
-// Set port & DB information
-const { PORT, DATABASE_URL } = require('./config');
+// CORS middleware setup
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow_Methods', 'GET, POST, PUT, PATCH, DELETE');
+  if (req.method === 'OPTIONS') {
+    return res.send(204);
+  }
+  next();
+});
 
 // Set up static file route
 app.use(express.static('./client/public'));
