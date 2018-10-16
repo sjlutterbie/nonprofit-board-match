@@ -16,9 +16,11 @@ const { PORT } = require('./config');
 app.use(express.static('./client/public'));
 
 
+// DEVELOPMENT ROUTE FOR TESTING AUTHENTICATION
 
-
-
+app.get('/authTest', (req, res) => {
+  res.send('Successfully accessed /authTest');
+});
 
 
 
