@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/sjlutterbie/nonprofit-board-match#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "mongoose": "^5.3.4",

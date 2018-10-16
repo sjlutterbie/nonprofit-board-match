@@ -9,6 +9,9 @@ const mongoose = require('mongoose');
   mongoose.Promise = global.Promise;
 const passport = require('passport');
 
+// Authorization routers
+const { router: usersRouter } = require('./server/users');
+
 // Set port & DB information
 const { PORT, DATABASE_URL } = require('./config');
 
