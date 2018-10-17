@@ -5,7 +5,8 @@
 $('.js-create-account-link').click(toggleFormType);
 
   function toggleFormType(e) {
-  
+    e.preventDefault();
+
     // Check current state of form
     if (!$('.js-login-form').hasClass('create-account')) {
       // Log In -> CreateAccount
@@ -22,22 +23,47 @@ $('.js-create-account-link').click(toggleFormType);
       $('.js-login-submit').val('Log In')
       $('.js-create-account-link').text('Create Account');
     }
-  
 
-  // Change the visibility of an element
-    // Element: .js-repeat-password
-    
-  // Change the text of an anchor element
-    // Element: .js-create-account-link
-    // Value switch: [Create Account | Log In]
-  
-  // Toggle element class
-    // Element: .js-login-form
-    // Class: create-account
-  
   }
 
 
+// Handle form submission
+
+$('.js-login-submit').click(chooseSubmitAction);
+
+  function chooseSubmitAction(e) {
+    e.preventDefault();
+    
+    let output;
+    
+    if($('.js-login-form').hasClass('create-account')) {
+      // createUser Form
+      output = createUser(e);
+    } else {
+      // logInUser Form
+      output = logInUser(e);
+    }
+    
+    return output;
+    
+  }
+  
+  
+  function logInUser(e) {
+  
+    alert('You tried to log in!');
+  
+    return 'logInUser';
+  
+  }
+  
+  function createUser(e) {
+  
+    alert('You tried to create an account!');
+  
+    return 'createUser';
+    
+  }
 
 
    // If form does NOT have class 'create-account':
@@ -77,7 +103,11 @@ $('.js-create-account-link').click(toggleFormType);
 
 try {
   module.exports = {
-    toggleFormType};
+    toggleFormType,
+    logInUser,
+    createUser,
+    chooseSubmitAction
+  };
 }
 catch(error) {
 }

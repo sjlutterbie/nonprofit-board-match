@@ -32,7 +32,9 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
+    "import-fresh": "^2.0.0",
     "jsdom": "^12.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "sinon": "^7.0.0"
   }
 }
