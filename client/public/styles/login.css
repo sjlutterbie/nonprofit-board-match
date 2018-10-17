@@ -55,3 +55,20 @@ body {
     margin: 4px;
   }
 
+.create-account-link {
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+}
+
+.default-credentials {
+  text-align: center;
+}
+
+  .d-c-title {
+    text-decoration: underline;
+  }
+  
+  .d-c-label {
+    font-weight: bold;
+  }

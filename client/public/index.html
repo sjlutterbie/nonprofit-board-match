@@ -30,19 +30,18 @@
         <label>Password
           <input type="password" name="password">
         </label>
-        <label>Repeat password
+        <label class="js-repeat-password" hidden>Repeat password
           <input type="password" name="password-repeat">
         </label>
-        <input type="submit" value="Log in">
+        <input type="submit" value="Log in" name="login-submit">
       </form>
+      <a href="#" class="create-account-link js-create-account-link login">Create account</a>
       
-      
-      
-      <!-- TODO: Replace this button with a login form that handles JWT user
-            authentication. 
-           DEV TODO: This button should default to the 'TESTER' user account, 
-            whose data is generated each session via the mockAPI -->
-      <a href="/portal" title="Enter Board Match Portal"><button>Get started</button></a>
+      <p class="default-credentials">
+        <span class="d-c-title">Demo user</span><br/>
+        <span class="d-c-label">Username:</span> NArmstrong<br/>
+        <span class="d-c-label">Password:</span> GiantLeapForMankind</p>
+      </p>
     </div>
     
     
@@ -50,6 +49,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
+  <script type="text/javascript" src="../js/login-form.js"></script>
 
   </body>
 </html>
