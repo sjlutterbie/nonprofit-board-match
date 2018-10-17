@@ -11,6 +11,8 @@ const passport = require('passport');
 
 // Authorization routers
 const { router: usersRouter } = require('./server/users');
+const { router: authRouter, localStrategy,
+                jwtStrategy } = require('./server/auth');
 
 // Set port & DB information
 const { PORT, DATABASE_URL } = require('./config');
@@ -31,7 +33,13 @@ app.use(function (req, res, next) {
   next();
 });
 
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 app.use('/api/users/', usersRouter);
+app.use('/api/auth', authRouter);
+
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // Set up static file route
 app.use(express.static('./client/public'));
@@ -40,19 +48,11 @@ app.use(express.static('./client/public'));
 
 // DEVELOPMENT ROUTE FOR TESTING AUTHENTICATION
 
-app.get('/authTest', (req, res) => {
-  res.send('Successfully accessed /authTest');
+app.get('/api/protected', jwtAuth, (req, res) => {
+  return res.json({
+    data: 'Welcome, friend!'
+  });
 });
-
-
-
-
-
-
-
-
-
-
 
 // Catch-all endpoint for requests to non-existing endpoints
 
