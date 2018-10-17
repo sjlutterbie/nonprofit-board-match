@@ -137,15 +137,6 @@ describe('Login Form JS', function() {
       
     });
     
-    describe('createUser', function() {
-      it('Should be a function', function() {
-        expect(lF.createUser).to.be.a('function');
-      });
-      
-      // TODO: USER CREDENTIALING INTEGRATION TEST
-      
-    });
-  
   });
 
 });

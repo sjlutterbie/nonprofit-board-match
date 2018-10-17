@@ -98,8 +98,6 @@ $('.js-login-submit').click(chooseSubmitAction);
   
   function createUser(e) {
   
-    alert('You tried to create an account!');
-  
     return 'createUser';
     
   }
