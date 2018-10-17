@@ -2,6 +2,9 @@
 
 // Load testing packages
 const chai = require('chai');
+const chaiHttp = require('chai-http');
+chai.use(chaiHttp);
+
 const sinon = require('sinon');
 
 // Simplify expect functions
@@ -129,8 +132,8 @@ describe('Login Form JS', function() {
       it('Should be a function', function() {
         expect(lF.logInUser).to.be.a('function');
       });
-      
-      // TODO: Functionality
+
+    // TODO: USER CREDENTIALING INTEGRATION TEST
       
     });
     
@@ -139,7 +142,7 @@ describe('Login Form JS', function() {
         expect(lF.createUser).to.be.a('function');
       });
       
-      // TODO: Functionality
+      // TODO: USER CREDENTIALING INTEGRATION TEST
       
     });
   

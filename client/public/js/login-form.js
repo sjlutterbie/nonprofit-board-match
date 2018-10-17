@@ -50,12 +50,51 @@ $('.js-login-submit').click(chooseSubmitAction);
   
   
   function logInUser(e) {
-  
-    alert('You tried to log in!');
-  
+    
+    // Build submission data (username, password)
+    const formData = {
+      username: $('input[name="username"]').val(),
+      password: $('input[name="password"]').val()
+    };
+    
+    $.ajax({
+      url: '/api/auth/login',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(formData),
+      dataType: 'json',
+      success: loginSuccess,
+      error: loginFailure
+    });
+      
+    // Send getJSON to "/login"
+    // If failure... display Alert
+    // If success... redirect to /portal
+
     return 'logInUser';
   
   }
+  
+    function loginSuccess(res) {
+
+      // DEVELOPMENT: Request a protected page
+      let request = $.ajax({
+        url: '/api/protected',
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${res.authToken}`,
+          contentType: 'application/json'
+        },
+        success: function(res) { $('body').html(res.data)}
+      });
+        
+    }
+    
+    function loginFailure(res) {
+      $('body').html(`${res.status}: ${res.responseText}`);
+    }
+    
+    
   
   function createUser(e) {
   
