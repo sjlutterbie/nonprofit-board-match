@@ -102,6 +102,7 @@ function closeServer() {
 // If server.js is called directly, launch the server
 if (require.main === module) {
   runServer(DATABASE_URL).catch(err => console.error(err));
+// Otherwise, handle like a module (for TDD purposes)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -110,4 +111,4 @@ module.exports = {
   runServer,
   closeServer,
   app
-};
+};  

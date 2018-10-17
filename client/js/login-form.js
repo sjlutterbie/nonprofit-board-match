@@ -1,6 +1,9 @@
 'use strict';
 
 // Handle click on "Create account" link (Toggle)
+function formTypeToggle() {
+}
+
   // If form does NOT have class 'create-account':
     // Convert login form to create account form
       // Display "repeat password" input
@@ -29,3 +32,15 @@
       
     
   
+// If jQuery is loaded this is running live
+try {
+  if ($) {
+    formTypeToggle();
+  }
+}
+// If $ is undefined, treat as a module (testing mode)
+catch(error) {
+  module.exports = {
+    formTypeToggle
+  };
+}

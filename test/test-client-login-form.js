@@ -23,6 +23,15 @@ const domBody = new JSDOM(
       </html>`).window.document
   .querySelector('body');
   
+// Load the module
+const lF = require('../client/js/login-form');
+  
 describe('[Create Account | Log in] link', function() {
+  
+  describe('formTypeToggle()', function() {
+    it('Should be a function', function() {
+      expect(lF.formTypeToggle).to.be.a('function');
+    });
+  });
   
 });
