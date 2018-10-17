@@ -1,39 +1,58 @@
 'use strict';
 
 // Load required modules
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
   // Use ES6 promises
-  mongoose.Promise = global.Promise
+  mongoose.Promise = global.Promise;
+const passport = require('passport');
+
+// Authorization routers
+const { router: usersRouter } = require('./server/users');
+const { router: authRouter, localStrategy,
+                jwtStrategy } = require('./server/auth');
+
+// Set port & DB information
+const { PORT, DATABASE_URL } = require('./config');
 
 // Create core app
 const app = express();
 
 app.use(morgan('common'));
 
-// Set port & DB information
-const { PORT, DATABASE_URL } = require('./config');
+// CORS middleware setup
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow_Methods', 'GET, POST, PUT, PATCH, DELETE');
+  if (req.method === 'OPTIONS') {
+    return res.send(204);
+  }
+  next();
+});
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
+app.use('/api/users/', usersRouter);
+app.use('/api/auth', authRouter);
+
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // Set up static file route
 app.use(express.static('./client/public'));
 
 
+
 // DEVELOPMENT ROUTE FOR TESTING AUTHENTICATION
 
-app.get('/authTest', (req, res) => {
-  res.send('Successfully accessed /authTest');
+app.get('/api/protected', jwtAuth, (req, res) => {
+  return res.json({
+    data: 'Welcome, friend!'
+  });
 });
-
-
-
-
-
-
-
-
-
-
 
 // Catch-all endpoint for requests to non-existing endpoints
 
@@ -83,6 +102,7 @@ function closeServer() {
 // If server.js is called directly, launch the server
 if (require.main === module) {
   runServer(DATABASE_URL).catch(err => console.error(err));
+// Otherwise, handle like a module (for TDD purposes)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -91,4 +111,4 @@ module.exports = {
   runServer,
   closeServer,
   app
-};
+};  

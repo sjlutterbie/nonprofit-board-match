@@ -1,1 +1,58 @@
-Hello, world!
+<!DOCTYPE html>
+
+<html lang="en">
+  
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Board match</title>
+    <meta name="description" content="A platform for service-minded individuals
+      and local non-profits in search of board-level support to connect.">
+      
+    <!-- CSS Reset -->
+    <link rel="stylesheet" type="text/css" href="styles/reset.css">
+    
+    <!-- Custom styles -->
+    <link rel="stylesheet" type="text/css" href="styles/layout.css">
+    <link rel="stylesheet" type="text/css" href="styles/login.css">
+    <link rel="stylesheet" type="text/css" href="styles/typography.css">
+    
+  </head>
+
+  <body>
+    <div class="card login-box">
+      <h1>Welcome to BoardMatch</h1>
+      <p class="dev-notice">Note: This landing page used for development purposes.</p>
+      <form class="login-form js-login-form">
+          <h2 class="login-form-heading js-login-form-heading">Log In</h2>
+          <label>Username
+            <input type="text" name="username">
+          </label>
+          <label>Password
+            <input type="password" name="password">
+          </label>
+          <label class="js-repeat-password" hidden>Repeat password
+            <input type="password" name="password-repeat">
+          </label>
+          <input type="submit" value="Log in" name="login-submit" class="js-login-submit">
+        </fieldset>
+      </form>
+      <a href="#" class="create-account-link js-create-account-link login">Create account</a>
+
+      
+      <p class="default-credentials">
+        <span class="d-c-title">Demo user</span><br/>
+        <span class="d-c-label">Username:</span> NArmstrong<br/>
+        <span class="d-c-label">Password:</span> GiantLeapForMankind</p>
+      </p>
+    </div>
+    
+    
+  <!-- Javascript -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+  <script type="text/javascript" src="./js/login-form.js"></script>
+
+  </body>
+</html>
