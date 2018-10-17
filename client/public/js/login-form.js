@@ -6,10 +6,24 @@ $('.js-create-account-link').click(toggleFormType);
 
   function toggleFormType(e) {
   
-  // Check whether an element has a specific class
-    // Element: .js-login-form
-    // Class: create-account
-    
+    // Check current state of form
+    if (!$('.js-login-form').hasClass('create-account')) {
+      // Log In -> CreateAccount
+      $('.js-login-form').addClass('create-account');
+      $('.js-login-form-heading').text('Create Account');
+      $('.js-repeat-password').show();
+      $('.js-login-submit').val('Create Account');
+      $('.js-create-account-link').text('Log In');
+    } else {
+      // Create Account -> Log In
+      $('.js-login-form').removeClass('create-account');
+      $('.js-login-form-heading').text('Log In');
+      $('.js-repeat-password').hide();
+      $('.js-login-submit').val('Log In')
+      $('.js-create-account-link').text('Create Account');
+    }
+  
+
   // Change the visibility of an element
     // Element: .js-repeat-password
     
@@ -23,24 +37,6 @@ $('.js-create-account-link').click(toggleFormType);
   
   }
 
-
-// Helper functions
-  function checkElementForClass(elementIdentifier, cssClass) {
-    
-    // Verify parameters are strings
-    [elementIdentifier, cssClass].forEach( parameter => {
-      if(typeof parameter != 'string') {
-        throw('checkElementForClass: Parameter is not a string');
-      }
-    });
-    
-    console.log('elementIdentifier: ' + elementIdentifier);
-    console.log('cssClass: ' + cssClass);
-    console.log('Output: ' + $(elementIdentifier).hasClass(cssClass))
-    
-    return $(elementIdentifier).hasClass(cssClass);
-
-  }
 
 
 
@@ -81,9 +77,7 @@ $('.js-create-account-link').click(toggleFormType);
 
 try {
   module.exports = {
-    toggleFormType,
-    checkElementForClass
-  };
+    toggleFormType};
 }
 catch(error) {
 }

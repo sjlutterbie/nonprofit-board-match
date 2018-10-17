@@ -27,77 +27,55 @@ describe('Login Form JS', function() {
         expect(lF.toggleFormType).to.be.a('function');
       });
     });
-  
-    // TODO: Test & build remaining functionality
-
-  });
-
-  describe('Helper functions', function() {
     
-    describe('checkElementForClass()', function() {
-      it('Should be a function', function() {
-        expect(lF.checkElementForClass).to.be.a('function');
-      });
-      it('Should return a boolean', function() {
-        $('body').html('<div class="a b"></div>');
-        expect(lF.checkElementForClass("a","b")).to.be.a('boolean');
-      });
-      it('Should require two string paramaters', function() {
-        const testCases = [
-          ["a", "b", true],               // Success
-          [1, "b", false],                // First element not string
-          ["a", 1, false],                // Second element not string
-          [1,2, false],                   // Neither element string
-          [[], "b", false],               // Array as parameter
-          ["a", {}, false],               // Object as parameter
-          [function foo() {}, "b", false] // Function as paramter
-        ];
-        testCases.forEach(function(testCase) {
-          if(testCase[2]) {
-            expect(lF.checkElementForClass.bind(lF, testCase[0], testCase[1]))
-            .to.not.throw('checkElementForClass: Parameter is not a string');
-          } else {
-            expect(lF.checkElementForClass.bind(lF, testCase[0], testCase[1]))
-            .to.throw('checkElementForClass: Parameter is not a string');
-          }
-        });
-      });
+    describe('DOM manipulation functionality', function() {
       
-      it('Should check whether an HTML element has a given class', function() {
-        // Set up test DOM
-          // Multiple elementIdentifier (testClassX) for each case:
-            // Has the target class
-            // Has a different class
-            // Has no second class
-        $('body').html(
-          `<div class="testClass1 targetClass"></div>
-           <div class="testClass2 targetClass"></div>
-           <div class="testClass3 incorrectClass1"></div>
-           <div class="testClass4 incorrectClass1"></div>
-           <div class="testClass5"></div>
-           <div class="testClass6"></div>`
-        );
-        const testCases = [
-          ['.testClass1', 'targetClass', true],
-          ['.testClass2', 'targetClass', true],
-          ['.testClass3', 'targetClass', false],
-          ['.testClass4', 'targetClass', false],
-          ['.testClass5', 'targetClass', false],
-          ['.testClass6', 'targetClass', false],
-        ];
-        // Run tests
-        testCases.forEach(function(testCase) {
-          expect(lF.checkElementForClass(testCase[0], testCase[1], $))
-          .to.equal(testCase[2]);
-        });
-        // Reset test DOM
+      it('Should transform the Login form to a Create Account form', function(){
+        // Create test DOM
+        $('body').html(`
+           <div class="js-login-form"></div>
+           <div class="js-login-form-heading">Log In</div>
+           <div class="js-repeat-password" style="display: none;"></div>
+           <input type="submit" value="Log In" class="js-login-submit"></input>
+           <a class="js-create-account-link">Create Account</a>
+        `);  
+        // Trigger the event
+        lF.toggleFormType();
+        // Evaluate results
+        expect($('.js-login-form').hasClass('create-account')).to.equal(true);
+        expect($('.js-login-form-heading').text()).to.equal('Create Account');
+        expect($('.js-repeat-password').css('display')).to.equal('block');
+        // Hack: Assign to constant because expect() returns .val() as ''
+        let buttonVal = $('.js-login-submit').val();
+        expect(buttonVal).to.equal('Create Account');
+        expect($('.js-create-account-link').text()).to.equal('Log In');
+        
+        //Reset test DOM
         $('body').html('');
       });
       
+      it('Should transform the Create Account form to a Log In form', function(){
+        // Create test DOM
+        $('body').html(`
+           <div class="js-login-form create-account"></div>
+           <div class="js-login-form-heading">Create Account</div>
+           <div class="js-repeat-password" style="display: block;"></div>
+           <input type="submit" value="Create Account" class="js-login-submit"></input>
+           <a class="js-create-account-link">Log In</a>
+        `);  
+        // Trigger the event
+        lF.toggleFormType();
+        // Evaluate results
+        expect($('.js-login-form').hasClass('create-account')).to.equal(false);
+        expect($('.js-login-form-heading').text()).to.equal('Log In');
+        expect($('.js-repeat-password').css('display')).to.equal('none');
+        // Hack: Assign to constant because expect() returns .val() as ''
+        let buttonVal = $('.js-login-submit').val();
+        expect(buttonVal).to.equal('Log In');
+        expect($('.js-create-account-link').text()).to.equal('Create Account');
+        //Reset test DOM
+        $('body').html('');
+      });
     });
-    
-    
   });
-  
-  
 });
