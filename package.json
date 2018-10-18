@@ -19,19 +19,25 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "cross-fetch": "^2.2.2",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
+    "http": "0.0.0",
     "jquery": "^3.3.1",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.3.4",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "chai-http": "^4.2.0",
+    "faker": "^4.1.0",
     "import-fresh": "^2.0.0",
     "jsdom": "^12.2.0",
     "mocha": "^5.2.0",

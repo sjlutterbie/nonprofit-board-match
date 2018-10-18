@@ -13,6 +13,7 @@ $('.js-create-account-link').click(toggleFormType);
       $('.js-login-form').addClass('create-account');
       $('.js-login-form-heading').text('Create Account');
       $('.js-repeat-password').show();
+      $('input[name="password-repeat"]').attr('required', true);
       $('.js-login-submit').val('Create Account');
       $('.js-create-account-link').text('Log In');
     } else {
@@ -20,16 +21,19 @@ $('.js-create-account-link').click(toggleFormType);
       $('.js-login-form').removeClass('create-account');
       $('.js-login-form-heading').text('Log In');
       $('.js-repeat-password').hide();
+      $('input[name="password-repeat"]').attr('required', false);
       $('.js-login-submit').val('Log In')
       $('.js-create-account-link').text('Create Account');
     }
 
   }
 
-
 // Handle form submission
 
-$('.js-login-submit').click(chooseSubmitAction);
+$('.js-login-form').submit(function(e) {
+  e.preventDefault();
+  chooseSubmitAction(e);
+});
 
   function chooseSubmitAction(e) {
     e.preventDefault();
@@ -51,6 +55,7 @@ $('.js-login-submit').click(chooseSubmitAction);
   // USER LOGIN PATHWAY
   
   function logInUser(e) {
+    e.preventDefault();
     
     // Build submission data (username, password)
     const formData = {
@@ -64,16 +69,16 @@ $('.js-login-submit').click(chooseSubmitAction);
       contentType: 'application/json',
       data: JSON.stringify(formData),
       dataType: 'json',
-      success: loginSuccess,
-      error: loginFailure
+      success: loadPortal,
+      error: loginError
     });
       
-    // For testing purposes (but not locked)  
+    // For testing purposes 
     return 'logInUser';
   
   }
-  
-    function loginSuccess(res) {
+
+    function loadPortal(res) {
 
       // DEVELOPMENT: Request simple 'protected page'
       const resUrl = '/api/protected';
@@ -88,23 +93,47 @@ $('.js-login-submit').click(chooseSubmitAction);
           Authorization: `Bearer ${res.authToken}`,
           contentType: 'application/json'
         },
-        success: function(res) { $('body').html(res.data)},
-        error: function(res) {
-          $('body').html(`${res.status}: ${res.responseText}`);
-        }
+        success: loadPortalSuccess,
+        error: loadPortalFailure
       });
         
     }
+      
+      function loadPortalSuccess(res) {
+        
+        $('body').html(res.data);
+        
+        // For testing purposes
+        return res;
+        
+      }
     
-    function loginFailure(res) {
+    
+      function loadPortalFailure(res) {
+        
+        $('body').html(`${res.status}: ${res.responseText}`);
+        
+        // For testing purposes
+        return res;
+        
+      }
+    
+    
+    function loginError(res) {
+
       $('body').html(`${res.status}: ${res.responseText}`);
+      
+      // For testing purposes
+      return res
     }
     
     
   
   function createUser(e) {
   
-    // For testing purposes (but not locked)
+  
+  
+    // For testing purposes
     return 'createUser';
     
   }
