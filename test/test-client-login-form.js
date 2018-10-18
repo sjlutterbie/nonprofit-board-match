@@ -110,8 +110,6 @@ describe('Login Form User Interactions', function() {
       });
     });
   });
-  
-
 });
 
 describe('Login User integration tests', function() {
