@@ -101,8 +101,9 @@ $('.js-login-form').submit(function(e) {
       
       function loadPortalSuccess(res) {
         
-        $('body').html(res.data);
-        
+        // Clears html, to rebuild via the Portal
+        $('html').html(res.data);
+
         // For testing purposes
         return res;
         
