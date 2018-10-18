@@ -3,8 +3,9 @@
 // Load testing packages
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-
+  chai.use(chaiHttp);
+const faker = require('faker');
+const mongoose = require('mongoose');
 const sinon = require('sinon');
 
 // Simplify expect functions
@@ -20,25 +21,41 @@ global.$ = require('jquery')(window);
 // Load the module //NOTE: let instead of const so it can be refreshed
 const lF = require('../client/public/js/login-form');
 
+// Load testing server details
+require('dotenv').config();
+const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../config');
+const {app, runServer, closeServer } = require('../server');
+const { localStrategy, jwtStrategy } = require('../server/auth');
+
+// Load Test user credentials
+const testUser =  {
+  username: 'testUser',
+  password: 'testPassword'
+};
+
 // BEGIN TESTING
   
-describe('Login Form JS', function() {
+describe('Login Form User Interactions', function() {
 
   describe('[Create Account | Log in] link', function() {
   
     describe('toggleFormType function', function() {
+      
       it('Should be a function', function() {
         expect(lF.toggleFormType).to.be.a('function');
       });
+      
     });
     
     describe('DOM manipulation functionality', function() {
+
       it('Should transform the Login form to a Create Account form', function(){
         // Create test DOM
         $('body').html(`
            <div class="js-login-form"></div>
            <div class="js-login-form-heading">Log In</div>
-           <div class="js-repeat-password" style="display: none;"></div>
+           <input type="text" class="js-repeat-password"
+                  name="password-repeat" style="display: none;"></input>
            <input type="submit" value="Log In" class="js-login-submit"></input>
            <a class="js-create-account-link">Create Account</a>
         `);  
@@ -52,7 +69,8 @@ describe('Login Form JS', function() {
         expect(e.preventDefault.called).to.equal(true);
         expect($('.js-login-form').hasClass('create-account')).to.equal(true);
         expect($('.js-login-form-heading').text()).to.equal('Create Account');
-        expect($('.js-repeat-password').css('display')).to.equal('block');
+        expect($('.js-repeat-password').css('display')).to.equal('inline-block');
+        expect($('input[name="password-repeat"]').prop('required')).to.equal(true);
         // Hack: Assign to constant because expect() returns .val() as ''
         let buttonVal = $('.js-login-submit').val();
         expect(buttonVal).to.equal('Create Account');
@@ -60,12 +78,14 @@ describe('Login Form JS', function() {
         //Reset test DOM
         $('body').html('');
       });
+      
       it('Should transform the Create Account form to a Log In form', function(){
         // Create test DOM
         $('body').html(`
            <div class="js-login-form create-account"></div>
            <div class="js-login-form-heading">Create Account</div>
-           <div class="js-repeat-password" style="display: block;"></div>
+           <input type="text" class="js-repeat-password"
+                  name="password-repeat" style="display: block;" required></input>
            <input type="submit" value="Create Account" class="js-login-submit"></input>
            <a class="js-create-account-link">Log In</a>
         `);  
@@ -80,6 +100,7 @@ describe('Login Form JS', function() {
         expect($('.js-login-form').hasClass('create-account')).to.equal(false);
         expect($('.js-login-form-heading').text()).to.equal('Log In');
         expect($('.js-repeat-password').css('display')).to.equal('none');
+        expect($('.js-repeat-password').prop('required')).to.equal(false);
         // Hack: Assign to constant because expect() returns .val() as ''
         let buttonVal = $('.js-login-submit').val();
         expect(buttonVal).to.equal('Log In');
@@ -93,13 +114,14 @@ describe('Login Form JS', function() {
   describe('Form submit button', function() {
     
     describe('chooseSubmitAction', function() {
+      
       it('Should be a function', function() {
         expect(lF.chooseSubmitAction).to.be.a('function');
       });
       
       describe('On  createUser Form', function() {
+        
         it('Should trigger createUser(e)', function() {
-          
           // Set test variables
           $('body').html('<div class="js-login-form create-account"></div>');
           const e = {
@@ -107,12 +129,14 @@ describe('Login Form JS', function() {
             target: $('body')
           };
           // Run test
-          expect(lF.chooseSubmitAction(e)).to.equal(lF.createUser(e));
+          expect(lF.chooseSubmitAction(e)).to.equal('createUser');
           // Reset DOM
           $('body').html('');
         });
       });
+      
       describe('On logInUser Form', function() {
+
         it('Should trigger logInUser()', function() {
           // Set test variables
           $('body').html('<div class="js-login-form"></div>');
@@ -121,28 +145,57 @@ describe('Login Form JS', function() {
             target: $('body')
           };
           // Run test
-          expect(lF.chooseSubmitAction(e)).to.equal(lF.logInUser(e));
+          expect(lF.chooseSubmitAction(e)).to.equal('logInUser');
           // Reset DOM
           $('body').html('');
         });
       });
     });
-    
-    describe('logInUser', function() {
-      it('Should be a function', function() {
-        expect(lF.logInUser).to.be.a('function');
-      });
-
-    // TODO: USER CREDENTIALING INTEGRATION TEST
-      
-    });
-    
-    describe('createUser', function() {
-      it('Should be a function', function() {
-        expect(lF.createUser).to.be.a('function');
-      });
-    });
-    
   });
+});
+
+describe('Login User integration tests', function() {
+  
+
+  /*
+  
+  Log In User chain:
+  ==================
+  Start: logInUser
+  ->  Success: loadPortal
+      ->  Success: loadPortalSuccess
+      ->  Error: loadPortalError
+  ->  Error: loginError
+  
+  */
+
+  // Initialize & close test server
+  before(function() {
+    return runServer(TEST_DATABASE_URL);
+  });
+  
+  after(function() {
+    return closeServer();
+  });
+
+  /*
+  
+  Test cases
+  ==========
+  - Valid username & password -> Success
+  - Invalid username (w/ valid password for testUser) -> Failure
+  - Valid username w/ invalid password -> Failure
+  
+  */
+  
+  // Create test cases
+  const testCases = [
+    [testUser.username, testUser.password, true],
+    [testUser.username+'X', testUser.password, false],
+    [testUser.username, testUser.password+'X', false]
+  ];
+
+  // TODO: Build these tests in a way that supports their async nature.
+
 
 });
