@@ -25,7 +25,7 @@ const lF = require('../client/public/js/login-form');
 require('dotenv').config();
 const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../config');
 const {app, runServer, closeServer } = require('../server');
-const { localStrategy, jwtStrategy } = require('../server/auth');
+const { localStrategy, jwtStrategy } = require('../server/api/auth');
 
 // Load Test user credentials
 const testUser =  {

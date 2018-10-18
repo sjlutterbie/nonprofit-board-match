@@ -10,9 +10,9 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 // Authorization routers
-const { router: usersRouter } = require('./server/users');
+const { router: usersRouter } = require('./server/api/users');
 const { router: authRouter, localStrategy,
-                jwtStrategy } = require('./server/auth');
+                jwtStrategy } = require('./server/api/auth');
 
 // Set port & DB information
 const { PORT, DATABASE_URL } = require('./config');
