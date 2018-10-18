@@ -10,11 +10,13 @@ const jwt = require('jsonwebtoken');
 const expect = chai.expect;
 
 // Load required modules
-//const portal = require('../../server/portal');
+const portal = require('../../server/portal');
 const { app, runServer, closeServer } = require('../../index');
 const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../../config');
 
-describe('/portal', function() {
+
+
+describe('Portal: Router', function() {
   
   before(function() {
     return runServer(TEST_DATABASE_URL);
@@ -103,4 +105,18 @@ describe('/portal', function() {
         });
     });
   });
+});
+
+describe('Portal: View', function() {
+  
+  describe('portalView()', function() {
+    it('Should be a function', function() {
+      expect(portal.portalView).to.be.a('function');
+    });
+    it('Should return a string', function() {
+      expect(portal.portalView()).to.be.a('string');
+    });
+  });
+  
+  
 });

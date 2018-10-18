@@ -80,12 +80,13 @@ $('.js-login-form').submit(function(e) {
 
     function loadPortal(res) {
 
-      // DEVELOPMENT: Request simple 'protected page'
       const resUrl = '/portal';
       
       // TODO: Elevate resUrl to function parameter, to enable testing
+      
+      // Store the JWT in local storage
+      localStorage.setItem('JWT', JSON.stringify(res.authToken))
 
-      // DEVELOPMENT: Request a protected page
       let request = $.ajax({
         url: resUrl,
         type: 'GET',
@@ -102,7 +103,7 @@ $('.js-login-form').submit(function(e) {
       function loadPortalSuccess(res) {
         
         // Clears html, to rebuild via the Portal
-        $('html').html(res.data);
+        document.write(res);
 
         // For testing purposes
         return res;
@@ -112,7 +113,7 @@ $('.js-login-form').submit(function(e) {
     
       function loadPortalFailure(res) {
         
-        $('body').html(`${res.status}: ${res.responseText}`);
+        $('html').html(`${res.status}: ${res.responseText}`);
         
         // For testing purposes
         return res;
