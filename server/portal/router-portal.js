@@ -8,24 +8,20 @@ const config = require('../../config');
 const { jwtStrategy } = require('../api/auth');
   passport.use(jwtStrategy);
 const jwtAuth = passport.authenticate('jwt', {session: false});
+const bodyParser = require('body-parser');
+  const jsonParser = bodyParser.json();
 
 // Load View
 const { portalView} = require('./view-portal');
 
 // Get request to load portal
 router.get('/', jwtAuth, (req, res) => {
+
+  // Extract arguments for portalBuilder
+  const profType = req.query.profType
+  const profId = req.query.profId
   
-  // Does the user have a user profile?
-  console.log(req);
-  
-    // If yes, load the individual profile
-    // If no, load the "Create profile" userflow.
-    
-    // So I need an indProf model.
-  
-  
-  
-  return res.send(portalView());
+  return res.send(portalView(profType, profId));
 
   
 });

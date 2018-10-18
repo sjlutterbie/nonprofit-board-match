@@ -86,7 +86,12 @@ $('.js-login-form').submit(function(e) {
       
       // Store the JWT in local storage
       localStorage.setItem('JWT', JSON.stringify(res.authToken))
-
+      
+      const requestData = {
+        profType: res.profType,
+        profID: res.user.indProf
+      };
+      
       let request = $.ajax({
         url: resUrl,
         type: 'GET',
@@ -94,7 +99,7 @@ $('.js-login-form').submit(function(e) {
           Authorization: `Bearer ${res.authToken}`,
           contentType: 'application/json'
         },
-        data: JSON.stringify(res.authToken), // For finding userAccount
+        data: requestData, // For finding userAccount
         success: loadPortalSuccess,
         error: loadPortalFailure
       });

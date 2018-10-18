@@ -14,8 +14,6 @@ const portal = require('../../server/portal');
 const { app, runServer, closeServer } = require('../../index');
 const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../../config');
 
-
-
 describe('Portal: Router', function() {
   
   before(function() {

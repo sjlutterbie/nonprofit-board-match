@@ -22,9 +22,11 @@ router.use(bodyParser.json());
 router.post('/login', localAuth, (req, res) => {
   const authToken = createAuthToken(req.user.serialize());
 
-  console.log(authToken);
-  
-  res.json({authToken});
+  res.json({
+    authToken: authToken,
+    user: req.user.serialize(),
+    profType: 'indProf' // For 'buildPortal(profTYpe, profID)'
+  });
   
 });
 

@@ -1,6 +1,6 @@
 'use strict';
 
-function portalView() {
+function portalView(profType, profId) {
   
   const viewHTML = `
   <!DOCTYPE html>
@@ -37,7 +37,10 @@ function portalView() {
         </nav>
         
         <main role="main">
-          This will be the main content area
+          <p>This will be the main content area.</p>
+          <p>It will render data relevant to:</p>
+          <p>profType: ${profType}</p>
+          <p>profId: ${profId} (undefined is OK)</p>
         </main>
     
         <!-- Load jQuery -->
