@@ -111,47 +111,7 @@ describe('Login Form User Interactions', function() {
     });
   });
   
-  describe('Form submit button', function() {
-    
-    describe('chooseSubmitAction', function() {
-      
-      it('Should be a function', function() {
-        expect(lF.chooseSubmitAction).to.be.a('function');
-      });
-      
-      describe('On  createUser Form', function() {
-        
-        it('Should trigger createUser(e)', function() {
-          // Set test variables
-          $('body').html('<div class="js-login-form create-account"></div>');
-          const e = {
-            preventDefault: sinon.spy(),
-            target: $('body')
-          };
-          // Run test
-          expect(lF.chooseSubmitAction(e)).to.equal('createUser');
-          // Reset DOM
-          $('body').html('');
-        });
-      });
-      
-      describe('On logInUser Form', function() {
 
-        it('Should trigger logInUser()', function() {
-          // Set test variables
-          $('body').html('<div class="js-login-form"></div>');
-          const e = {
-            preventDefault: sinon.spy(),
-            target: $('body')
-          };
-          // Run test
-          expect(lF.chooseSubmitAction(e)).to.equal('logInUser');
-          // Reset DOM
-          $('body').html('');
-        });
-      });
-    });
-  });
 });
 
 describe('Login User integration tests', function() {

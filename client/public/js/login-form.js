@@ -131,47 +131,60 @@ $('.js-login-form').submit(function(e) {
   
   function createUser(e) {
   
+  // Verify password fields match
+  const password = $('input[name="password"]').val();
+  const passwordRepeat = $('input[name="password-repeat"]').val();
   
+  if(password != passwordRepeat) {
+    $('.alert-area').text('Passwords must match');
+    return;
+  }
+  
+  // Handle form submission
+  const formData = {
+    username: $('input[name="username"]').val(),
+    password: $('input[name="password"]').val()
+  };
+  
+  $.ajax({
+      url: '/api/users',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(formData),
+      dataType: 'json',
+      success: createUserSuccess,
+      error: createUserError
+    });
   
     // For testing purposes
     return 'createUser';
     
   }
-
-
-   // If form does NOT have class 'create-account':
-    // Convert login form to create account form
-      // Display "repeat password" input
-      // Add "create-account" class to form element
-      // Change "Create account" link to "Log in"
-  // If form HAS class 'create-account':
-    // Convert create account form to login form
-      // Hide "repeat password" input
-      // Remove "create-account" class from form element
-      // Change "Log in" link to "Create Account"
- 
-
-// Handle form submission
-  // If form does NOT have class "create-account"
-    // POST user authorization
-      // If failed:
-        // Display error, reset form
-      // If success:
-        // Redirect to /portal
-  // If form HAS class 'create-account'
-    // Handle client-side username/password validation
-    // POST account creation
-      // If failed:
-        // Display error, reset form
-      // If success:
-        // Redirect to /portal
   
-  
- 
+    function createUserSuccess(res) {
       
+      $('.alert-area').text(`User '${res.username}' created! You may now log in.`);
+      
+      // Create null event
+      const e = {
+        preventDefault: function() {}
+      }
+      
+      toggleFormType(e);
+      
+    }
     
+    function createUserError(res) {
+      
+      $('.alert-area').text(
+        `${res.responseJSON.reason}: ${res.responseJSON.message}`
+      );
+      
+    }
 
 
+
+  
 // Make available as module for testing
 
 try {
