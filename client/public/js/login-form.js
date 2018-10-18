@@ -48,6 +48,7 @@ $('.js-login-submit').click(chooseSubmitAction);
     
   }
   
+  // USER LOGIN PATHWAY
   
   function logInUser(e) {
     
@@ -67,25 +68,30 @@ $('.js-login-submit').click(chooseSubmitAction);
       error: loginFailure
     });
       
-    // Send getJSON to "/login"
-    // If failure... display Alert
-    // If success... redirect to /portal
-
+    // For testing purposes (but not locked)  
     return 'logInUser';
   
   }
   
     function loginSuccess(res) {
 
+      // DEVELOPMENT: Request simple 'protected page'
+      const resUrl = '/api/protected';
+      
+      // TODO: Elevate resUrl to function parameter, to enable testing
+
       // DEVELOPMENT: Request a protected page
       let request = $.ajax({
-        url: '/api/protected',
+        url: resUrl,
         type: 'GET',
         headers: {
           Authorization: `Bearer ${res.authToken}`,
           contentType: 'application/json'
         },
-        success: function(res) { $('body').html(res.data)}
+        success: function(res) { $('body').html(res.data)},
+        error: function(res) {
+          $('body').html(`${res.status}: ${res.responseText}`);
+        }
       });
         
     }
@@ -98,6 +104,7 @@ $('.js-login-submit').click(chooseSubmitAction);
   
   function createUser(e) {
   
+    // For testing purposes (but not locked)
     return 'createUser';
     
   }
