@@ -116,7 +116,6 @@ describe('Portal: View', function() {
     it('Should return a string', function() {
       expect(portal.portalView()).to.be.a('string');
     });
-    
   });
   
   
