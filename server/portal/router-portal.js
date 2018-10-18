@@ -15,12 +15,12 @@ const { portalView} = require('./view-portal');
 // Get request to load portal
 router.get('/', jwtAuth, (req, res) => {
   
-  console.log(req);
+  // Does the user have a user profile?
+    // If yes, load the individual profile
+    // If no, load the "Create profile" userflow.
+    
+    // So I need an indProf model.
   
-  return res.json({
-    data: portalView(),
-    authToken: req.headers.authorization
-  });
   
   return res.send(portalView());
 
