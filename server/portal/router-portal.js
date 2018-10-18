@@ -15,7 +15,7 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 // Get request to load portal
 router.get('/', jwtAuth, (req, res) => {
   return res.json({
-    data: 'Welcome, friend!'
+    data: 'Welcome, friend, to the Portal!'
   });
 });
 

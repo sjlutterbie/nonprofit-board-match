@@ -81,7 +81,7 @@ $('.js-login-form').submit(function(e) {
     function loadPortal(res) {
 
       // DEVELOPMENT: Request simple 'protected page'
-      const resUrl = '/api/protected';
+      const resUrl = '/portal';
       
       // TODO: Elevate resUrl to function parameter, to enable testing
 
