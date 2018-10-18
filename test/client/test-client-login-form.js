@@ -19,13 +19,13 @@ const window = new JSDOM(
 global.$ = require('jquery')(window);
 
 // Load the module //NOTE: let instead of const so it can be refreshed
-const lF = require('../client/public/js/login-form');
+const lF = require('../../client/public/js/login-form');
 
 // Load testing server details
 require('dotenv').config();
-const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../config');
-const {app, runServer, closeServer } = require('../server');
-const { localStrategy, jwtStrategy } = require('../server/api/auth');
+const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../../config');
+const {app, runServer, closeServer } = require('../../index');
+const { localStrategy, jwtStrategy } = require('../../server/api/auth');
 
 // Load Test user credentials
 const testUser =  {

@@ -2,9 +2,10 @@
   "name": "nonprofit-board-match",
   "version": "1.0.0",
   "description": "A platform for connecting service-oriented individuals with local non-profit organizations looking for board members.",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "import-fresh": "^2.0.0",
     "jsdom": "^12.2.0",
     "mocha": "^5.2.0",
+    "nodemon": "^1.18.4",
     "sinon": "^7.0.0"
   }
 }
