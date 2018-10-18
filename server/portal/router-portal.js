@@ -5,18 +5,21 @@ const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
-
 const { jwtStrategy } = require('../api/auth');
-
-passport.use(jwtStrategy);
-
+  passport.use(jwtStrategy);
 const jwtAuth = passport.authenticate('jwt', {session: false});
+
+// Load View
+const { portalView} = require('./view-portal');
 
 // Get request to load portal
 router.get('/', jwtAuth, (req, res) => {
-  return res.json({
-    data: 'Welcome, friend, to the Portal! Yes, this is just vanilla HTML, for now.'
-  });
+  
+  return res.send(portalView());
+  
+  //return res.json({
+  //  data: portalView()
+  //});
 });
 
 
