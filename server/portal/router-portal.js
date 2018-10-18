@@ -15,11 +15,16 @@ const { portalView} = require('./view-portal');
 // Get request to load portal
 router.get('/', jwtAuth, (req, res) => {
   
-  return res.send(portalView());
+  console.log(req);
   
-  //return res.json({
-  //  data: portalView()
-  //});
+  return res.json({
+    data: portalView(),
+    authToken: req.headers.authorization
+  });
+  
+  return res.send(portalView());
+
+  
 });
 
 

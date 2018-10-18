@@ -101,8 +101,13 @@ $('.js-login-form').submit(function(e) {
       
       function loadPortalSuccess(res) {
         
+        
+        
         // Clears html, to rebuild via the Portal
-        document.write(res);
+        document.write(res.data);
+        
+        console.log(res.authToken);
+        
         // For testing purposes
         return res;
         
