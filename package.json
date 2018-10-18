@@ -4,6 +4,7 @@
   "description": "A platform for connecting service-oriented individuals with local non-profit organizations looking for board members.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js"
     "test": "mocha --recursive",
     "dev": "nodemon index.js"
   },
