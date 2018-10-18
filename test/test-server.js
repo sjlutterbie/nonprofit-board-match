@@ -13,7 +13,7 @@ require('dotenv').config();
 const { PORT, TEST_DATABASE_URL } = require('../config');
 
 // Load module
-const { app, runServer, closeServer } = require('../server');
+const { app, runServer, closeServer } = require('../index');
 
 // Test basic server functionality
 describe('Server start/stop functions', function() {
