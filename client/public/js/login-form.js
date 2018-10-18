@@ -94,6 +94,7 @@ $('.js-login-form').submit(function(e) {
           Authorization: `Bearer ${res.authToken}`,
           contentType: 'application/json'
         },
+        data: JSON.stringify(res.authToken), // For finding userAccount
         success: loadPortalSuccess,
         error: loadPortalFailure
       });
