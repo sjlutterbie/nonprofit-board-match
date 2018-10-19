@@ -139,8 +139,8 @@ describe('GET /api/indprofs/:id', function() {
           .then(
             function(res) {
               expect(res).to.have.status(200);
-              expect(res.body).to.be.a('object');
-              expect(res.body[0]).to.deep.equal(indProf[0]);
+              expect(res).to.be.a('object');
+              expect(res[0]).to.deep.equal(indProf[0]);
             },
             function(err) {
               return err;
