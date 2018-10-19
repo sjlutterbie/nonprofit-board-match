@@ -5,28 +5,31 @@ const mongoose = require('mongoose');
   
 const {User} = require('../users');
   
-const IndProf  = mongoose.Schema({
-  overview: {
-    firstName: {
-      type: String,
-      required: true
-    },
-    lastName: {
-      type: String,
-      required: true
-    },
-    email: String,
-    phone: String
+const indProfSchema  = mongoose.Schema({
+  firstName: {
+    type: String,
+    required: true
   },
+  lastName: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  phone: String,
   linkedIn: String,
-  experience: {},
   userAccount: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'}
+    ref: 'User',
+    required: true
+  }
 });
   
-  
-  
+const IndProf = mongoose.model('IndProf', indProfSchema);  
+
 module.exports = {
+  indProfSchema,
   IndProf
 };

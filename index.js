@@ -14,6 +14,7 @@ const { router: usersRouter } = require('./server/api/users');
 const { router: authRouter, localStrategy,
                 jwtStrategy } = require('./server/api/auth');
 const { router: portalRouter } = require('./server/portal');
+const { router: indProfsRouter } = require('./server/api/indProf');
 
 // Set port & DB information
 const { PORT, DATABASE_URL } = require('./config');
@@ -40,6 +41,7 @@ passport.use(jwtStrategy);
 app.use('/api/users/', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/portal', portalRouter);
+app.use('/api/indprofs', indProfsRouter);
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
