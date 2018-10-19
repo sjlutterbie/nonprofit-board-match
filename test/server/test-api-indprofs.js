@@ -16,8 +16,6 @@ const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
 const iP = require('../../server/api/indProf');
 const {User} = require('../../server/api/users');
 
-
-
 // DATA MODEL TESTING
 
 describe('IndProf API: Data Model', function() {
@@ -25,7 +23,7 @@ describe('IndProf API: Data Model', function() {
   it('Should be an object', function() {
     expect(iP.indProfSchema).to.be.an('object');
   });
-  it('IndProf include the expected keys', function() {
+  it('IndProf should include the expected keys', function() {
     const requiredKeys = ['firstName', 'lastName', 'email', 'phone',
                           'linkedIn', 'userAccount'];
     expect(iP.indProfSchema.obj).to.include.keys(requiredKeys);
