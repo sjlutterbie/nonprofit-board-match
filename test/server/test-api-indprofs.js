@@ -57,6 +57,106 @@ const token = jwt.sign(
   }
 );
 
+
+describe('GET /api/indprofs/:id', function() {
+  
+  before(function() {
+    return runServer(TEST_DATABASE_URL);
+  });
+
+    afterEach(function() {
+      return iP.IndProf.remove({});
+    });
+  
+  // indProfs require an associated userAccount
+  before(function() {
+    User.create(
+      {
+        username: testUser.username,
+        password: testUser.password
+      }).then(function(user) {
+        testUser.userId = user._id;
+      });
+    
+  });
+  
+  after(function() {
+    User.deleteOne(
+      {_id: testUser.userId},
+      function(err, _) {
+        if (err) {
+          return err;
+        }
+      });
+  });
+      
+  after(function() {
+    return closeServer();
+  });
+  
+  it('Should reject requests with no JWT', function() {
+    return chai.request(app)
+      .get('/api/indprofs/foo')
+      .then(function(res) {
+        expect(res).to.have.status(401);
+      });
+  });
+  it('Should reject users with an incorrect JWT', function() {
+    return chai.request(app)
+      .get('/api/indprofs/foo')
+      .set('authorization', `Bearer ${token}XX`)
+      .then(function(res) {
+        expect(res).to.have.status(401);
+      }
+    );
+  });
+  it('Should reject users with an incorrect :id', function() {
+    return chai.request(app)
+      .get('/api/indprofs/foo')
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      }
+    );
+  });
+  
+  it('Should return the correct indProf', function(){
+    // Create an indProf
+    iP.IndProf.create(
+      {
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        email: faker.internet.email(),
+        userAccount: testUser.userId
+      }  
+    ).then(
+      // If successful, run API call
+      function(indProf) {
+        const testURL = `/api/indprofs/${indProf._id}`;
+        return chai.request(app)
+          .get(testURL)
+          .set('authorization', `Bearer ${token}`)
+          .then(
+            function(res) {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.a('object');
+              expect(res.body[0]).to.deep.equal(indProf[0]);
+            },
+            function(err) {
+              return err;
+            }
+        );
+      },
+      // If failed, return error
+      function(err) {
+        return err;
+      }
+    );
+    
+  });
+
+});
+
 describe('POST /api/indprofs', function() {
   
   before(function() {
@@ -75,7 +175,6 @@ describe('POST /api/indprofs', function() {
         password: testUser.password
       }).then(function(user) {
         testUser.userId = user._id;
-        console.log('POST: ' + testUser.userId);
       });
     
   });
@@ -354,3 +453,4 @@ describe('POST /api/indprofs', function() {
     });
   });
 });
+
