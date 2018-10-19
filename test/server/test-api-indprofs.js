@@ -14,6 +14,7 @@ const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
 
 // Load module
 const iP = require('../../server/api/indProf');
+const {User} = require('../../server/api/users');
 
 
 describe('IndProf API: Data Model', function() {
@@ -26,41 +27,67 @@ describe('IndProf API: Data Model', function() {
                           'linkedIn', 'userAccount'];
     expect(iP.indProfSchema.obj).to.include.keys(requiredKeys);
   });
-
 });
 
 describe('IndProf API: Routers', function() {
-  const testUser = {
-    username: 'testUser',
-    password: 'testPassword',
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    email: faker.internet.email(),
-    phone: faker.phone.phoneNumber(),
-    linkedIn: faker.internet.url(),
-    userAccount: '5bc7d2efce086f7cae6889c7'
-  };
-  const token = jwt.sign(
-    {
-      user: testUser.username,
-    },
-    JWT_SECRET,
-    {
-      algorithm: 'HS256',
-      expiresIn: '7d'
-    }
-  );
   
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
   
+    // Generate test data
+    const testUser = {
+      username: faker.random.alphaNumeric(10),                   
+      password: faker.random.alphaNumeric(10),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      phone: faker.phone.phoneNumber(),
+      linkedIn: faker.internet.url()
+    };
+    
+    // Generate valid token
+    const token = jwt.sign(
+      {
+        user: testUser.username,
+      },
+      JWT_SECRET,
+      {
+        algorithm: 'HS256',
+        expiresIn: '1d'
+      }
+    );
+    
+    afterEach(function() {
+      return iP.IndProf.remove({});
+    });
+  
+    // indProfs require an associated userAccount
+    before(function() {
+      User.create(
+        {
+          username: testUser.username,
+          password: testUser.password
+        }).then(function(user) {
+          testUser.userId = user._id;
+        });
+      
+    });
+    
+    after(function() {
+      User.deleteOne(
+        {_id: testUser.userId},
+        function(err, _) {
+          if (err) {
+            return err;
+          } else {
+            console.log(`Removed user ${testUser.userId}`);
+          }
+        });
+    });
+      
   after(function() {
     return closeServer();
-  });
-  
-  afterEach(function() {
-    return iP.IndProf.remove({});
   });
 
   describe('POST /', function() {
@@ -72,7 +99,8 @@ describe('IndProf API: Routers', function() {
           lastName: testUser.lastName,
           email: testUser.email,
           phone: testUser.phone,
-          linkedIn: testUser.linkedIn
+          linkedIn: testUser.linkedIn,
+          userAccount: testUser.userId
         })
         .then(function(res) {
           expect(res).to.have.status(401);
@@ -87,7 +115,8 @@ describe('IndProf API: Routers', function() {
           lastName: testUser.lastName,
           email: testUser.email,
           phone: testUser.phone,
-          linkedIn: testUser.linkedIn
+          linkedIn: testUser.linkedIn,
+          userAccount: testUser.userId
         })
         .then(function(res) {
           expect(res).to.have.status(401);
@@ -101,7 +130,8 @@ describe('IndProf API: Routers', function() {
           lastName: testUser.lastName,
           email: testUser.email,
           phone: testUser.phone,
-          linkedIn: testUser.linkedIn
+          linkedIn: testUser.linkedIn,
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -116,7 +146,8 @@ describe('IndProf API: Routers', function() {
           firstName: testUser.firstName,
           email: testUser.email,
           phone: testUser.phone,
-          linkedIn: testUser.linkedIn
+          linkedIn: testUser.linkedIn,
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -131,7 +162,8 @@ describe('IndProf API: Routers', function() {
           firstName: testUser.firstName,
           lastName: testUser.lastName,
           phone: testUser.phone,
-          linkedIn: testUser.linkedIn
+          linkedIn: testUser.linkedIn,
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -164,7 +196,7 @@ describe('IndProf API: Routers', function() {
           email: testUser.email,
           phone: testUser.phone,
           linkedIn: testUser.linkedIn,
-          userAccount: testUser.userAccount
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -181,7 +213,7 @@ describe('IndProf API: Routers', function() {
           email: testUser.email,
           phone: testUser.phone,
           linkedIn: testUser.linkedIn,
-          userAccount: testUser.userAccount
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -198,7 +230,7 @@ describe('IndProf API: Routers', function() {
           email: 1234,
           phone: testUser.phone,
           linkedIn: testUser.linkedIn,
-          userAccount: testUser.userAccount
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -215,7 +247,7 @@ describe('IndProf API: Routers', function() {
           email: testUser.email,
           phone: 1234,
           linkedIn: testUser.linkedIn,
-          userAccount: testUser.userAccount
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -232,7 +264,24 @@ describe('IndProf API: Routers', function() {
           email: testUser.email,
           phone: testUser.phone,
           linkedIn: 1234,
-          userAccount: testUser.userAccount
+          userAccount: testUser.userId
+        })
+        .set('authorization', `Bearer ${token}`)
+        .then(function(res) {
+          expect(res).to.have.status(422);
+        });
+    });
+    it('Should reject submissions with an invalid userAccount', function() {
+      return chai.request(app)
+        .post('/api/indprofs')
+        .set('content-type', 'application/json')
+        .send({
+          firstName: testUser.firstName,
+          lastName: testUser.lastName,
+          email: testUser.email,
+          phone: testUser.phone,
+          linkedIn: testUser.linkedIn,
+          userAccount: 'NotaUserId'
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -249,7 +298,7 @@ describe('IndProf API: Routers', function() {
           email: testUser.email,
           phone: testUser.phone,
           linkedIn: testUser.linkedIn,
-          userAccount: testUser.userAccount
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -268,7 +317,6 @@ describe('IndProf API: Routers', function() {
           expect(res.body.email).to.equal(testUser.email);
           expect(res.body.phone).to.equal(testUser.phone);
           expect(res.body.linkedIn).to.equal(testUser.linkedIn);
-          expect(res.body.userAccount).to.equal(testUser.userAccount);
         });
     });
     it('Should trim firstName and lastName', function() {
@@ -281,7 +329,7 @@ describe('IndProf API: Routers', function() {
           email: testUser.email,
           phone: testUser.phone,
           linkedIn: testUser.linkedIn,
-          userAccount: testUser.userAccount
+          userAccount: testUser.userId
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
@@ -300,7 +348,7 @@ describe('IndProf API: Routers', function() {
           expect(user).to.not.be.null;
           expect(user.firstName).to.equal(testUser.firstName);
           expect(user.lastName).to.equal(testUser.lastName);
-        });
+      });
     });
   });
 });

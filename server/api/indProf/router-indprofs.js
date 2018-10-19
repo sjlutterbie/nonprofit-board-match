@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 
 const {IndProf} = require('./models-indprofs');
+const {User} = require('../users');
 
 const router = express.Router();
 
@@ -47,7 +48,7 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
       location: nonStringField
     });
   }
-  
+
   // Create new IndProf
   
   // Extract values from req.body
@@ -57,33 +58,38 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
   firstName = firstName.trim();
   lastName = lastName.trim();
   
-  return IndProf.create({
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    phone: phone,
-    linkedIn: linkedIn,
-    userAccount: userAccount
-  })
-  .then(indProf => {
-    return res.status(201).json(indProf);
-  })
-  .catch( err => {
-    // Forward validation errors, hide unknown errors
-    if (err.reason === 'ValidationError') {
-      return res.status(err.code).json(err);
-    }
-    // Otherwise, return generic error to avoid leaking system details
-    res.status(500).json(
-      {code: 500,
-      message: 'Internal server error'
+  // Validate userAccount as User._id, then create user
+    User.findById(userAccount)
+    .catch(function(err){
+      return res.status(422).json({
+        code: 422,
+        reason: 'ValidatingError',
+        message: 'Non-string field',
+        location: userAccount
+      });
+    })
+    .then(function(user) {
+      return IndProf.create(
+        {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phone: phone,
+          linkedIn: linkedIn,
+          userAccount: userAccount
+        });
+    })
+    .catch(function(err){
+      return res.status(500).json(
+        {code: 500,
+          message: 'Internal server error'
+        }
+      );
+    })
+    .then(function(indProf) {
+      return res.status(201).json(indProf);
     });
-  });
 });
-  
-  
-  // PUT update an existing individual profile
-  // DELETE an individual profile
   
 module.exports = {
   router
