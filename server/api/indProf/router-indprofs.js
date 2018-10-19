@@ -16,6 +16,25 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
   // GET an individual profile
 
+router.get('/:id', jsonParser, jwtAuth, (req, res) => {
+  
+  IndProf.findById(req.params.id)
+    .then(
+      // Found profile
+      function(prof) {
+        res.status(200).json(prof);  
+      },
+      // Couldn't find profile
+      function(err) {
+        return res.status(422).json({
+          code: 422,
+          reason: 'ValidationError',
+          message: 'Invalid profile ID'
+        });
+      }
+    );
+
+});
 
 
   
