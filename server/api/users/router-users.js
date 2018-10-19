@@ -1,6 +1,8 @@
 'use strict'
 const express = require('express');
+const passport = require('passport');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 
 const {User} = require('./models-users');
 
@@ -127,5 +129,18 @@ router.post('/', jsonParser, (req, res) => {
       res.status(500).json({code: 500, message: 'Internal server error'});
     });
 });
+
+// Get a specific userAccount
+
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
+router.get('/:id', jwtAuth, (req, res) => {
+  
+  // Requires 
+  
+  // Requires a valid JWT token, which will include the username to find.
+  
+});
+
 
 module.exports = {router};

@@ -14,14 +14,17 @@ const UserSchema = mongoose.Schema({
     required: true
   },
   firstName: {type: String, default: ''},
-  lastName: {type: String, default: ''}
+  lastName: {type: String, default: ''},
+  indProf: {type: mongoose.Schema.Types.ObjectId, ref: 'IndProf'}
 });
 
 UserSchema.methods.serialize = function () {
   return {
     username: this.username || '',
     firstName: this.firstName || '',
-    lastName: this.lastName || ''
+    lastName: this.lastName || '',
+    indProf: this.indProf || '',
+    userId: this._id
   };
 };
 
