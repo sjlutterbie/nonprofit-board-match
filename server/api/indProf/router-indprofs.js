@@ -14,8 +14,10 @@ const jsonParser = bodyParser.json();
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
-// What routes to include?
   // GET an individual profile
+
+
+
   
   // POST a new individual profile
 router.post('/', jsonParser, jwtAuth, (req, res) => {
@@ -60,35 +62,44 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
   
   // Validate userAccount as User._id, then create user
     User.findById(userAccount)
-    .catch(function(err){
-      return res.status(422).json({
-        code: 422,
-        reason: 'ValidatingError',
-        message: 'Non-string field',
-        location: userAccount
-      });
-    })
-    .then(function(user) {
-      return IndProf.create(
-        {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          phone: phone,
-          linkedIn: linkedIn,
-          userAccount: userAccount
-        });
-    })
-    .catch(function(err){
-      return res.status(500).json(
-        {code: 500,
-          message: 'Internal server error'
+      .then(
+        // Resolve function
+        function(user) {
+          return IndProf.create(
+            {
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              phone: phone,
+              linkedIn: linkedIn,
+              userAccount: userAccount
+            })
+            .then(
+              // Resolve
+              function(indProf) {
+                return res.status(201).json(indProf);
+              },
+              // Reject
+              function(err){
+                return res.status(500).json(
+                  {code: 500,
+                    message: 'Internal server error'
+                  }
+                );
+              }
+            );
+        },
+        // Reject function
+        function(err){
+          return res.status(422).json({
+            code: 422,
+            reason: 'ValidatingError',
+            message: 'Non-string field',
+            location: userAccount
+          });
         }
       );
-    })
-    .then(function(indProf) {
-      return res.status(201).json(indProf);
-    });
+
 });
   
 module.exports = {
