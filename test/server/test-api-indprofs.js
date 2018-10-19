@@ -58,6 +58,10 @@ describe('IndProf API: Routers', function() {
   after(function() {
     return closeServer();
   });
+  
+  afterEach(function() {
+    return iP.IndProf.remove({});
+  });
 
   describe('POST /', function() {
     it('Should reject requests with no JWT', function() {
@@ -251,7 +255,7 @@ describe('IndProf API: Routers', function() {
         .then(function(res) {
           expect(res).to.have.status(201);
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.keys(
+          expect(res.body).to.include.keys(
             'firstName',
             'lastName',
             'email',
@@ -267,10 +271,37 @@ describe('IndProf API: Routers', function() {
           expect(res.body.userAccount).to.equal(testUser.userAccount);
         });
     });
-
-
-
-
+    it('Should trim firstName and lastName', function() {
+      return chai.request(app)
+        .post('/api/indprofs')
+        .set('content-type', 'application/json')
+        .send({
+          firstName: `    ${testUser.firstName}    `,
+          lastName: `  ${testUser.lastName}  `,
+          email: testUser.email,
+          phone: testUser.phone,
+          linkedIn: testUser.linkedIn,
+          userAccount: testUser.userAccount
+        })
+        .set('authorization', `Bearer ${token}`)
+        .then(function(res) {
+          expect(res).to.have.status(201);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.include.keys(
+            'firstName', 'lastName', 'email', 'phone', 'linkedIn',
+            'userAccount');
+          expect(res.body.firstName).to.equal(testUser.firstName);
+          expect(res.body.lastName).to.equal(testUser.lastName);
+          return iP.IndProf.findOne({
+            email: testUser.email
+          });
+        })
+        .then(function(user) {
+          expect(user).to.not.be.null;
+          expect(user.firstName).to.equal(testUser.firstName);
+          expect(user.lastName).to.equal(testUser.lastName);
+        });
+    });
   });
 });
   

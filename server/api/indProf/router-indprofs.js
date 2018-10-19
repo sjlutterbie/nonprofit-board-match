@@ -48,9 +48,37 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
     });
   }
   
+  // Create new IndProf
   
-  res.send('Hi there!');
+  // Extract values from req.body
+  let {firstName, lastName, email, 
+       userAccount, phone = '', linkedIn = ''} = req.body;
   
+  firstName = firstName.trim();
+  lastName = lastName.trim();
+  
+  return IndProf.create({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phone: phone,
+    linkedIn: linkedIn,
+    userAccount: userAccount
+  })
+  .then(indProf => {
+    return res.status(201).json(indProf);
+  })
+  .catch( err => {
+    // Forward validation errors, hide unknown errors
+    if (err.reason === 'ValidationError') {
+      return res.status(err.code).json(err);
+    }
+    // Otherwise, return generic error to avoid leaking system details
+    res.status(500).json(
+      {code: 500,
+      message: 'Internal server error'
+    });
+  });
 });
   
   
