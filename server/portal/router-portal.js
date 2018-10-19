@@ -13,6 +13,8 @@ const bodyParser = require('body-parser');
 
 // Load View
 const { portalView} = require('./view-portal');
+const ctrls = require('./controllers-portal');
+
 
 // Get request to load portal
 router.get('/', jwtAuth, (req, res) => {
@@ -20,8 +22,14 @@ router.get('/', jwtAuth, (req, res) => {
   // Extract arguments for portalBuilder
   const profType = req.query.profType
   const profId = req.query.profId
+  const userId = req.user.userId
   
-  return res.send(portalView(profType, profId));
+  // Select which Portal View to build
+  
+  const viewType = ctrls.portalBuildSelector(profType, profId);
+
+  // NOTE: Function Arguments used for dev purposes
+  return res.send(portalView(profType, profId, userId, viewType));
 
   
 });

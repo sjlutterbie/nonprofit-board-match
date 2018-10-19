@@ -1,6 +1,6 @@
 'use strict';
 
-function portalView(profType, profId) {
+function portalView(profType, profId, userId, viewType) {
   
   const viewHTML = `
   <!DOCTYPE html>
@@ -41,6 +41,8 @@ function portalView(profType, profId) {
           <p>It will render data relevant to:</p>
           <p>profType: ${profType}</p>
           <p>profId: ${profId} (undefined is OK)</p>
+          <p>userId: ${userId}</p>
+          <p>Based on the above, you'd see the <u>${viewType}</u> view.</p>
         </main>
     
         <!-- Load jQuery -->
