@@ -3,15 +3,14 @@ const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const router = express.Router();
+const jsonParser = bodyParser.json();
+const jwtAuth = passport.authenticate('jwt', {session: false});
+
 
 const {IndProf} = require('./models-indprofs');
 const {User} = require('../users');
 
-const router = express.Router();
-
-const jsonParser = bodyParser.json();
-
-const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
   // GET an individual profile
@@ -33,12 +32,10 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
         });
       }
     );
-
 });
 
+// POST a new individual profile
 
-  
-  // POST a new individual profile
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
   // Set required fields, detect missing fields
