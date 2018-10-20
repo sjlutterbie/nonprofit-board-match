@@ -17,8 +17,25 @@ const {Application} = require('./models-applications');
   
 // GET an individual Application
 
-  // TODO
+router.get('/:id', jsonParser, jwtAuth, (req, res) => {
   
+  Application.findById(req.params.id)
+    .then(
+      // Found application
+      function(application) {
+        res.status(200).json(position);
+      },
+      // Couldn't find application
+      function(err) {
+        return res.status(422).json({
+          code: 422,
+          reason: 'ValidationError',
+          message: 'Invalid Application ID'
+        });
+      }
+    );
+});
+
 // POST a new Application
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {

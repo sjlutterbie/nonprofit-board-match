@@ -56,6 +56,213 @@ const token = jwt.sign(
   }
 );
 
+// GET/:id
+
+describe('POST /api/application', function() {
+  
+  before(function() {
+    return runServer(TEST_DATABASE_URL);
+  });
+
+  afterEach(function() {
+    return Application.remove({});
+  });
+  
+  // applications require a userAccount -> indProf && -> orgProf -> position
+  
+  before(function() {
+    // Generate test User
+    User.create(
+      {
+        username: faker.random.alphaNumeric(10),
+        password: faker.random.alphaNumeric(10)
+      }
+    ).then(
+      // Store variables, advance
+      function(user){
+        testIds.userId = user._id;
+        console.log(testIds.userId);
+        return user;
+      },
+      // Reject
+      function(err) {
+        return (err);
+      }
+    )
+    .then(
+      // Generate indProf
+      function(user) {
+        IndProf.create(
+          {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            email: faker.internet.email(),
+            userAccount: user._id
+          }
+        ).then(
+          // Store variables, advance
+          function (indProf) {
+            testIds.indProfId = indProf._id;
+            return indProf;
+          },
+          function(err) {
+            return err;
+          }
+        ).then(
+          // Create orgProf
+          function(indProf) { // Parameter included to clarify promise chain
+            OrgProf.create(
+              {
+                name: faker.company.companyName(),
+                email: faker.internet.email(),
+                userAccount: testIds.userId
+              }  
+            ).then(
+              function(orgProf) {
+                testIds.orgProfId = orgProf._id;
+                return orgProf;
+              },
+              function(err) {
+                return err;
+              }
+            ).then(
+              function(orgProf) { // Parameter included to clarify promise chain
+                Position.create(
+                  {
+                    title: faker.name.jobTitle(),
+                    description: faker.lorem.paragraphs(2),
+                    dateCreated: new Date(),
+                    orgProf: orgProf._id
+                  }  
+                ).then(
+                  function(position) {
+                    testIds.posId = position._id;
+                    return position;
+                  },
+                  function(err) {
+                    return err;
+                  }
+                );
+              },
+              function(err) {
+                return err;
+              }
+            );
+          },
+          function (err) {
+            return err;
+          }
+        );
+      }, 
+      function(err) {
+        return err;
+      }
+    );
+  });
+  
+  after(function() {
+    // Clean up test objects
+    User.findByIdAndDelete(testIds.userId)
+      .then(
+        function(_){
+          // Success
+        },
+        function(err) {
+          return err;
+        }
+      );
+    IndProf.findByIdAndDelete(testIds.indProfId)
+      .then(
+        function(_){
+          // Success
+        },
+        function(err) {
+          return err;
+        }
+      );
+    OrgProf.findByIdAndDelete(testIds.orgProfId)
+      .then(
+        function(_){
+          // Success
+        },
+        function(err) {
+          return err;
+        }
+      );
+    Position.findByIdAndDelete(testIds.posId)
+      .then(
+        function(_){
+          // Success
+        },
+        function(err) {
+          return err;
+        }
+      );
+  });
+  
+  after(function() {
+    return closeServer();
+  });
+  
+  it('Should reject requests with no JWT', function() {
+    return chai.request(app)
+      .get('/api/applications/foo')
+      .then(function(res) {
+        expect(res).to.have.status(401);
+      });
+  });
+  it('Should reject requests with an incorrect JWT', function() {
+    return chai.request(app)
+      .get('/api/applications/foo')
+      .set('authorization', `Bearer ${token}XX`)
+      .then(function(res) {
+        expect(res).to.have.status(401);
+      });
+  });
+  it('Should reject requests with an invalid JWT', function() {
+    return chai.request(app)
+      .get('/api/applications/foo')
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+  
+  it('Should return the correct Application', function() {
+    // Create an application
+    Application.create(
+      {
+        coverMessage: faker.lorem.paragraphs(2),
+        applicationDate: new Date(),
+        position: testIds.posId,
+        indProf: testIds.indProf
+      }  
+    ).then(
+      // If successful, run API call
+      function(application) {
+        const testURL = `api/applications${application._id}`;
+        return chai.request(app)
+          .get(testURL)
+          .set('authorization', `Bearer ${token}`)
+          .then(
+            function(res) {
+              expect(res).to.have.status(200);
+              expect(res).to.be.a('object');
+              expect(res[0]).to.deep.equal(application[0]);
+            },
+            function(err) {
+              return err;
+            }
+          );
+      },
+      // If failed, return error
+      function(err) {
+        return err;
+      }
+    );
+  });
+});
+
 
 // POST ROUTE
 
@@ -82,6 +289,7 @@ describe('POST /api/application', function() {
       // Store variables, advance
       function(user){
         testIds.userId = user._id;
+        console.log(testIds.userId);
         return user;
       },
       // Reject
