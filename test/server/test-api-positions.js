@@ -38,7 +38,7 @@ const testOrg = {
   email: faker.internet.email()
 };
 
-  
+// Generate test User
 const testUser = {
   username: faker.random.alphaNumeric(10),
   password: faker.random.alphaNumeric(10)

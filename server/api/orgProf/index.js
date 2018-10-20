@@ -1,6 +1,6 @@
 'use strict';
 
-const {orgProfSchema, OrgProf} = require('./models-orgprofs.js');
-const {router} = require('./router-orgprofs.js');
+const {orgProfSchema, OrgProf} = require('./models-orgprofs');
+const {router} = require('./router-orgprofs');
 
 module.exports = {orgProfSchema, OrgProf, router};
