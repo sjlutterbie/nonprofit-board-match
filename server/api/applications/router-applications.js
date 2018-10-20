@@ -11,9 +11,21 @@ const {Position} = require('../positions');
 const {IndProf} = require('../indProf');
 const {Application} = require('./models-applications');
 
-// Get all Applicaitons for a position
+// DELETE an application
 
   // TODO
+    // Deleting an application must remove ref from:
+      // Relevant indProf
+      // Relevant position
+  
+// GET all Applications for an indProf
+
+  // TODO
+
+
+// GET all Applicaitons for a position
+
+  // TODO: Non-MVP Feature
   
 // GET an individual Application
 
@@ -37,6 +49,10 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
 });
 
 // POST a new Application
+
+  // TODO: Creating a new application should update refs for:
+    // Relevant indProf
+    // Relevant position
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   

@@ -14,8 +14,16 @@ const {OrgProf} = require('../orgProf/models-orgprofs');
 // Get all Positions
 
   // TODO
+  
+// Get all Positions for a specific organization
 
-// GET an individual Position
+  // TODO: Non-MVP Feature
+  
+// DELETE a position
+
+  // TODO: Non-MVP Feature
+
+// GET a single Position
 
 router.get('/:id', jsonParser, jwtAuth, (req, res) => {
   
@@ -37,6 +45,9 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
 });
 
 // POST a new Position
+
+  // TODO: Creating a new Position should update refs for
+    // Relevant OrgProf
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
@@ -119,6 +130,7 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
       );
 
 });
+
   
 module.exports = {
   router

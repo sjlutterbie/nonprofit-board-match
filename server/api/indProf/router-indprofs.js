@@ -13,7 +13,7 @@ const {User} = require('../users');
 
 
 
-  // GET an individual profile
+// GET an individual profile
 
 router.get('/:id', jsonParser, jwtAuth, (req, res) => {
   
@@ -35,6 +35,9 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
 });
 
 // POST a new individual profile
+
+  // TODO: Creating an indProf should update ref for:
+    // userAccount
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   

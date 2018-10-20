@@ -33,7 +33,10 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
     );
 });
 
-// POST a new individual profile
+// POST a new organization profile
+
+    //TODO: Creating an orgProf should update refs for
+      // Relevant userAccount
 
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
