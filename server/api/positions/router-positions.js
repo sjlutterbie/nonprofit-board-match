@@ -9,8 +9,7 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
 const {Position} = require('./models-positions');
-const {OrgProf} = require('../orgProf');
-
+const {OrgProf} = require('../orgProf/models-orgprofs');
 
 // Get all Positions
 
@@ -42,7 +41,7 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
   // Set required fields, detect missing fields
-  const requiredFields = ['title', 'description', 'dateCreated', 'orgProf'] 
+  const requiredFields = ['title', 'description', 'dateCreated', 'orgProf']; 
 
   const missingField = requiredFields.find(field => !(field in req.body));
   
@@ -90,7 +89,8 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
               title: title,
               description: description,
               dateCreated: dateCreated,
-              orgProf: orgProf
+              orgProf: orgProf,
+              applications: []
             })
             .then(
               // Resolve

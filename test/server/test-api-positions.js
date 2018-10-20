@@ -180,3 +180,261 @@ describe('GET /api/positions/:id', function() {
   });
 
 });
+
+describe('POST /api/positions', function() {
+  
+  before(function() {
+    return runServer(TEST_DATABASE_URL);
+  });
+
+    afterEach(function() {
+      return Position.remove({});
+    });
+  
+  // indProfs require an associated userAccount
+  before(function() {
+    User.create(
+      {
+        username: testUser.username,
+        password: testUser.password
+      }
+    )
+    .then(
+      function(user) {
+        testUser._id = user._id;
+        OrgProf.create(
+          {
+            name: faker.company.companyName(),
+            email: faker.internet.email(),
+            userAccount: user._id
+          }  
+        )
+        .then(
+          function(org) {
+            testOrg._id = org._id;
+          },
+          function(err) {return err}
+        );
+      },
+      function(err) {return err}
+    );
+  });
+
+  
+  after(function() {
+    User.deleteOne(
+      {_id: testUser._id},
+      function(err, _) {
+        if (err) {
+          return err;
+        }
+      });
+    OrgProf.deleteOne(
+      {_id: testOrg._id},
+      function(err, _) {
+        if (err) {
+          return err;
+        }
+      });
+  });
+      
+  after(function() {
+    return closeServer();
+  });
+
+
+  it('Should reject requests with no JWT', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .send({
+        title: faker.name.jobTitle(),
+        description: faker.lorem.paragraphs(2),
+        dateCreated: new Date(),
+        orgProf: testOrg._id
+      })
+      .then(function(res) {
+        expect(res).to.have.status(401);
+      });
+  });
+  it('Should reject users with an incorrect JWT', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .set('authorization', `Bearer ${token}XX`)
+      .send({
+        title: faker.name.jobTitle(),
+        description: faker.lorem.paragraphs(2),
+        dateCreated: new Date(),
+        orgProf: testOrg._id
+      })
+      .then(function(res) {
+        expect(res).to.have.status(401);
+    });
+  });
+  it('Should reject submissions with a missing title', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        description: faker.lorem.paragraphs(2),
+        dateCreated: new Date(),
+        orgProf: testOrg._id
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+  it('Should reject submissions with a missing description', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        title: faker.name.jobTitle(),
+        dateCreated: new Date(),
+        orgProf: testOrg._id
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+  it('Should reject submissions with a missing dateCreated', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        title: faker.name.jobTitle(),
+        description: faker.lorem.paragraphs(2),
+        orgProf: testOrg._id
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+  it('Should reject submissions with a missing orgProf', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        title: faker.name.jobTitle(),
+        description: faker.lorem.paragraphs(2),
+        dateCreated: new Date()
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+  it('Should reject submissions with a non-string title', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        title: 1234,
+        description: faker.lorem.paragraphs(2),
+        dateCreated: new Date(),
+        orgProf: testOrg._id
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+  it('Should reject submissions with a non-string description', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        title: faker.name.jobTitle(),
+        description: 1234,
+        dateCreated: new Date(),
+        orgProf: testOrg._id
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+   it('Should reject submissions with an invalid orgProf', function() {
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        title: faker.name.jobTitle(),
+        description: 1234,
+        dateCreated: new Date(),
+        orgProf: 'NotAnOrgProf'
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+  
+    it('Should create a new Position', function() {
+    
+    const testPosition = {
+      title: faker.name.jobTitle(),
+      description: faker.lorem.paragraphs(2),
+      dateCreated: new Date(),
+      orgProf: testOrg._id
+    };
+      
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        title: testPosition.title,
+        description: testPosition.description,
+        dateCreated: testPosition.dateCreated,
+        orgProf: testPosition.orgProf
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(201);
+        expect(res.body).to.be.an('object');
+        expect(res.body).to.include.keys(
+          'title','description','dateCreated','orgProf','applications'
+        );
+        expect(res.body.title).to.equal(testPosition.title);
+        expect(res.body.description).to.equal(testPosition.description);
+      });
+  });
+  it('Should trim title and description', function() {
+    
+    const testPosition = {
+      title: faker.name.jobTitle(),
+      description: faker.lorem.paragraphs(2),
+      dateCreated: new Date(),
+      orgProf: testOrg._id
+    };
+    
+    return chai.request(app)
+      .post('/api/positions')
+      .set('content-type', 'application/json')
+      .send({
+        title: `  ${testPosition.title} `,
+        description: `   ${testPosition.description}  `,
+        dateCreated: testPosition.dateCreated,
+        orgProf: testPosition.orgProf
+      })
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(201);
+        expect(res.body).to.be.an('object');
+        expect(res.body.title).to.equal(testPosition.title);
+        expect(res.body.description).to.equal(testPosition.description);
+        return Position.findOne({
+          title: testPosition.title
+        });
+      })
+      .then(function(position) {
+        expect(position).to.not.be.null;
+        expect(position.title).to.equal(testPosition.title);
+        expect(position.description).to.equal(testPosition.description);
+    });
+  });
+});
+
+
