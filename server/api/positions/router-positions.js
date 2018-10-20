@@ -8,22 +8,32 @@ const jsonParser = bodyParser.json();
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
 
-const {IndProf} = require('./models-indprofs');
-const {User} = require('../users');
+const {Position} = require('./models-positions');
+const {OrgProf} = require('../orgProf/models-orgprofs');
 
+// Get all Positions
 
+  // TODO
+  
+// Get all Positions for a specific organization
 
-// GET an individual profile
+  // TODO: Non-MVP Feature
+  
+// DELETE a position
+
+  // TODO: Non-MVP Feature
+
+// GET a single Position
 
 router.get('/:id', jsonParser, jwtAuth, (req, res) => {
   
-  IndProf.findById(req.params.id)
+  Position.findById(req.params.id)
     .then(
       // Found profile
-      function(prof) {
-        res.status(200).json(prof);  
+      function(position) {
+        res.status(200).json(position);  
       },
-      // Couldn't find profile
+      // Couldn't find position
       function(err) {
         return res.status(422).json({
           code: 422,
@@ -34,15 +44,16 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
     );
 });
 
-// POST a new individual profile
+// POST a new Position
 
-  // TODO: Creating an indProf should update ref for:
-    // userAccount
+  // TODO: Creating a new Position should update refs for
+    // Relevant OrgProf
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
   // Set required fields, detect missing fields
-  const requiredFields = ['firstName', 'lastName', 'email', 'userAccount'];
+  const requiredFields = ['title', 'description', 'dateCreated', 'orgProf']; 
+
   const missingField = requiredFields.find(field => !(field in req.body));
   
   // Reject request with missing fields
@@ -55,8 +66,9 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
     });
   }
   
-  // Set string fields, detect non-string fields
-  const stringFields = ['firstName', 'lastName', 'email', 'phone', 'linkedIn'];
+  // Set string fields, detect non-string data
+  const stringFields = ['title', 'description']
+
   const nonStringField = stringFields.find(field => 
     (field in req.body && typeof req.body[field] !== 'string'));
   
@@ -69,34 +81,32 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
       location: nonStringField
     });
   }
-
-  // Create new IndProf
+  
+  // Create new Position
   
   // Extract values from req.body
-  let {firstName, lastName, email, 
-       userAccount, phone = '', linkedIn = ''} = req.body;
+  let {title, description, dateCreated, orgProf} = req.body;
   
-  firstName = firstName.trim();
-  lastName = lastName.trim();
+  title = title.trim();
+  description = description.trim();
   
-  // Validate userAccount as User._id, then create user
-    User.findById(userAccount)
+  // Validate OrgProf as OrgProf._id, then create user
+    OrgProf.findById(orgProf)
       .then(
         // Resolve function
-        function(user) {
-          return IndProf.create(
+        function(org) {
+          return Position.create(
             {
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              phone: phone,
-              linkedIn: linkedIn,
-              userAccount: userAccount
+              title: title,
+              description: description,
+              dateCreated: dateCreated,
+              orgProf: orgProf,
+              applications: []
             })
             .then(
               // Resolve
-              function(indProf) {
-                return res.status(201).json(indProf);
+              function(position) {
+                return res.status(201).json(position);
               },
               // Reject
               function(err){
@@ -113,13 +123,14 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
           return res.status(422).json({
             code: 422,
             reason: 'ValidatingError',
-            message: 'Non-string field',
-            location: userAccount
+            message: 'Invalid ID',
+            location: orgProfs
           });
         }
       );
 
 });
+
   
 module.exports = {
   router

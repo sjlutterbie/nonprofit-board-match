@@ -7,17 +7,16 @@ const router = express.Router();
 const jsonParser = bodyParser.json();
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
-
-const {IndProf} = require('./models-indprofs');
+const {OrgProf} = require('./models-orgprofs');
 const {User} = require('../users');
+const {Position} = require('../positions');
 
 
-
-// GET an individual profile
+// GET an organization profile
 
 router.get('/:id', jsonParser, jwtAuth, (req, res) => {
   
-  IndProf.findById(req.params.id)
+  OrgProf.findById(req.params.id)
     .then(
       // Found profile
       function(prof) {
@@ -34,15 +33,16 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
     );
 });
 
-// POST a new individual profile
+// POST a new organization profile
 
-  // TODO: Creating an indProf should update ref for:
-    // userAccount
+    //TODO: Creating an orgProf should update refs for
+      // Relevant userAccount
+
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
   // Set required fields, detect missing fields
-  const requiredFields = ['firstName', 'lastName', 'email', 'userAccount'];
+  const requiredFields = ['name', 'email', 'userAccount'];
   const missingField = requiredFields.find(field => !(field in req.body));
   
   // Reject request with missing fields
@@ -56,7 +56,7 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
   }
   
   // Set string fields, detect non-string fields
-  const stringFields = ['firstName', 'lastName', 'email', 'phone', 'linkedIn'];
+  const stringFields = ['name', 'website', 'email', 'phone', 'summary',];
   const nonStringField = stringFields.find(field => 
     (field in req.body && typeof req.body[field] !== 'string'));
   
@@ -70,33 +70,36 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
     });
   }
 
-  // Create new IndProf
+  // Create new OrgProf
   
   // Extract values from req.body
-  let {firstName, lastName, email, 
-       userAccount, phone = '', linkedIn = ''} = req.body;
+  let {name, website = '', email, phone = '', summary = '',
+       userAccount} = req.body;
   
-  firstName = firstName.trim();
-  lastName = lastName.trim();
+  name = name.trim();
+  website = website.trim();
+  email = email.trim();
+  phone = phone.trim();
+  summary = summary.trim();
   
   // Validate userAccount as User._id, then create user
     User.findById(userAccount)
       .then(
         // Resolve function
         function(user) {
-          return IndProf.create(
+          return OrgProf.create(
             {
-              firstName: firstName,
-              lastName: lastName,
+              name: name,
+              website: website,
               email: email,
               phone: phone,
-              linkedIn: linkedIn,
+              summary: summary,
               userAccount: userAccount
             })
             .then(
               // Resolve
-              function(indProf) {
-                return res.status(201).json(indProf);
+              function(orgProf) {
+                return res.status(201).json(orgProf);
               },
               // Reject
               function(err){

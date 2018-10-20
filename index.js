@@ -15,6 +15,9 @@ const { router: authRouter, localStrategy,
                 jwtStrategy } = require('./server/api/auth');
 const { router: portalRouter } = require('./server/portal');
 const { router: indProfsRouter } = require('./server/api/indProf');
+const { router: orgProfsRouter } = require('./server/api/orgProf');
+const { router: positionsRouter } = require('./server/api/positions');
+const { router: applicationsRouter } = require('./server/api/applications');
 
 // Set port & DB information
 const { PORT, DATABASE_URL } = require('./config');
@@ -22,13 +25,13 @@ const { PORT, DATABASE_URL } = require('./config');
 // Create core app
 const app = express();
 
-app.use(morgan('common'));
+//app.use(morgan('common'));
 
 // CORS middleware setup
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  res.header('Access-Control-Allow_Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.header('Access-Control-Allow_Methods', 'GET, POST, PUT, DELETE');
   if (req.method === 'OPTIONS') {
     return res.send(204);
   }
@@ -42,6 +45,9 @@ app.use('/api/users/', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/portal', portalRouter);
 app.use('/api/indprofs', indProfsRouter);
+app.use('/api/orgprofs', orgProfsRouter);
+app.use('/api/positions', positionsRouter);
+app.use('/api/applications', applicationsRouter);
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 

@@ -13,21 +13,22 @@ const { app, runServer, closeServer} = require('../../index');
 const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
 
 // Load module
-const iP = require('../../server/api/indProf');
+const {OrgProf, orgProfSchema} = require('../../server/api/orgProf');
 const {User} = require('../../server/api/users');
 
 // DATA MODEL TESTING
 
-describe('IndProf API: Data Model', function() {
+describe('OrgProf API: Data Model', function() {
   
   it('Should be an object', function() {
-    expect(iP.indProfSchema).to.be.an('object');
+    expect(orgProfSchema).to.be.an('object');
   });
-  it('IndProf should include the expected keys', function() {
-    const requiredKeys = ['firstName', 'lastName', 'email', 'phone',
-                          'linkedIn', 'userAccount'];
-    expect(iP.indProfSchema.obj).to.include.keys(requiredKeys);
+  it('OrgProf should include the expected keys', function() {
+    const requiredKeys = ['name', 'website', 'email', 'phone', 'summary',
+      'userAccount', 'positions'];
+    expect(orgProfSchema.obj).to.include.keys(requiredKeys);
   });
+  
 });
 
 // ROUTE TESTING
@@ -55,15 +56,14 @@ const token = jwt.sign(
   }
 );
 
-
-describe('GET /api/indprofs/:id', function() {
+describe('GET /api/orgprofs/:id', function() {
   
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
 
     afterEach(function() {
-      return iP.IndProf.remove({});
+      return OrgProf.remove({});
     });
   
   // indProfs require an associated userAccount
@@ -94,14 +94,14 @@ describe('GET /api/indprofs/:id', function() {
   
   it('Should reject requests with no JWT', function() {
     return chai.request(app)
-      .get('/api/indprofs/foo')
+      .get('/api/orgprofs/foo')
       .then(function(res) {
         expect(res).to.have.status(401);
       });
   });
   it('Should reject users with an incorrect JWT', function() {
     return chai.request(app)
-      .get('/api/indprofs/foo')
+      .get('/api/orgprofs/foo')
       .set('authorization', `Bearer ${token}XX`)
       .then(function(res) {
         expect(res).to.have.status(401);
@@ -110,7 +110,7 @@ describe('GET /api/indprofs/:id', function() {
   });
   it('Should reject users with an incorrect :id', function() {
     return chai.request(app)
-      .get('/api/indprofs/foo')
+      .get('/api/orgprofs/foo')
       .set('authorization', `Bearer ${token}`)
       .then(function(res) {
         expect(res).to.have.status(422);
@@ -118,19 +118,21 @@ describe('GET /api/indprofs/:id', function() {
     );
   });
   
-  it('Should return the correct indProf', function(){
+  it('Should return the correct orgProf', function(){
     // Create an indProf
-    iP.IndProf.create(
+    OrgProf.create(
       {
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
         email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       }  
     ).then(
       // If successful, run API call
-      function(indProf) {
-        const testURL = `/api/indprofs/${indProf._id}`;
+      function(orgProf) {
+        const testURL = `/api/orgprofs/${orgProf._id}`;
         return chai.request(app)
           .get(testURL)
           .set('authorization', `Bearer ${token}`)
@@ -138,7 +140,7 @@ describe('GET /api/indprofs/:id', function() {
             function(res) {
               expect(res).to.have.status(200);
               expect(res).to.be.a('object');
-              expect(res[0]).to.deep.equal(indProf[0]);
+              expect(res[0]).to.deep.equal(orgProf[0]);
             },
             function(err) {
               return err;
@@ -155,17 +157,20 @@ describe('GET /api/indprofs/:id', function() {
 
 });
 
-describe('POST /api/indprofs', function() {
+
+
+
+describe('POST /api/orgprofs', function() {
   
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
 
     afterEach(function() {
-      return iP.IndProf.remove({});
+      return OrgProf.remove({});
     });
   
-  // indProfs require an associated userAccount
+  // orgProfs require an associated userAccount
   before(function() {
     User.create(
       {
@@ -193,13 +198,13 @@ describe('POST /api/indprofs', function() {
 
   it('Should reject requests with no JWT', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       })
       .then(function(res) {
@@ -208,45 +213,29 @@ describe('POST /api/indprofs', function() {
   });
   it('Should reject users with an incorrect JWT', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('authorization', `Bearer ${token}XX`)
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       })
       .then(function(res) {
         expect(res).to.have.status(401);
     });
   });
-  it('Should reject submissions with a missing firstName', function() {
+  it('Should reject submissions with a missing name', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        lastName: testUser.lastName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
-        userAccount: testUser.userId
-      })
-      .set('authorization', `Bearer ${token}`)
-      .then(function(res) {
-        expect(res).to.have.status(422);
-      });
-  });
-  it('Should reject submissions with a missing lastName', function() {
-    return chai.request(app)
-      .post('/api/indprofs')
-      .set('content-type', 'application/json')
-      .send({
-        firstName: testUser.firstName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
+        website: faker.internet.url(),
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       })
       .set('authorization', `Bearer ${token}`)
@@ -256,13 +245,13 @@ describe('POST /api/indprofs', function() {
   });
   it('Should reject submissions with a missing email', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       })
       .set('authorization', `Bearer ${token}`)
@@ -272,30 +261,30 @@ describe('POST /api/indprofs', function() {
   });
   it('Should reject submissions with a missing userAccount', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
       })
       .set('authorization', `Bearer ${token}`)
       .then(function(res) {
         expect(res).to.have.status(422);
       });
   });
-  it('Should reject submissions with a non-string firstName', function() {
+  it('Should reject submissions with a non-string name', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: 1234,
-        lastName: testUser.lastName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
+        name: 1234,
+        website: faker.internet.url(),
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       })
       .set('authorization', `Bearer ${token}`)
@@ -303,16 +292,16 @@ describe('POST /api/indprofs', function() {
         expect(res).to.have.status(422);
       });
   });
-  it('Should reject submissions with a non-string lastName', function() {
+  it('Should reject submissions with a non-string website', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: testUser.firstName,
-        lastName: 1234,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
+        name: faker.company.companyName(),
+        website: 1234,
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       })
       .set('authorization', `Bearer ${token}`)
@@ -322,14 +311,14 @@ describe('POST /api/indprofs', function() {
   });
   it('Should reject submissions with a non-string email', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
         email: 1234,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       })
       .set('authorization', `Bearer ${token}`)
@@ -337,16 +326,16 @@ describe('POST /api/indprofs', function() {
         expect(res).to.have.status(422);
       });
   });
-  it('Should reject submissions with a non-string phone', function() {
+  it('Should reject submissions with a non-string name', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
-        email: testUser.email,
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
+        email: faker.internet.email(),
         phone: 1234,
-        linkedIn: testUser.linkedIn,
+        summary: faker.lorem.paragraphs(2),
         userAccount: testUser.userId
       })
       .set('authorization', `Bearer ${token}`)
@@ -354,16 +343,16 @@ describe('POST /api/indprofs', function() {
         expect(res).to.have.status(422);
       });
   });
-  it('Should reject submissions with a non-string linkedIn', function() {
+  it('Should reject submissions with a non-string name', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: 1234,
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: 1234,
         userAccount: testUser.userId
       })
       .set('authorization', `Bearer ${token}`)
@@ -373,14 +362,14 @@ describe('POST /api/indprofs', function() {
   });
   it('Should reject submissions with an invalid userAccount', function() {
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
+        name: faker.company.companyName(),
+        website: faker.internet.url(),
+        email: faker.internet.email(),
+        phone: faker.phone.phoneNumber(),
+        summary: faker.lorem.paragraphs(2),
         userAccount: 'NotaUserId'
       })
       .set('authorization', `Bearer ${token}`)
@@ -388,66 +377,91 @@ describe('POST /api/indprofs', function() {
         expect(res).to.have.status(422);
       });
   });
-  it('Should create a new indProf', function() {
+  it('Should create a new orgProf', function() {
+    
+    const testOrg = {
+      name: faker.company.companyName(),
+      website: faker.internet.url(),
+      email: faker.internet.email(),
+      phone: faker.phone.phoneNumber(),
+      summary: faker.lorem.paragraphs(2),
+      userAccount: testUser.userId
+    };
+
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: testUser.firstName,
-        lastName: testUser.lastName,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
-        userAccount: testUser.userId
+        name: testOrg.name,
+        website: testOrg.website,
+        email: testOrg.email,
+        phone: testOrg.phone,
+        summary: testOrg.summary,
+        userAccount: testOrg.userAccount
       })
       .set('authorization', `Bearer ${token}`)
       .then(function(res) {
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('object');
         expect(res.body).to.include.keys(
-          'firstName',
-          'lastName',
+          'name',
+          'website',
           'email',
           'phone',
-          'linkedIn',
+          'summary',
           'userAccount'
         );
-        expect(res.body.firstName).to.equal(testUser.firstName);
-        expect(res.body.lastName).to.equal(testUser.lastName);
-        expect(res.body.email).to.equal(testUser.email);
-        expect(res.body.phone).to.equal(testUser.phone);
-        expect(res.body.linkedIn).to.equal(testUser.linkedIn);
+        expect(res.body.name).to.equal(testOrg.name);
+        expect(res.body.website).to.equal(testOrg.website);
+        expect(res.body.email).to.equal(testOrg.email);
+        expect(res.body.phone).to.equal(testOrg.phone);
+        expect(res.body.summary).to.equal(testOrg.summary);
       });
   });
-  it('Should trim firstName and lastName', function() {
+
+  it('Should trim the relevant fields', function() {
+    
+    const testOrg = {
+      name: faker.company.companyName(),
+      website: faker.internet.url(),
+      email: faker.internet.email(),
+      phone: faker.phone.phoneNumber(),
+      summary: faker.lorem.paragraphs(2),
+      userAccount: testUser.userId
+    };
+
     return chai.request(app)
-      .post('/api/indprofs')
+      .post('/api/orgprofs')
       .set('content-type', 'application/json')
       .send({
-        firstName: `    ${testUser.firstName}    `,
-        lastName: `  ${testUser.lastName}  `,
-        email: testUser.email,
-        phone: testUser.phone,
-        linkedIn: testUser.linkedIn,
-        userAccount: testUser.userId
+        name: `   ${testOrg.name} `,
+        website: `  ${testOrg.website}   `,
+        email: `    ${testOrg.email}   `,
+        phone: ` ${testOrg.phone} `,
+        summary: `${testOrg.summary}        `,
+        userAccount: testOrg.userAccount
       })
       .set('authorization', `Bearer ${token}`)
       .then(function(res) {
         expect(res).to.have.status(201);
         expect(res.body).to.be.an('object');
         expect(res.body).to.include.keys(
-          'firstName', 'lastName', 'email', 'phone', 'linkedIn',
-          'userAccount');
-        expect(res.body.firstName).to.equal(testUser.firstName);
-        expect(res.body.lastName).to.equal(testUser.lastName);
-        return iP.IndProf.findOne({
-          email: testUser.email
-        });
-      })
-      .then(function(user) {
-        expect(user).to.not.be.null;
-        expect(user.firstName).to.equal(testUser.firstName);
-        expect(user.lastName).to.equal(testUser.lastName);
+          'name', 'website', 'email', 'phone', 'summary', 'userAccount');
+        expect(res.body.name).to.equal(testOrg.name);
+        expect(res.body.website).to.equal(testOrg.website);
+        expect(res.body.email).to.equal(testOrg.email);
+        expect(res.body.phone).to.equal(testOrg.phone);
+        expect(res.body.summary).to.equal(testOrg.summary);
+        return OrgProf.findById(res.body._id,
+          function(err, org) {
+            if(err) {
+              return err;
+            } else {
+              expect(org).to.not.be.null,
+              expect(org.name).to.equal(testOrg.name);
+            }
+          }
+        );
     });
   });
 });
