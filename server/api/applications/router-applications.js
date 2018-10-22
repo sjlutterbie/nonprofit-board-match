@@ -11,12 +11,6 @@ const {Position} = require('../positions');
 const {IndProf} = require('../indProf');
 const {Application} = require('./models-applications');
 
-// DELETE an application
-
-  // TODO
-    // Deleting an application must remove ref from:
-      // Relevant indProf
-      // Relevant position
   
 // GET all Applications for an indProf
 
@@ -26,6 +20,53 @@ const {Application} = require('./models-applications');
 // GET all Applicaitons for a position
 
   // TODO: Non-MVP Feature
+
+// PUT /:id update an application
+  // Verify body & req.param match
+
+
+  // TODO
+    // Deleting an application must remove ref from:
+      // Relevant indProf
+      // Relevant position
+
+router.delete('/:id', jsonParser, jwtAuth, (req, res) => {
+  
+  Application.findById(req.params.id)
+    .then(
+      // Success
+      function(application) {
+        Application.findByIdAndDelete(req.params.id)
+        .then(
+          // Success
+          function(application) {
+            res.status(202).json({id: application._id});
+          },
+          // Failure
+          function(err) {
+            return res.status(500).json(
+              {
+                code: 500,
+                message: 'Internal server error'
+              }
+            );
+          }
+        );
+      },
+      // Failure
+      function(err) {
+        return res.status(422).json(
+          {
+          code: 422,
+          reason: 'ValidationError',
+          message: 'Invalid Application ID'
+          }
+        );
+      }
+    );
+  
+});
+
   
 // GET an individual Application
 
@@ -145,6 +186,10 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
     }
   );
 });
+
+
+
+
 
 
 module.exports = { router };

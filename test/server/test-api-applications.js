@@ -58,7 +58,17 @@ const token = jwt.sign(
 
 // GET/:id
 
-describe('POST /api/application', function() {
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////
+
+describe('GET /api/application/:id', function() {
   
   before(function() {
     return runServer(TEST_DATABASE_URL);
@@ -219,7 +229,7 @@ describe('POST /api/application', function() {
         expect(res).to.have.status(401);
       });
   });
-  it('Should reject requests with an invalid JWT', function() {
+  it('Should reject requests with an invalid /:id', function() {
     return chai.request(app)
       .get('/api/applications/foo')
       .set('authorization', `Bearer ${token}`)
@@ -589,4 +599,213 @@ describe('POST /api/application', function() {
     });
   });
 
+});
+
+
+// DELETE :/id
+
+describe('DELETE /api/application/:id', function() {
+  
+  before(function() {
+    return runServer(TEST_DATABASE_URL);
+  });
+
+  afterEach(function() {
+    return Application.remove({});
+  });
+  
+  // applications require a userAccount -> indProf && -> orgProf -> position
+  
+  before(function() {
+    // Generate test User
+    User.create(
+      {
+        username: faker.random.alphaNumeric(10),
+        password: faker.random.alphaNumeric(10)
+      }
+    ).then(
+      // Store variables, advance
+      function(user){
+        testIds.userId = user._id;
+        console.log(testIds.userId);
+        return user;
+      },
+      // Reject
+      function(err) {
+        return (err);
+      }
+    )
+    .then(
+      // Generate indProf
+      function(user) {
+        IndProf.create(
+          {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            email: faker.internet.email(),
+            userAccount: user._id
+          }
+        ).then(
+          // Store variables, advance
+          function (indProf) {
+            testIds.indProfId = indProf._id;
+            return indProf;
+          },
+          function(err) {
+            return err;
+          }
+        ).then(
+          // Create orgProf
+          function(indProf) { // Parameter included to clarify promise chain
+            OrgProf.create(
+              {
+                name: faker.company.companyName(),
+                email: faker.internet.email(),
+                userAccount: testIds.userId
+              }  
+            ).then(
+              function(orgProf) {
+                testIds.orgProfId = orgProf._id;
+                return orgProf;
+              },
+              function(err) {
+                return err;
+              }
+            ).then(
+              function(orgProf) { // Parameter included to clarify promise chain
+                Position.create(
+                  {
+                    title: faker.name.jobTitle(),
+                    description: faker.lorem.paragraphs(2),
+                    dateCreated: new Date(),
+                    orgProf: orgProf._id
+                  }  
+                ).then(
+                  function(position) {
+                    testIds.posId = position._id;
+                    return position;
+                  },
+                  function(err) {
+                    return err;
+                  }
+                );
+              },
+              function(err) {
+                return err;
+              }
+            );
+          },
+          function (err) {
+            return err;
+          }
+        );
+      }, 
+      function(err) {
+        return err;
+      }
+    );
+  });
+  
+  after(function() {
+    // Clean up test objects
+    User.findByIdAndDelete(testIds.userId)
+      .then(
+        function(_){
+          // Success
+        },
+        function(err) {
+          return err;
+        }
+      );
+    IndProf.findByIdAndDelete(testIds.indProfId)
+      .then(
+        function(_){
+          // Success
+        },
+        function(err) {
+          return err;
+        }
+      );
+    OrgProf.findByIdAndDelete(testIds.orgProfId)
+      .then(
+        function(_){
+          // Success
+        },
+        function(err) {
+          return err;
+        }
+      );
+    Position.findByIdAndDelete(testIds.posId)
+      .then(
+        function(_){
+          // Success
+        },
+        function(err) {
+          return err;
+        }
+      );
+  });
+  
+  after(function() {
+    return closeServer();
+  });
+  
+  it('Should reject requests with no JWT', function() {
+    return chai.request(app)
+      .delete('/api/applications/foo')
+      .then(function(res) {
+        expect(res).to.have.status(401);
+      });
+  });
+  it('Should reject requests with an incorrect JWT', function() {
+    return chai.request(app)
+      .delete('/api/applications/foo')
+      .set('authorization', `Bearer ${token}XX`)
+      .then(function(res) {
+        expect(res).to.have.status(401);
+      });
+  });
+  it('Should reject requests with an invalid /:id', function() {
+    return chai.request(app)
+      .delete('/api/applications/foo')
+      .set('authorization', `Bearer ${token}`)
+      .then(function(res) {
+        expect(res).to.have.status(422);
+      });
+  });
+  it('Should delete the correct application', function() {
+    
+    // Create an application
+    return chai.request(app)
+      .post('/api/applications')
+      .set('authorization', `Bearer ${token}`)
+      .send({
+        coverMessage: faker.lorem.paragraphs(2),
+        applicationDate: new Date(),
+        indProf: testIds.indProfId,
+        position: testIds.posId
+      })
+      .then (
+        // Application created, now delete it & test
+        function(application) {
+          console.log(application.body._id);
+          const testURL = `/api/applications/${application.body._id}`;
+          return chai.request(app)
+          .delete(testURL)
+          .set('authorization', `Bearer ${token}`)
+          .then(
+            function(res) {
+              expect(res).to.have.status(202);
+            },
+            function(err) {
+              return err;
+            }
+          );
+        },
+        function(err) {
+          return err;
+        }
+      );
+  });
+  
 });
