@@ -56,8 +56,6 @@ const token = jwt.sign(
   }
 );
 
-
-
 describe('/api/applications routes', function() {
   
   // Test setup
@@ -66,141 +64,66 @@ describe('/api/applications routes', function() {
     return runServer(TEST_DATABASE_URL);
   });
 
-  afterEach(function() {
-    return Application.remove({});
-  });
-  
-  // applications require a userAccount -> indProf && -> orgProf -> position
+  // Applications require a userAccount -> indProf && -> orgProf -> position
   
   before(function() {
-    return new Promise((resolve) => {
-      // Generate test User
+    return new Promise(function(resolve){
       User.create(
         {
           username: faker.random.alphaNumeric(10),
           password: faker.random.alphaNumeric(10)
         }
-      ).then(
-        // Store variables, advance
-        function(user){
-          testIds.userId = user._id;
-          return user;
-        },
-        // Reject
-        function(err) {
-          return (err);
-        }
-      )
-      .then(
-        // Generate indProf
-        function(user) {
-          IndProf.create(
-            {
-              firstName: faker.name.firstName(),
-              lastName: faker.name.lastName(),
-              email: faker.internet.email(),
-              userAccount: user._id
-            }
-          ).then(
-            // Store variables, advance
-            function (indProf) {
-              testIds.indProfId = indProf._id;
-              return indProf;
-            },
-            function(err) {
-              return err;
-            }
-          ).then(
-            // Create orgProf
-            function(indProf) { // Parameter included to clarify promise chain
-              OrgProf.create(
-                {
-                  name: faker.company.companyName(),
-                  email: faker.internet.email(),
-                  userAccount: testIds.userId
-                }  
-              ).then(
-                function(orgProf) {
-                  testIds.orgProfId = orgProf._id;
-                  return orgProf;
-                },
-                function(err) {
-                  return err;
-                }
-              ).then(
-                function(orgProf) { // Parameter included to clarify promise chain
-                  Position.create(
-                    {
-                      title: faker.name.jobTitle(),
-                      description: faker.lorem.paragraphs(2),
-                      dateCreated: new Date(),
-                      orgProf: orgProf._id
-                    }  
-                  ).then(
-                    function(position) {
-                      testIds.posId = position._id;
-                      resolve();
-                    },
-                    function(err) {
-                      return err;
-                    }
-                  );
-                },
-                function(err) {
-                  return err;
-                }
-              );
-            },
-            function (err) {
-              return err;
-            }
-          );
-        }, 
-        function(err) {
-          return err;
-        }
-      );
+      ).then(function(user) {
+        testIds.userId = user._id;
+        return IndProf.create (
+          {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            email: faker.internet.email(),
+            userAccount: user._id
+          }
+        );
+      }).then(function(indProf) {
+        testIds.indProfId = indProf._id;
+        return OrgProf.create(
+          {
+            name: faker.company.companyName(),
+            email: faker.internet.email(),
+            userAccount: testIds.userId
+          }  
+        );
+      }).then(function(orgProf) {
+        testIds.orgProfId = orgProf._id;
+        return Position.create(
+          {
+            title: faker.name.jobTitle(),
+            description: faker.lorem.paragraphs(2),
+            dateCreated: new Date(),
+            currentlyOpen: Math.random() > .5 ? true : false,
+            orgProf: orgProf._id
+          }
+        );
+      }).then(function(position) {
+        testIds.posId = position._id;
+        resolve();
+      }).catch(function(err) {
+        return err;
+      });
     });
+    
   });
-  
+        
+  // Testing cleanup
+      
   after(function() {
-    // Clean up test objects
-    User.findByIdAndDelete(testIds.userId)
-      .then(
-        function(_){
-          // Success
-        },
-        function(err) {
-          return err;
-        }
-      );
-    IndProf.findByIdAndDelete(testIds.indProfId)
-      .then(
-        function(_){
-          // Success
-        },
-        function(err) {
-          return err;
-        }
-      );
-    OrgProf.findByIdAndDelete(testIds.orgProfId)
-      .then(
-        function(_){
-          // Success
-        },
-        function(err) {
-          return err;
-        }
-      );
-    Position.findByIdAndDelete(testIds.posId)
-      .then(
-        function(_){
-          // Success
-        },
-        function(err) {
-          return err;
-        }
-      );
+    User.remove({})
+    .then(IndProf.remove({}))
+    .then(OrgProf.remove({}))
+    .then(Position.remove({}))
+    .then(Application.remove({}))
+    .catch(function(err) {
+      return err;
+    });
   });
   
   after(function() {
@@ -396,7 +319,7 @@ describe('/api/applications routes', function() {
   });
   
   describe('POST /api/application', function() {
-
+    
     it('Should reject requests with no JWT', function() {
       return chai.request(app)
         .post('/api/applications')
@@ -530,7 +453,7 @@ describe('/api/applications routes', function() {
         indProf: testIds.indProfId,
         position: testIds.posId
       };
-      
+
       return chai.request(app)
         .post('/api/applications')
         .set('authorization', `Bearer ${token}`)

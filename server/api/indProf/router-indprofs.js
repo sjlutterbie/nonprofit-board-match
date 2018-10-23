@@ -119,9 +119,6 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
 
 // POST a new individual profile
 
-  // TODO: Creating an indProf should update ref for:
-    // userAccount
-
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
   // Set required fields, detect missing fields

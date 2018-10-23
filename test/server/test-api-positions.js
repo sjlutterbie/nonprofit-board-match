@@ -118,6 +118,27 @@ describe('/api/positions routes', function() {
     return closeServer();
   });
   
+    describe('GET /api/positions?queryString...', function() {
+    it('Should reject requests with no JWT', function() {
+      return chai.request(app)
+        .get('/api/positions?foo=bar')
+        .then(function(res) {
+          expect(res).to.have.status(401);
+        });
+    });
+    it('Should reject requests with an incorrect JWT', function() {
+      return chai.request(app)
+        .get('/api/positions?foo=bar')
+        .set('authorization', `Bearer ${token}XX`)
+        .then(function(res) {
+          expect(res).to.have.status(401);
+        });
+    });
+
+
+
+  });  
+
   describe('GET /api/positions/:id', function() {
     
     it('Should reject requests with no JWT', function() {
@@ -152,6 +173,7 @@ describe('/api/positions routes', function() {
           title: faker.name.jobTitle,
           description: faker.lorem.paragraphs(2),
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testOrg._id
         }  
       ).then(
@@ -189,6 +211,7 @@ describe('/api/positions routes', function() {
           title: faker.name.jobTitle(),
           description: faker.lorem.paragraphs(2),
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testOrg._id
         })
         .then(function(res) {
@@ -203,6 +226,7 @@ describe('/api/positions routes', function() {
           title: faker.name.jobTitle(),
           description: faker.lorem.paragraphs(2),
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testOrg._id
         })
         .then(function(res) {
@@ -216,6 +240,7 @@ describe('/api/positions routes', function() {
         .send({
           description: faker.lorem.paragraphs(2),
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testOrg._id
         })
         .set('authorization', `Bearer ${token}`)
@@ -230,6 +255,7 @@ describe('/api/positions routes', function() {
         .send({
           title: faker.name.jobTitle(),
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testOrg._id
         })
         .set('authorization', `Bearer ${token}`)
@@ -238,6 +264,21 @@ describe('/api/positions routes', function() {
         });
     });
     it('Should reject submissions with a missing dateCreated', function() {
+      return chai.request(app)
+        .post('/api/positions')
+        .set('content-type', 'application/json')
+        .send({
+          title: faker.name.jobTitle(),
+          description: faker.lorem.paragraphs(2),
+          currentlyOpen: Math.random() > .5 ? true : false,
+          orgProf: testOrg._id
+        })
+        .set('authorization', `Bearer ${token}`)
+        .then(function(res) {
+          expect(res).to.have.status(422);
+        });
+    });
+    it('Should reject submissions with a missing currentlyOpen', function() {
       return chai.request(app)
         .post('/api/positions')
         .set('content-type', 'application/json')
@@ -258,6 +299,7 @@ describe('/api/positions routes', function() {
         .send({
           title: faker.name.jobTitle(),
           description: faker.lorem.paragraphs(2),
+          currentlyOpen: Math.random() > .5 ? true : false,
           dateCreated: new Date()
         })
         .set('authorization', `Bearer ${token}`)
@@ -273,6 +315,7 @@ describe('/api/positions routes', function() {
           title: 1234,
           description: faker.lorem.paragraphs(2),
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testOrg._id
         })
         .set('authorization', `Bearer ${token}`)
@@ -288,6 +331,7 @@ describe('/api/positions routes', function() {
           title: faker.name.jobTitle(),
           description: 1234,
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testOrg._id
         })
         .set('authorization', `Bearer ${token}`)
@@ -303,6 +347,7 @@ describe('/api/positions routes', function() {
           title: faker.name.jobTitle(),
           description: 1234,
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: 'NotAnOrgProf'
         })
         .set('authorization', `Bearer ${token}`)
@@ -315,6 +360,7 @@ describe('/api/positions routes', function() {
         title: faker.name.jobTitle(),
         description: faker.lorem.paragraphs(2),
         dateCreated: new Date(),
+        currentlyOpen: Math.random() > .5 ? true : false,
         orgProf: testOrg._id
       };
       return chai.request(app)
@@ -324,6 +370,7 @@ describe('/api/positions routes', function() {
           title: testPosition.title,
           description: testPosition.description,
           dateCreated: testPosition.dateCreated,
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testPosition.orgProf
         })
         .set('authorization', `Bearer ${token}`)
@@ -342,6 +389,7 @@ describe('/api/positions routes', function() {
         title: faker.name.jobTitle(),
         description: faker.lorem.paragraphs(2),
         dateCreated: new Date(),
+        currentlyOpen: Math.random() > .5 ? true : false,
         orgProf: testOrg._id
       };
       return chai.request(app)
@@ -351,6 +399,7 @@ describe('/api/positions routes', function() {
           title: `  ${testPosition.title} `,
           description: `   ${testPosition.description}  `,
           dateCreated: testPosition.dateCreated,
+          currentlyOpen: testPosition.currentlyOpen,
           orgProf: testPosition.orgProf
         })
         .set('authorization', `Bearer ${token}`)
@@ -359,6 +408,7 @@ describe('/api/positions routes', function() {
           expect(res.body).to.be.an('object');
           expect(res.body.title).to.equal(testPosition.title);
           expect(res.body.description).to.equal(testPosition.description);
+          expect(res.body.currentlyOpen).to.equal(testPosition.currentlyOpen);
           return Position.findOne({
             title: testPosition.title
           });
@@ -367,6 +417,7 @@ describe('/api/positions routes', function() {
           expect(position).to.not.be.null;
           expect(position.title).to.equal(testPosition.title);
           expect(position.description).to.equal(testPosition.description);
+          expect(position.currentlyOpen).to.equal(testPosition.currentlyOpen);
       });
     });
   });
@@ -406,6 +457,7 @@ describe('/api/positions routes', function() {
           title: faker.name.jobTitle(),
           description: faker.lorem.paragraphs(2),
           dateCreated: new Date(),
+          currentlyOpen: Math.random() > .5 ? true : false,
           orgProf: testOrg._id
         })
         .then (
@@ -430,11 +482,7 @@ describe('/api/positions routes', function() {
         );
     });
   });
-  
-  
-  
-  
-  
+
 });
 
 

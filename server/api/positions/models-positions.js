@@ -16,6 +16,10 @@ const positionsSchema = mongoose.Schema({
     type: Date,
     required: true
   },
+  currentlyOpen: {
+    type: Boolean,
+    required: true
+  },
   orgProf: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'OrgProf',

@@ -11,14 +11,44 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 const {Position} = require('./models-positions');
 const {OrgProf} = require('../orgProf/models-orgprofs');
 
-// GET: Retrieve all Positions
+// GET: Retrieve all Positions (with query filters)
 
-  // TODO
+router.get('/', jsonParser, jwtAuth, (req, res) => {
   
-// GET: Retrieve all Positions for a specific organization
+  // Block requests with invalid query fields
+  const allowedFields = ['currentlyOpen'];
+  
+  const invalidField = Object.keys(req.query).find(field =>
+  !(allowedFields.includes(field)));
+  
+  if(invalidField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Invalid query field',
+      location: invalidField
+    });
+  }
+  
+  // Run request
+  Position.find(req.query)
+    .exec(function(err, docs) {
+      if(docs) {
+        return res.status(200).json(docs);
+      }
+  
+      if(err) {
+        return res.status(500).json({
+          code: 500,
+          message: 'Internal server error'
+        });
+      }
+    }
+  );
+  
+});
 
-  // TODO: Non-MVP Feature
-  
+
 // DELETE a position
 
 router.delete('/:id', jsonParser, jwtAuth, (req, res) => {
@@ -82,13 +112,11 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
 
 // POST a new Position
 
-  // TODO: Creating a new Position should update refs for
-    // Relevant OrgProf
-
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
   // Set required fields, detect missing fields
-  const requiredFields = ['title', 'description', 'dateCreated', 'orgProf']; 
+  const requiredFields = ['title', 'description', 'dateCreated',
+                          'currentlyOpen', 'orgProf']; 
 
   const missingField = requiredFields.find(field => !(field in req.body));
   
@@ -118,10 +146,19 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
     });
   }
   
+  // Verify currentlyOpen is a boolean
+  if (typeof req.body.currentlyOpen != 'boolean') {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Non-boolean for currentlyOpen'
+    });
+  }
+  
   // Create new Position
   
   // Extract values from req.body
-  let {title, description, dateCreated, orgProf} = req.body;
+  let {title, description, dateCreated, currentlyOpen, orgProf} = req.body;
   
   title = title.trim();
   description = description.trim();
@@ -137,6 +174,7 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
               description: description,
               dateCreated: dateCreated,
               orgProf: orgProf,
+              currentlyOpen: currentlyOpen,
               applications: []
             })
             .then(

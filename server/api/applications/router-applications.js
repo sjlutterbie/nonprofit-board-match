@@ -84,7 +84,7 @@ router.get('/', jsonParser, jwtAuth, (req, res) => {
       code: 422,
       reason: 'ValidationError',
       message: 'Invalid query field',
-      location: allowedFields
+      location: invalidField
     });
   }
 
