@@ -12,16 +12,6 @@ const {Position} = require('../positions');
 const {IndProf} = require('../indProf');
 const {Application} = require('./models-applications');
 
-  
-// PUT /:id update an application
-  // Verify body & req.param match
-
-
-  // TODO
-    // Deleting an application must remove ref from:
-      // Relevant indProf
-      // Relevant position
-
 router.delete('/:id', jsonParser, jwtAuth, (req, res) => {
   
   Application.findById(req.params.id)
@@ -87,10 +77,6 @@ router.get('/', jsonParser, jwtAuth, (req, res) => {
       location: invalidField
     });
   }
-
-  
-  // TODO: queryObj and Application.find() not working correctly.
-    // ALSO: testHandling for this section not working correctly.
 
   // Run request
   Application.find(req.query)

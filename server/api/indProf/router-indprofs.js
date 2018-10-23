@@ -160,45 +160,34 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
   firstName = firstName.trim();
   lastName = lastName.trim();
   
-  // Validate userAccount as User._id, then create user
-    User.findById(userAccount)
-      .then(
-        // Resolve function
-        function(user) {
-          return IndProf.create(
-            {
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              phone: phone,
-              linkedIn: linkedIn,
-              userAccount: userAccount
-            })
-            .then(
-              // Resolve
-              function(indProf) {
-                return res.status(201).json(indProf);
-              },
-              // Reject
-              function(err){
-                return res.status(500).json(
-                  {code: 500,
-                    message: 'Internal server error'
-                  }
-                );
-              }
-            );
-        },
-        // Reject function
-        function(err){
-          return res.status(422).json({
-            code: 422,
-            reason: 'ValidatingError',
-            message: 'Non-string field',
-            location: userAccount
-          });
+  // Validate userAccount as User._id, then create profile
+  User.findById(userAccount)
+    .then(function(user) {
+      return IndProf.create(
+        {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phone: phone,
+          linkedIn: linkedIn,
+          userAccount: userAccount
         }
       );
+    })
+    .then(function(indProf) {
+      User.findByIdAndUpdate(indProf.userAccount,
+        { indProf: indProf._id}
+      ).then(function(user) {
+        return res.status(201).json(indProf);
+      });
+    })
+    .catch(function(err) {
+      return res.status(500).json({
+        code: 500,
+        message: 'Internal server error'
+      }
+    );
+  });
 
 });
   

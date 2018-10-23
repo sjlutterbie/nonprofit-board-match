@@ -348,7 +348,7 @@ describe('/api/indprofs routes',function() {
         })
         .set('authorization', `Bearer ${token}`)
         .then(function(res) {
-          expect(res).to.have.status(422);
+          expect(res).to.have.status(500);
         });
     });
     it('Should create a new indProf', function() {
