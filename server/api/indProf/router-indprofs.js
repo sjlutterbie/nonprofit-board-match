@@ -86,8 +86,44 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
       message: 'Request parameter and body IDs do not match'
     });
   }
-
+  
+  // Ensure /:id is a valid IndProf
+  IndProf.findById(req.params.id)
+    .then(function(prof) {
+      return IndProf.update({
+        id: req.body.indProfId,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone,
+        linkedIn: req.body.linkedIn,
+        userAccount: req.body.userAccount
+      })
+    .then(function(prof) {
+      return res.status(204).json(prof);
+    })
+    .catch(function(err) {
+      return res.status(500).json({
+        code: 500,
+        reason: 'Internal server error'
+      });
+    });
+  })
+  .catch(function(err) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Invalid ID'
+    });
+  });
+  
 });
+
+function updateProf(updatedProf) {
+  
+  
+  
+}
 
 // POST a new individual profile
 
