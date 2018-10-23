@@ -12,9 +12,6 @@ const {IndProf} = require('./models-indprofs');
 const {User} = require('../users');
 
 
-// PUT update an individual profile
-
-  // TODO
 
 // GET an individual profile
 
@@ -35,6 +32,61 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
         });
       }
     );
+});
+
+router.put('/:id', jsonParser, jwtAuth, (req, res) => {
+  
+  // Set required fields, detect missing fields
+  const requiredFields = ['firstName', 'lastName', 'email',
+                          'userAccount', 'indProfId'];
+  const missingField = requiredFields.find(field => !(field in req.body));
+  
+  if(missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Missing field',
+      location: missingField
+    });
+  }
+  
+  // Detect non-string fields
+  const stringFields = ['firstName', 'lastName', 'email', 'phone', 'linkedIn'];
+  const nonStringField = stringFields.find(field => 
+    (field in req.body && typeof req.body[field] !== 'string'));
+    
+  // Reject request with non-string fields
+  if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Empty string field',
+      location: nonStringField
+    });
+  }
+  
+  const emptyStringField = requiredFields.find(field => 
+  (field in req.body && req.body[field] === ''));
+  
+  // Required fields also may not be empty strings
+  if (emptyStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Empty string in required field',
+      location: emptyStringField
+    });
+  }
+  
+  // Ensure /:id and indProfId match
+  if (req.params.id != req.body.indProfiId) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Request parameter and body IDs do not match'
+    });
+  }
+
 });
 
 // POST a new individual profile
@@ -72,6 +124,7 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
       location: nonStringField
     });
   }
+  
 
   // Create new IndProf
   
