@@ -34,6 +34,8 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
     );
 });
 
+// PUT (update) an individual profile
+
 router.put('/:id', jsonParser, jwtAuth, (req, res) => {
   
   // Set required fields, detect missing fields
@@ -78,8 +80,11 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
     });
   }
   
+  
+  
   // Ensure /:id and indProfId match
-  if (req.params.id != req.body.indProfiId) {
+  if (req.params.id != req.body.indProfId) {
+    
     return res.status(422).json({
       code: 422,
       reason: 'ValidationError',
@@ -88,42 +93,29 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
   }
   
   // Ensure /:id is a valid IndProf
-  IndProf.findById(req.params.id)
-    .then(function(prof) {
-      return IndProf.update({
-        id: req.body.indProfId,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        phone: req.body.phone,
-        linkedIn: req.body.linkedIn,
-        userAccount: req.body.userAccount
-      })
-    .then(function(prof) {
-      return res.status(204).json(prof);
-    })
-    .catch(function(err) {
-      return res.status(500).json({
-        code: 500,
-        reason: 'Internal server error'
-      });
-    });
+  IndProf.findByIdAndUpdate(req.body.indProfId,
+  {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phone: req.body.phone,
+    linkedIn: req.body.linkedIn,
+    userAccount: req.body.userAccount
+  },
+  {
+    new: true
+  })
+  .then(function(indProf) {
+    return res.status(204).json(indProf);
   })
   .catch(function(err) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Invalid ID'
+    return res.status(500).json({
+      code: 500,
+      reason: 'Internal server error'
     });
   });
-  
-});
 
-function updateProf(updatedProf) {
-  
-  
-  
-}
+});
 
 // POST a new individual profile
 

@@ -20,7 +20,99 @@ const {Position} = require('../positions');
 
 // PUT: Update an existing organization profile
   
-    // TODO: Non-MVP Feature
+router.put('/:id', jsonParser, jwtAuth, (req, res) => {
+  
+  // Set required fields, detect missing fields
+  const requiredFields = ['name', 'email', 'userAccount', 'orgProfId'];
+  const missingField = requiredFields.find(field => !(field in req.body));
+  
+  if(missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Missing field',
+      location: missingField
+    });
+  }
+  
+  // Detect non-string fields
+  const stringFields = ['name', 'website', 'email', 'phone', 'summary',];
+  const nonStringField = stringFields.find(field => 
+    (field in req.body && typeof req.body[field] !== 'string'));
+    
+  // Reject request with non-string fields
+  if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Empty string field',
+      location: nonStringField
+    });
+  }
+  
+  const emptyStringField = requiredFields.find(field => 
+  (field in req.body && req.body[field] === ''));
+  
+  // Required fields also may not be empty strings
+  if (emptyStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Empty string in required field',
+      location: emptyStringField
+    });
+  }
+  
+  // Ensure /:id and orgProfId match
+  if (req.params.id != req.body.orgProfId) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Request parameter and body IDs do not match'
+    });
+  }
+  
+  // Ensure userAccount is valid
+  User.findById(req.body.userAccount)
+    .then(function(prof){})
+    .catch(function(err) {
+      return res.status(422).json({
+        code: 422,
+        reason: 'ValidationError',
+        message: 'Invalid user account ID'
+      });
+    });
+
+  // Ensure /:id is a valid IndProf
+  OrgProf.findById(req.params.id)
+    .then(function(prof) {
+      return OrgProf.update({
+        name: req.body.name,
+        website: req.body.website,
+        email: req.body.email,
+        phone: req.body.phone,
+        summary: req.body.summary,
+        userAccount: req.body.userAccount
+      })
+    .then(function(prof) {
+      return res.status(204).json(prof);
+    })
+    .catch(function(err) {
+      return res.status(500).json({
+        code: 500,
+        reason: 'Internal server error'
+      });
+    });
+  })
+  .catch(function(err) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Invalid ID'
+    });
+  });
+  
+});
 
 // GET /:id: Retrieve a specific organization profile
 
