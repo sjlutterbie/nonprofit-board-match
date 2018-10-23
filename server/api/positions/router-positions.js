@@ -11,17 +11,53 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 const {Position} = require('./models-positions');
 const {OrgProf} = require('../orgProf/models-orgprofs');
 
-// Get all Positions
+// GET: Retrieve all Positions
 
   // TODO
   
-// Get all Positions for a specific organization
+// GET: Retrieve all Positions for a specific organization
 
   // TODO: Non-MVP Feature
   
 // DELETE a position
 
-  // TODO: Non-MVP Feature
+router.delete('/:id', jsonParser, jwtAuth, (req, res) => {
+  
+  // Verify position exists
+  Position.findById(req.params.id)
+    .then(
+      // Success: Delete position
+      function(position) {
+        Position.findByIdAndDelete(req.params.id)
+        .then(
+          // Success
+          function(position) {
+            return res.status(202).json({id: position._id});
+          },
+          // Failure
+          function(err) {
+            return res.status(500).json(
+              {
+                code: 500,
+                message: 'Internal server error'
+              }
+            );
+          }
+        );
+      },
+      // Failure: Validation error (invalid id)
+      function(err) {
+        return res.status(422).json(
+          {
+            code: 422,
+            reason: 'ValidationError',
+            message: 'Invalid Application ID'
+          }  
+        );
+      }
+    );
+  
+});
 
 // GET a single Position
 

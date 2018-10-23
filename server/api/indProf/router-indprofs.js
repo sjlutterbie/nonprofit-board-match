@@ -12,6 +12,9 @@ const {IndProf} = require('./models-indprofs');
 const {User} = require('../users');
 
 
+// PUT update an individual profile
+
+  // TODO
 
 // GET an individual profile
 

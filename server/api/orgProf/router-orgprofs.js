@@ -12,7 +12,17 @@ const {User} = require('../users');
 const {Position} = require('../positions');
 
 
-// GET an organization profile
+
+// POST: Create a new organization profile
+
+    //TODO: Creating an orgProf should update refs for
+      // Relevant userAccount
+
+// PUT: Update an existing organization profile
+  
+    // TODO: Non-MVP Feature
+
+// GET /:id: Retrieve a specific organization profile
 
 router.get('/:id', jsonParser, jwtAuth, (req, res) => {
   
@@ -32,12 +42,6 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
       }
     );
 });
-
-// POST a new organization profile
-
-    //TODO: Creating an orgProf should update refs for
-      // Relevant userAccount
-
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   

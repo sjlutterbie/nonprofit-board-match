@@ -6,21 +6,13 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 const jwtAuth = passport.authenticate('jwt', {session: false});
+const mongoose = require('mongoose');
 
 const {Position} = require('../positions');
 const {IndProf} = require('../indProf');
 const {Application} = require('./models-applications');
 
   
-// GET all Applications for an indProf
-
-  // TODO
-
-
-// GET all Applicaitons for a position
-
-  // TODO: Non-MVP Feature
-
 // PUT /:id update an application
   // Verify body & req.param match
 
@@ -40,7 +32,7 @@ router.delete('/:id', jsonParser, jwtAuth, (req, res) => {
         .then(
           // Success
           function(application) {
-            res.status(202).json({id: application._id});
+            return res.status(202).json({id: application._id});
           },
           // Failure
           function(err) {
@@ -57,21 +49,71 @@ router.delete('/:id', jsonParser, jwtAuth, (req, res) => {
       function(err) {
         return res.status(422).json(
           {
-          code: 422,
-          reason: 'ValidationError',
-          message: 'Invalid Application ID'
-          }
+            code: 422,
+            reason: 'ValidationError',
+            message: 'Invalid Application ID'
+            }
         );
       }
     );
   
 });
 
+// GET all applications (with query filters)
+
+router.get('/', jsonParser, jwtAuth, (req, res) => {
+
+  // Block requests w/ no query string
+  if (Object.keys(req.query).length === 0) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Query fields required'
+    });
+  }
+  
+  // Block requests with invalid query fields
+  const allowedFields = ['indProf', 'position'];
+  
+  const invalidField = Object.keys(req.query).find(field => 
+    !(allowedFields.includes(field))
+  );
+
+  if(invalidField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Invalid query field',
+      location: allowedFields
+    });
+  }
+
+  
+  // TODO: queryObj and Application.find() not working correctly.
+    // ALSO: testHandling for this section not working correctly.
+
+  // Run request
+  Application.find(req.query)
+    .exec(function(err, docs) {
+      if(docs) {
+        return res.status(200).json(docs);
+      }
+  
+      if(err) {
+        return res.status(500).json({
+          code: 500,
+          message: 'Internal server error'
+        });
+      }
+    }
+  );
+
+});
   
 // GET an individual Application
 
 router.get('/:id', jsonParser, jwtAuth, (req, res) => {
-  
+
   Application.findById(req.params.id)
     .then(
       // Found application
