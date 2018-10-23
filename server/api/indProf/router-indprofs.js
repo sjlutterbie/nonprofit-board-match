@@ -34,10 +34,90 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
     );
 });
 
-// POST a new individual profile
+// PUT (update) an individual profile
 
-  // TODO: Creating an indProf should update ref for:
-    // userAccount
+router.put('/:id', jsonParser, jwtAuth, (req, res) => {
+  
+  // Set required fields, detect missing fields
+  const requiredFields = ['firstName', 'lastName', 'email',
+                          'userAccount', 'indProfId'];
+  const missingField = requiredFields.find(field => !(field in req.body));
+  
+  if(missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Missing field',
+      location: missingField
+    });
+  }
+  
+  // Detect non-string fields
+  const stringFields = ['firstName', 'lastName', 'email', 'phone', 'linkedIn'];
+  const nonStringField = stringFields.find(field => 
+    (field in req.body && typeof req.body[field] !== 'string'));
+    
+  // Reject request with non-string fields
+  if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Empty string field',
+      location: nonStringField
+    });
+  }
+  
+  const emptyStringField = requiredFields.find(field => 
+  (field in req.body && req.body[field] === ''));
+  
+  // Required fields also may not be empty strings
+  if (emptyStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Empty string in required field',
+      location: emptyStringField
+    });
+  }
+  
+  
+  
+  // Ensure /:id and indProfId match
+  if (req.params.id != req.body.indProfId) {
+    
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Request parameter and body IDs do not match'
+    });
+  }
+  
+  // Ensure /:id is a valid IndProf
+  IndProf.findByIdAndUpdate(req.body.indProfId,
+  {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phone: req.body.phone,
+    linkedIn: req.body.linkedIn,
+    userAccount: req.body.userAccount
+  },
+  {
+    new: true
+  })
+  .then(function(indProf) {
+    return res.status(204).json(indProf);
+  })
+  .catch(function(err) {
+    return res.status(500).json({
+      code: 500,
+      reason: 'Internal server error'
+    });
+  });
+
+});
+
+// POST a new individual profile
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
@@ -69,6 +149,7 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
       location: nonStringField
     });
   }
+  
 
   // Create new IndProf
   
@@ -79,45 +160,34 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
   firstName = firstName.trim();
   lastName = lastName.trim();
   
-  // Validate userAccount as User._id, then create user
-    User.findById(userAccount)
-      .then(
-        // Resolve function
-        function(user) {
-          return IndProf.create(
-            {
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              phone: phone,
-              linkedIn: linkedIn,
-              userAccount: userAccount
-            })
-            .then(
-              // Resolve
-              function(indProf) {
-                return res.status(201).json(indProf);
-              },
-              // Reject
-              function(err){
-                return res.status(500).json(
-                  {code: 500,
-                    message: 'Internal server error'
-                  }
-                );
-              }
-            );
-        },
-        // Reject function
-        function(err){
-          return res.status(422).json({
-            code: 422,
-            reason: 'ValidatingError',
-            message: 'Non-string field',
-            location: userAccount
-          });
+  // Validate userAccount as User._id, then create profile
+  User.findById(userAccount)
+    .then(function(user) {
+      return IndProf.create(
+        {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phone: phone,
+          linkedIn: linkedIn,
+          userAccount: userAccount
         }
       );
+    })
+    .then(function(indProf) {
+      User.findByIdAndUpdate(indProf.userAccount,
+        { indProf: indProf._id}
+      ).then(function(user) {
+        return res.status(201).json(indProf);
+      });
+    })
+    .catch(function(err) {
+      return res.status(500).json({
+        code: 500,
+        message: 'Internal server error'
+      }
+    );
+  });
 
 });
   
