@@ -85,7 +85,7 @@ $('.js-login-form').submit(function(e) {
       // TODO: Elevate resUrl to function parameter, to enable testing
       
       // Store the JWT in local storage
-      localStorage.setItem('JWT', JSON.stringify(res.authToken))
+      localStorage.setItem('JWT', res.authToken)
       
       const requestData = {
         profType: res.profType,

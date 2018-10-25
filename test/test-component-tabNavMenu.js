@@ -14,12 +14,12 @@ const window = new JSDOM(
 global.$ = require('jquery')(window);
   
 // Load module
-const tabNavMenu = require('../server/portal/components/tabnav-menu');
+const tabNavMenu = require('../server/portal/components/component-tabNavMenu');
 
 
 // BEGIN TESTING
 
-describe('buildTabNavMenu()', function() {
+describe('tabNavMenu.buildComponent()', function() {
   
   it('Should be a function', function() {
     expect(tabNavMenu.buildComponent).to.be.a('function');

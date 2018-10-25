@@ -13,13 +13,13 @@ function buildComponent() {
   const outputHTML = `
     <ul>
       <li>
-        <a href="#">Profile</a>
+        <a href="#" class="js-tabnavmenu-profile">Profile</a>
       </li>
       <li>
-        <a href="#">Open Positions</a>
+        <a href="#" class="js-tabnavmenu-positions">Open Positions</a>
       </li>
       <li>
-        <a href="#">Applications</a>
+        <a href="#" class="js-tabnavmenu-applications">Applications</a>
       </li>
     </ul>`;
   

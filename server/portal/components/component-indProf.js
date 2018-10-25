@@ -7,3 +7,19 @@
 //    using pre-populated data from the existing profile.
 //  If the active userAccont does NOT have an existing indProf, it displays the
 //    profile editing form, without any pre-populated data.
+
+
+function buildComponent() {
+  
+  const outputHTML = `
+    <p>Welcome to the Individual Profile view!</p>
+  `;
+  
+  return outputHTML;
+  
+}
+
+
+module.exports = {
+  buildComponent
+};

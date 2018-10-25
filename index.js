@@ -13,7 +13,7 @@ const passport = require('passport');
 const { router: usersRouter } = require('./server/api/users');
 const { router: authRouter, localStrategy,
                 jwtStrategy } = require('./server/api/auth');
-const { router: portalRouter } = require('./server/portal');
+const { router: portalRouter } = require('./server/portal/router-portal');
 const { router: indProfsRouter } = require('./server/api/indProf');
 const { router: orgProfsRouter } = require('./server/api/orgProf');
 const { router: positionsRouter } = require('./server/api/positions');

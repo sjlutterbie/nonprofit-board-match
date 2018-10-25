@@ -18,7 +18,6 @@ const window = new JSDOM(
   `<!DOCTYPE html><html><body></body></html>`).window;
 global.$ = require('jquery')(window);
 
-// Load the module //NOTE: let instead of const so it can be refreshed
 const lF = require('../../client/public/js/login-form');
 
 // Load testing server details

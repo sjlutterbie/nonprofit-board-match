@@ -1,8 +1,9 @@
 'use strict';
 
-const tabNavMenu = require('./components/tabnav-menu');
+const tabNavMenu = require('./components/component-tabNavMenu');
+const indProf = require('./components/component-indProf');
 
-function portalView(profType, profId, userId, viewType) {
+function buildPortal(profType, profId, userId, viewType) {
   
   const viewHTML = `
   <!DOCTYPE html>
@@ -45,13 +46,15 @@ function portalView(profType, profId, userId, viewType) {
           <p>profId: ${profId} (undefined is OK)</p>
           <p>userId: ${userId}</p>
           <p>Based on the above, you'd see the <u>${viewType}</u> view.</p>
+          <hr/>
+          ${indProf.buildComponent()}
         </main>
     
         <!-- Load jQuery -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"
                 integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
                 crossorigin="anonymous"></script>
-        <script type="text/javascript" src="js/portal.js"></script>
+        <script type="text/javascript" src="js/client-portal.js"></script>
       </body>
     </html>`;
     
@@ -59,7 +62,20 @@ function portalView(profType, profId, userId, viewType) {
   
 }
 
+function portalBuildSelector(profType, profId) {
+
+  // If the profId is undefined, go to create mode.
+  const viewType = profId ? 'Static' : 'Create'; 
+
+  // Create the viewType string  
+  const buildType = profType + '-' + viewType;
+
+  return buildType;  
+  
+}
+
 
 module.exports = {
-  portalView
+  buildPortal,
+  portalBuildSelector
 };
