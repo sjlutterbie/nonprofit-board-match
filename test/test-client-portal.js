@@ -41,21 +41,9 @@ const token = jwt.sign(
   }
 );
 
-// Make token available in 'localStorage'
-
 // TESTING
 
 describe('Portal: Client-side user interaction', function() {
-  
-    
-  before(function() {
-    return runServer(TEST_DATABASE_URL);
-  });
-
-  after(function() {
-    return closeServer();
-  });
-  
   
   describe('Helper functionss', function() {
 
@@ -85,16 +73,39 @@ describe('Portal: Client-side user interaction', function() {
     
   });
 
-
-  describe('tabNavMenu: loadIndProf', function() {
-    it('Should be a function', function() {
-      expect(cP.loadIndProf).to.be.a('function');
+  describe('Ajax calls', function() {
+        
+    before(function() {
+      return runServer(TEST_DATABASE_URL);
     });
+    
+    after(function() {
+      return closeServer();
+    });
+    
+    describe('tabNavMenu: loadIndProf', function() {
+      it('Should be a function', function() {
+        expect(cP.loadIndProf).to.be.a('function');
+      });
+  
+      describe('Event handling', function() {
+        
+        // Create test event
+        const e = {
+          preventDefault: sinon.spy()
+        };
+      
+        cP.loadIndProf(e, token,
+          function(res) {
+            expect(res).to.be.a('string');
+          },
+          function(err) {
+            console.log('Damn, not again.');
+            console.log(err);
+          });
 
-    describe('Event handling', function() {
-      
-      // TODO
-      
+      });
+
     });
     
   });

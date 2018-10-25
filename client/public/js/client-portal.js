@@ -25,7 +25,7 @@ $('.js-tabnavmenu-profile').click(e =>
     const id = 'foo'; // HARD-CODED FROM DEV PURPOSES
     const reqUrl = `/portal/components/indprof/${id}`;
     
-    $.ajax({
+    let request = $.ajax({
       url: reqUrl,
       type: 'GET',
       headers: headersObj,
