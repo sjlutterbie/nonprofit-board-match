@@ -25,7 +25,7 @@ router.post('/login', localAuth, (req, res) => {
   res.json({
     authToken: authToken,
     user: req.user.serialize(),
-    profType: 'indProf' // For 'buildPortal(profTYpe, profID)'
+    userType: 'individual' // For 'buildPortal(profTYpe, profID)'
   });
   
 });
