@@ -3,7 +3,7 @@
 const tabNavMenu = require('./components/component-tabNavMenu');
 const indProf = require('./components/component-indProf');
 
-function buildPortal(profType, profId, userId, viewType) {
+function buildPortal(userType, profId, userId, viewType) {
   
   const viewHTML = `
   <!DOCTYPE html>
@@ -36,18 +36,17 @@ function buildPortal(profType, profId, userId, viewType) {
         </header>
         
         <nav class="tab-nav">
-          ${tabNavMenu.buildComponent()}
+          ${tabNavMenu.buildComponent(userType, profId)}
         </nav>
         
         <main role="main">
           <p>This will be the main content area.</p>
           <p>It will render data relevant to:</p>
-          <p>profType: ${profType}</p>
+          <p>userType: ${userType}</p>
           <p>profId: ${profId} (undefined is OK)</p>
           <p>userId: ${userId}</p>
           <p>Based on the above, you'd see the <u>${viewType}</u> view.</p>
           <hr/>
-          ${indProf.buildComponent()}
         </main>
     
         <!-- Load jQuery -->

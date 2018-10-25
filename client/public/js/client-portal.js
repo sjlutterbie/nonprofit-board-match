@@ -11,10 +11,16 @@
 $('.js-tabnavmenu-profile').click(e =>
   loadIndProf(e, localStorage.JWT, updateMain, handleAjaxError));
 
-  function loadIndProf(event, authToken, onSuccess, onError) {
+  function loadIndProf(e, authToken, onSuccess, onError) {
     // Make an API call to /portal/components/indprof/:id; handle result.
 
-    event.preventDefault();
+    e.preventDefault();
+    
+    // Extract data from event, prepare to pass to GET request
+    const data = {
+      userType: e.currentTarget.dataset.usertype,
+      profId: e.currentTarget.dataset.profid
+    };
     
     // Create authentication headers
     const headersObj = {
@@ -29,6 +35,7 @@ $('.js-tabnavmenu-profile').click(e =>
       url: reqUrl,
       type: 'GET',
       headers: headersObj,
+      data: data,
       success: onSuccess,
       error: onError
     });
@@ -50,6 +57,11 @@ $('.js-tabnavmenu-positions').click(e =>
       contentType: 'application/json'
     };
 
+    // Extract data from event, prepare to pass to GET request
+    const data = {
+      userType: event.currentTarget.dataset.usertype,
+      profId: event.currentTarget.dataset.profid
+    };
     
     const reqUrl = `/portal/components/positions`;
     
@@ -57,6 +69,7 @@ $('.js-tabnavmenu-positions').click(e =>
       url: reqUrl,
       type: 'GET',
       headers: headersObj,
+      data: data,
       success: onSuccess,
       error: onError
     });
@@ -78,6 +91,12 @@ $('.js-tabnavmenu-applications').click(e =>
       contentType: 'application/json'
     };
 
+
+    // Extract data from event, prepare to pass to GET request
+    const data = {
+      userType: event.currentTarget.dataset.usertype,
+      profId: event.currentTarget.dataset.profid
+    };
     
     const reqUrl = `/portal/components/applications`;
     
@@ -85,6 +104,7 @@ $('.js-tabnavmenu-applications').click(e =>
       url: reqUrl,
       type: 'GET',
       headers: headersObj,
+      data: data,
       success: onSuccess,
       error: onError
     });

@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const sinon = require('sinon');
 const jwt = require('jsonwebtoken');
 
+
 // Simplify expect functions
 const expect = chai.expect;
 
@@ -18,6 +19,7 @@ const { JSDOM } = require('jsdom');
 const window = new JSDOM(
   `<!DOCTYPE html><html><body></body></html>`).window;
 global.$ = require('jquery')(window);
+
 
 // Load module
 
@@ -100,7 +102,6 @@ describe('Portal: Client-side user interaction', function() {
             expect(res).to.be.a('string');
           },
           function(err) {
-            console.log('Damn, not again.');
             console.log(err);
           });
 

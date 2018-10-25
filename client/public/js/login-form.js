@@ -88,7 +88,7 @@ $('.js-login-form').submit(function(e) {
       localStorage.setItem('JWT', res.authToken)
       
       const requestData = {
-        profType: res.profType,
+        userType: res.userType,
         profID: res.user.indProf
       };
       

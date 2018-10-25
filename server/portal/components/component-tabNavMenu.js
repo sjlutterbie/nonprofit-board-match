@@ -8,18 +8,18 @@
 //  - Application (-> applications-view)
 
 
-function buildComponent() {
+function buildComponent(userType, profId) {
 
   const outputHTML = `
     <ul>
       <li>
-        <a href="#" class="js-tabnavmenu-profile">Profile</a>
+        <a href="#" data-usertype="${userType}" data-profid="${profId}" class="js-tabnavmenu-profile">Profile</a>
       </li>
       <li>
-        <a href="#" class="js-tabnavmenu-positions">Open Positions</a>
+        <a href="#" data-usertype="${userType}" data-profid="${profId}" class="js-tabnavmenu-positions">Open Positions</a>
       </li>
       <li>
-        <a href="#" class="js-tabnavmenu-applications">Applications</a>
+        <a href="#" data-usertype="${userType}" data-profid="${profId}" class="js-tabnavmenu-applications">Applications</a>
       </li>
     </ul>`;
   

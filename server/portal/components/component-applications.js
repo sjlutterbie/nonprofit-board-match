@@ -9,10 +9,12 @@
 //    profile editing form, without any pre-populated data.
 
 
-function buildComponent() {
+function buildComponent(userType, profId) {
   
   const outputHTML = `
     <p>Welcome to the Applications view!</p>
+    <p>userType: ${userType}</p>
+    <p>profId: ${profId}</p>
   `;
   
   return outputHTML;

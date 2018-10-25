@@ -29,16 +29,16 @@ const applications = require('./components/component-applications')
 router.get('/', jwtAuth, (req, res) => {
 
   // Extract arguments for portalBuilder
-  const profType = req.query.profType;
+  const userType = req.query.userType;
   const profId = req.query.profId;
   const userId = req.user.userId;
   
   // Select which Portal View to build
   
-  const viewType = portal.portalBuildSelector(profType, profId);
+  const viewType = portal.portalBuildSelector(userType, profId);
 
   // NOTE: Function Arguments used for dev purposes
-  return res.send(portal.buildPortal(profType, profId, userId, viewType));
+  return res.send(portal.buildPortal(userType, profId, userId, viewType));
 
   
 });
@@ -46,10 +46,11 @@ router.get('/', jwtAuth, (req, res) => {
 // Get request to load an indProf
 
 router.get('/components/indprof/:id',jsonParser, jwtAuth, (req, res) => {
-   
-  console.log('Router call id: ' + req.params.id);
-   
-  return res.send(indProf.buildComponent());
+
+  // Extract query data
+  const { userType, profId } = req.query;
+
+  return res.send(indProf.buildComponent(userType, profId));
   
 });
 
@@ -57,7 +58,9 @@ router.get('/components/indprof/:id',jsonParser, jwtAuth, (req, res) => {
 
 router.get('/components/positions', jsonParser, jwtAuth, (req, res) => {
   
-  return res.send(positions.buildComponent());
+  const { userType, profId } = req.query;
+
+  return res.send(positions.buildComponent(userType, profId));
   
 });
 
@@ -66,7 +69,9 @@ router.get('/components/positions', jsonParser, jwtAuth, (req, res) => {
 
 router.get('/components/applications', jsonParser, jwtAuth, (req, res) => {
   
-  return res.send(applications.buildComponent());
+  const { userType, profId } = req.query;
+
+  return res.send(applications.buildComponent(userType, profId));
   
 });
 
