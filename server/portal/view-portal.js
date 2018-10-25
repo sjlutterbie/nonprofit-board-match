@@ -1,5 +1,7 @@
 'use strict';
 
+const tabNavMenu = require('./components/tabnav-menu');
+
 function portalView(profType, profId, userId, viewType) {
   
   const viewHTML = `
@@ -33,7 +35,7 @@ function portalView(profType, profId, userId, viewType) {
         </header>
         
         <nav class="tab-nav">
-          This will be the TabBar Nav
+          ${tabNavMenu.buildComponent()}
         </nav>
         
         <main role="main">
