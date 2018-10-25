@@ -11,15 +11,15 @@
 $('.js-tabnavmenu-profile').click(e =>
   loadIndProf(e, localStorage.JWT, updateMain, handleAjaxError));
 
-  function loadIndProf(e, authToken, onSuccess, onError) {
+  function loadIndProf(event, authToken, onSuccess, onError) {
     // Make an API call to /portal/components/indprof/:id; handle result.
 
-    e.preventDefault();
+    event.preventDefault();
     
     // Extract data from event, prepare to pass to GET request
     const data = {
-      userType: e.currentTarget.dataset.usertype,
-      profId: e.currentTarget.dataset.profid
+      userType: event.currentTarget.dataset.usertype,
+      profId: event.currentTarget.dataset.profid
     };
     
     // Create authentication headers

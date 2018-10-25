@@ -94,7 +94,13 @@ describe('Portal: Client-side user interaction', function() {
         
         // Create test event
         const e = {
-          preventDefault: sinon.spy()
+          preventDefault: sinon.spy(),
+          currentTarget: {
+            dataset: {
+              userType: 'individual',
+              profId: undefined
+            }
+          }
         };
       
         cP.loadIndProf(e, token,
