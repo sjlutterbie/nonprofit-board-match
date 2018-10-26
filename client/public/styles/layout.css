@@ -8,31 +8,17 @@ html, body {
   background: #fff;
 }
 
-body {
-  position: relative;
+.content-wrapper {
   display: flex;
-  flex-direction: column;
-  margin: auto;
+  flex-flow: column nowrap;
+  justify-content: start;
+  align-items: center;
+  height: 100%;
 }
 
-/* PAGE HEADER */
-
-header {
-  width: 100%;
-  padding: 8px;
-  background: #eee; /* TEMP FOR DESIGN PURPOSES */
-}
-
-.header-nav {
-  background: #ddd; /* TEMP FOR DESIGN PURPOSES */
-}
-
-/* SIDEBAR */
-
-.tab-nav {
-  padding: 8px;
-  background: #ccc; /* TEMP FOR DESIGN PURPOSES */
-}
+  .login-wrapper {
+    justify-content: center;
+  }
 
 /* MAIN CONTENT */
 
@@ -53,3 +39,85 @@ main {
       0px 4px 5px 0px rgba(0, 0, 0, 0.14),
       0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
+
+/* LOGIN SCREEN */
+
+.login-box {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: space-around;
+  flex-grow: 0;
+  height: 80%;
+    max-height: 400px;
+  width: 80%;
+    max-width: 300px;
+}
+
+.dev-notice {
+  text-align: center;
+  font-style: italic;
+}
+
+.login-form {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.login-form label {
+  width: 80%;
+  text-align: center;
+  margin: 4px;
+}
+
+.login-form input {
+  width: 100%;
+  text-align: center;
+  padding: 4px;
+}
+
+  .login-form input[type="submit"] {
+    width: 80%;
+    margin: 4px;
+  }
+
+.create-account-link {
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+}
+
+.default-credentials {
+  text-align: center;
+}
+
+  .d-c-title {
+    text-decoration: underline;
+  }
+  
+  .d-c-label {
+    font-weight: bold;
+  }
+
+
+/* PAGE HEADER */
+
+header {
+  width: 100%;
+  padding: 8px;
+  background: #eee; /* TEMP FOR DESIGN PURPOSES */
+}
+
+.header-nav {
+  background: #ddd; /* TEMP FOR DESIGN PURPOSES */
+}
+
+/* SIDEBAR */
+
+.tab-nav {
+  padding: 8px;
+  background: #ccc; /* TEMP FOR DESIGN PURPOSES */
+  width: 100%;
+}
+
