@@ -82,8 +82,7 @@ $('.js-login-form').submit(function(e) {
 
       const resUrl = '/portal';
       
-      // TODO: Elevate resUrl to function parameter, to enable testing
-      
+
       // Store the JWT in local storage
       localStorage.setItem('JWT', res.authToken)
       
@@ -103,7 +102,7 @@ $('.js-login-form').submit(function(e) {
         success: loadPortalSuccess,
         error: loadPortalFailure
       });
-        
+
     }
       
       function loadPortalSuccess(res) {
@@ -112,6 +111,10 @@ $('.js-login-form').submit(function(e) {
         //document.write(res);
 
         $('body').html(res);
+        
+        // Changes flexbox justify from center to start
+        $('.content-wrapper').removeClass('login-wrapper');
+
         // For testing purposes
         return res;
         
