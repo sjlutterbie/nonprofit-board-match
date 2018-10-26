@@ -10,10 +10,10 @@ const expect = chai.expect;
 
 // Load session variables
 require('dotenv').config();
-const { PORT, TEST_DATABASE_URL } = require('../config');
+const { PORT, TEST_DATABASE_URL } = require('../../config');
 
 // Load module
-const { app, runServer, closeServer } = require('../index');
+const { app, runServer, closeServer } = require('../../index');
 
 // Test basic server functionality
 describe('Server start/stop functions', function() {

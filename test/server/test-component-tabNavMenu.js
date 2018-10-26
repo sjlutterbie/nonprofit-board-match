@@ -14,7 +14,7 @@ const window = new JSDOM(
 global.$ = require('jquery')(window);
   
 // Load module
-const tabNavMenu = require('../server/portal/components/component-tabNavMenu');
+const tabNavMenu = require('../../server/portal/components/component-tabNavMenu');
 
 
 // BEGIN TESTING
