@@ -1,5 +1,7 @@
 'use strict';
 
+const { IndProf } = require('../../api/indProf');
+
 // INDIVIDUAL PROFILE VIEW:
 //  If the active userAccount has an existing indProf, it displays the details
 //    of the indProf, with an "Edit" option.
@@ -20,12 +22,14 @@ function buildComponent(userType, profId, mode) {
   
   // Determine which view to present
   mode = setView(profId, mode);
-  
-  const outputHTML = `
+
+  let outputHTML = `
     <p>Welcome to the Individual Profile view!</p>
     <p>userType: ${userType}</p>
     <p>profId: ${profId}</p>
   `;
+  
+  outputHTML += editMode();
   
   return outputHTML;
   
@@ -56,8 +60,47 @@ function setView(profId, mode) {
   
 }
 
+function editMode() {
+  // Renders an HTML form for editing an indProf object. Pre-populates the form
+  //  with existing indProf data.
+  // indProf fields:
+  //  firstName: String, required
+  //  lastName: String, required
+  //  email: String, required
+  //  phone: String
+  //  linekdIn: String
+
+  const outputHTML = `
+    <form>
+      <fieldset>
+        <legend>Your profile</legend>
+        <label for="firstname">First name:
+          <input type="text" name="firstname" required>
+        </label>
+        <label for="lastname">Last name:
+          <input type="text" name="lastname" required>
+        </label>
+        <label for="email">Email address:
+          <input type="email" name="email" required>
+        </label>
+        <label for="phone">Phone number:
+          <input type="text" name="phone">
+        </label>
+        <label for="linkedin">LinkedIn profile:
+          <input type="url" name="linkedin">
+        </label>
+        <input type="submit" class="js-indprof-submit" value="Submit">
+      </fieldset>
+    </form>
+  `;
+  
+  return outputHTML;
+  
+}
+
 
 module.exports = {
   buildComponent,
-  setView
+  setView,
+  editMode
 };

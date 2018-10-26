@@ -10,9 +10,9 @@ const jwt = require('jsonwebtoken');
 const expect = chai.expect;
 
 // Load required modules
-const portal = require('../server/portal/portal');                 // NOTE: Will need to add ../ to paths when moving from temp test directory
-const { app, runServer, closeServer } = require('../index'); 
-const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../config');
+const portal = require('../../server/portal/portal'); 
+const { app, runServer, closeServer } = require('../../index'); 
+const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../../config');
 
 describe('Portal: View', function() {
   

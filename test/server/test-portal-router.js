@@ -11,8 +11,8 @@ const faker = require('faker');
 const expect = chai.expect;
 
 // Load required modules
-const { app, runServer, closeServer } = require('../index');           // NOTE: Will need to add ../ to paths when moving from temp test directory
-const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../config');
+const { app, runServer, closeServer } = require('../../index');
+const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../../config');
 
 // Generate valid token
 const token = jwt.sign(
