@@ -50,7 +50,9 @@ router.get('/components/indprof/:id',jsonParser, jwtAuth, (req, res) => {
   // Extract query data
   const { userType, profId } = req.query;
 
-  return res.send(indProf.buildComponent(userType, profId));
+  const resHTML = indProf.buildComponent(userType, profId);
+  
+  return res.send(resHTML);
   
 });
 
