@@ -110,7 +110,7 @@ $('.js-login-form').submit(function(e) {
         // Clears html, to rebuild via the Portal
         //document.write(res);
 
-        $('body').html(res);
+        $('.content-wrapper').html(res);
         
         // Changes flexbox justify from center to start
         $('.content-wrapper').removeClass('login-wrapper');

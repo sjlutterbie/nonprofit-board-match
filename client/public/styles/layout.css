@@ -118,5 +118,6 @@ header {
 .tab-nav {
   padding: 8px;
   background: #ccc; /* TEMP FOR DESIGN PURPOSES */
+  width: 100%;
 }
 
