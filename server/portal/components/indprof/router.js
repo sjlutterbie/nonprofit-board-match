@@ -36,11 +36,24 @@ router.get('/', jwtAuth, (req, res) => {
     // Get indProf
     let indProfPromise = ctrls.getIndProfPromise(profId);
     
-    console.log(indProfPromise);
-    
     indProfPromise.then(
      function(profile) {
        return res.send(views.staticMode(profile));
+     },
+     function(err) {
+       return err;
+     }
+    );
+  }
+  
+   if (mode === 'edit') {
+    
+    // Get indProf
+    let indProfPromise = ctrls.getIndProfPromise(profId);
+    
+    indProfPromise.then(
+     function(profile) {
+       return res.send(views.editMode(profile));
      },
      function(err) {
        return err;
