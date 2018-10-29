@@ -7,7 +7,7 @@
 // Handle click on "Create individual profile" form
 
 $('html').on('submit', '.js-indprof-create', e =>
-  createIndProf(e, localStorage.JWT, updateMain, handleAjaxError));
+  createIndProf(e, localStorage.JWT, moveToPortal, handleAjaxError));
 
   function createIndProf(event, authToken, onSuccess, onError) {
     // Create an indProf
@@ -44,7 +44,32 @@ $('html').on('submit', '.js-indprof-create', e =>
 
     
   }
-
+  
+  function moveToPortal(res) {
+    
+    console.log(res);
+    
+    const reqUrl = '/portal';
+    
+    const requestData = {
+      userType: 'individual',
+      userId: res.userAccount,
+      profId: res._id
+    }
+    
+    let request = $.ajax({
+        url: reqUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.JWT}`,
+          contentType: 'application/json'
+        },
+        data: requestData, // For finding userAccount
+        success: loadPortalSuccess,
+        error: loadPortalFailure
+      });
+    
+  }
 
 
 // Handle click on tabNavMenu: Profile link

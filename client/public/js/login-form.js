@@ -114,21 +114,6 @@ $('.js-login-form').submit(function(e) {
       });
       
     }
-    
-    function loadCreateUserSuccess(res) {
-      
-      // Clears html, to rebuild via the Portal
-      //document.write(res);
-      
-      $('main').html(res);
-      
-      // Changes flexbox justify from center to start
-      $('.content-wrapper').removeClass('login-wrapper');
-      
-      // For testing purposes
-      return res;
-      
-    }
 
     function loadPortal(res) {
 
@@ -141,7 +126,7 @@ $('.js-login-form').submit(function(e) {
       const requestData = {
         userType: res.userType,
         userId: res.user.userId,
-        profID: res.user.indProf
+        profId: res.user.indProf
       };
       
       let request = $.ajax({

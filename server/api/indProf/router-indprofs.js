@@ -121,8 +121,6 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
 
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
-  console.log(req.body);
-  
   // Set required fields, detect missing fields
   const requiredFields = ['firstName', 'lastName', 'email', 'userAccount'];
   const missingField = requiredFields.find(field => !(field in req.body));
