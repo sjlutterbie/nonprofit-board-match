@@ -4,11 +4,77 @@
 //  loads once the user has authenticated.
 
 
+// Handle click on "Create individual profile" form
+
+$('html').on('submit', '.js-indprof-create', e =>
+  createIndProf(e, localStorage.JWT, moveToPortal, handleAjaxError));
+
+  function createIndProf(event, authToken, onSuccess, onError) {
+    // Create an indProf
+    event.preventDefault();
+    
+    // Extract data from event
+    const data = {
+      firstName: $('input[name="firstname"]').val(),
+      lastName: $('input[name="lastname"]').val(),
+      email: $('input[name="email"]').val(),
+      phone: $('input[name="phone"]').val(),
+      linkedIn: $('input[name="linkedin"]').val(),
+      userAccount: $('input[name="userid"]').val()
+    };
+    
+    // Create authentication headers
+    const headersObj = {
+      Authorization: `Bearer ${authToken}`,
+      contentType: 'application/json'
+    };
+    
+    const reqUrl = "/api/indprofs";
+    
+    $.ajax({
+      url: reqUrl,
+      type: 'POST',
+      headers: headersObj,
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      dataType: 'json',
+      success: onSuccess,
+      error: onError
+    });
+
+    
+  }
+  
+  function moveToPortal(res) {
+    
+    console.log(res);
+    
+    const reqUrl = '/portal';
+    
+    const requestData = {
+      userType: 'individual',
+      userId: res.userAccount,
+      profId: res._id
+    }
+    
+    let request = $.ajax({
+        url: reqUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.JWT}`,
+          contentType: 'application/json'
+        },
+        data: requestData, // For finding userAccount
+        success: loadPortalSuccess,
+        error: loadPortalFailure
+      });
+    
+  }
 
 
 // Handle click on tabNavMenu: Profile link
 
-$('.js-tabnavmenu-profile').click(e =>
+$('html').on('click', '.js-tabnavmenu-profile', e =>
   loadIndProf(e, localStorage.JWT, updateMain, handleAjaxError));
 
   function loadIndProf(event, authToken, onSuccess, onError) {
@@ -19,7 +85,8 @@ $('.js-tabnavmenu-profile').click(e =>
     // Extract data from event, prepare to pass to GET request
     const data = {
       userType: event.currentTarget.dataset.usertype,
-      profId: event.currentTarget.dataset.profid
+      profId: event.currentTarget.dataset.profid,
+      mode: event.currentTarget.dataset.mode
     };
     
     // Create authentication headers
@@ -28,8 +95,7 @@ $('.js-tabnavmenu-profile').click(e =>
       contentType: 'application/json'
     };
 
-    const id = 'foo'; // HARD-CODED FROM DEV PURPOSES
-    const reqUrl = `/portal/components/indprof/${id}`;
+    const reqUrl = `/portal/components/indprof`;
     
     let request = $.ajax({
       url: reqUrl,

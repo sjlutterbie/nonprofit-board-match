@@ -35,12 +35,9 @@ router.get('/', jwtAuth, (req, res) => {
   
   // Select which Portal View to build
   
-  const viewType = portal.portalBuildSelector(userType, profId);
-
   // NOTE: Function Arguments used for dev purposes
-  return res.send(portal.buildPortal(userType, profId, userId, viewType));
+  return res.send(portal.buildPortal(userType, profId, userId));
 
-  
 });
 
 // Get request to load an indProf
