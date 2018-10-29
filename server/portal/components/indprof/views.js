@@ -10,9 +10,9 @@ function editMode(userData) {
   //  email: String, required
   //  phone: String
   //  linkedIn: String
-  
+
   const outputHTML = `
-    <form class="js-indprof-create">
+    <form class="js-indprof-edit">
       <fieldset>
         <legend>Your profile</legend>
         <label for="firstname">First name:
@@ -35,7 +35,17 @@ function editMode(userData) {
           <input type="url" name="linkedin"
                  value="${userData.linkedIn}">
         </label>
-        <input type="submit" class="js-indprof-submit" value="Submit">
+          <input type="hidden" name="profid" value="${userData._id}">
+          <input type="hidden" name="userid" value="${userData.userAccount}">
+        <input type="button" class="js-indprof-cancel"
+               data-profid="${userData._id}"
+               data-userid="${userData.userAccount}"
+               value="Cancel">
+        <input type="reset" value="Reset">
+        <input type="submit" class="js-indprof-submit"
+               data-profid="${userData._id}"
+               value="Submit">
+        
       </fieldset>
     </form>
   `;
@@ -89,7 +99,9 @@ function staticMode(userData) {
       <li>Phone: ${userData.phone}</li>
       <li>LinkedIn: ${userData.linkedIn}</li>
     </ul>
-    <button>Edit profile (inactive)</button>
+    <button class="js-edit-indprof" 
+            data-userid="${userData.userAccount}"
+            data-profid="${userData._id}">Edit profile</button>
   `;  
   
   return outputHTML;

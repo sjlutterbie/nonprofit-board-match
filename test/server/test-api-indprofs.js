@@ -723,7 +723,7 @@ describe('/api/indprofs routes',function() {
           indProfId: testUser.indProfId
         })
         .then(function(res) {
-          expect(res).to.have.status(204);
+          expect(res).to.have.status(200);
       });
     });
   });
