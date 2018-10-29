@@ -106,7 +106,7 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
     new: true
   })
   .then(function(indProf) {
-    return res.status(204).json(indProf);
+    return res.status(200).json(indProf);
   })
   .catch(function(err) {
     return res.status(500).json({

@@ -26,7 +26,7 @@ const { PORT, DATABASE_URL } = require('./config');
 // Create core app
 const app = express();
 
-//app.use(morgan('common'));
+app.use(morgan('common'));
 
 // CORS middleware setup
 app.use(function (req, res, next) {
