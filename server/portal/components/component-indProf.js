@@ -133,10 +133,29 @@ function createMode(userData) {
     <p>This is an HTML snippet (editable in component-indProf.js) that will
        welcome a new user to the system, and instruct them to create their
        individual profile to get started.</p>
+    <form>
+      <fieldset>
+        <legend>Your profile</legend>
+        <label for="firstname">First name:
+          <input type="text" name="firstname" required>
+        </label>
+        <label for="lastname">Last name:
+          <input type="text" name="lastname" required>
+        </label>
+        <label for="email">Email address:
+          <input type="email" name="email" required>
+        </label>
+        <label for="phone">Phone number:
+          <input type="text" name="phone">
+        </label>
+        <label for="linkedin">LinkedIn profile:
+          <input type="url" name="linkedin">
+        </label>
+        <input type="submit" class="js-indprof-submit" value="Submit">
+      </fieldset>
+    </form>
   `;
-  
-  outputHTML += editMode(userData);
-  
+
   return outputHTML;
   
 }
