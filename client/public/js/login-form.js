@@ -69,7 +69,7 @@ $('.js-login-form').submit(function(e) {
       contentType: 'application/json',
       data: JSON.stringify(formData),
       dataType: 'json',
-      success: loadPortal,
+      success: chooseLoginPath,
       error: loginError
     });
       
@@ -77,6 +77,44 @@ $('.js-login-form').submit(function(e) {
     return 'logInUser';
   
   }
+  
+    function chooseLoginPath(res) {
+      
+      if (res.user.indProf) {
+        loadPortal(res);
+      } else {
+        loadCreateIndProf(res);
+      }
+      
+    }
+  
+    function loadCreateIndProf(res) {
+      
+      // Store the JWT in local storage
+      localStorage.setItem('JWT', res.authToken)
+      
+      const requestData = {
+        userType: res.userType,
+        userId: res.user.userId,
+        mode: 'create'
+      };
+      
+      const resUrl = '/portal/components/indprof';
+    
+      let request = $.ajax({
+        url: resUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${res.authToken}`,
+          contentType: 'application/json'
+        },
+        data: requestData,
+        success: loadPortalSuccess,
+        error: loadPortalFailure
+      });
+      
+    }
+    
 
     function loadPortal(res) {
 
@@ -88,6 +126,7 @@ $('.js-login-form').submit(function(e) {
       
       const requestData = {
         userType: res.userType,
+        userId: res.user.userId,
         profID: res.user.indProf
       };
       
