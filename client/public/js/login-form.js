@@ -115,6 +115,20 @@ $('.js-login-form').submit(function(e) {
       
     }
     
+    function loadCreateUserSuccess(res) {
+      
+      // Clears html, to rebuild via the Portal
+      //document.write(res);
+      
+      $('main').html(res);
+      
+      // Changes flexbox justify from center to start
+      $('.content-wrapper').removeClass('login-wrapper');
+      
+      // For testing purposes
+      return res;
+      
+    }
 
     function loadPortal(res) {
 

@@ -12,7 +12,7 @@ function editMode(userData) {
   //  linkedIn: String
   
   const outputHTML = `
-    <form>
+    <form class="js-indprof-create">
       <fieldset>
         <legend>Your profile</legend>
         <label for="firstname">First name:
@@ -50,7 +50,7 @@ function createMode(userData) {
     <p>This is an HTML snippet (editable in component-indProf.js) that will
        welcome a new user to the system, and instruct them to create their
        individual profile to get started.</p>
-    <form>
+    <form class="js-indprof-create">
       <fieldset>
         <legend>Your profile</legend>
         <label for="firstname">First name:
@@ -68,7 +68,8 @@ function createMode(userData) {
         <label for="linkedin">LinkedIn profile:
           <input type="url" name="linkedin">
         </label>
-        <input type="submit" class="js-indprof-submit" value="Submit">
+        <input type="hidden" name="userid" value="${userData.userId}">
+        <input type="submit" class="js-create-indprof-submit" value="Submit">
       </fieldset>
     </form>
   `;

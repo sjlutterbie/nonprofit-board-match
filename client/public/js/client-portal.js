@@ -4,6 +4,47 @@
 //  loads once the user has authenticated.
 
 
+// Handle click on "Create individual profile" form
+
+$('html').on('submit', '.js-indprof-create', e =>
+  createIndProf(e, localStorage.JWT, updateMain, handleAjaxError));
+
+  function createIndProf(event, authToken, onSuccess, onError) {
+    // Create an indProf
+    event.preventDefault();
+    
+    // Extract data from event
+    const data = {
+      firstName: $('input[name="firstname"]').val(),
+      lastName: $('input[name="lastname"]').val(),
+      email: $('input[name="email"]').val(),
+      phone: $('input[name="phone"]').val(),
+      linkedIn: $('input[name="linkedin"]').val(),
+      userAccount: $('input[name="userid"]').val()
+    };
+    
+    // Create authentication headers
+    const headersObj = {
+      Authorization: `Bearer ${authToken}`,
+      contentType: 'application/json'
+    };
+    
+    const reqUrl = "/api/indprofs";
+    
+    $.ajax({
+      url: reqUrl,
+      type: 'POST',
+      headers: headersObj,
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      dataType: 'json',
+      success: onSuccess,
+      error: onError
+    });
+
+    
+  }
+
 
 
 // Handle click on tabNavMenu: Profile link
