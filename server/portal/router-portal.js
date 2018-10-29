@@ -21,7 +21,7 @@ const bodyParser = require('body-parser');
 
 // Load View
 const portal = require('./portal');
-const indProf = require('./components/component-indProf');
+const indProf = require('./components/indprof');
 const positions = require('./components/component-positions');
 const applications = require('./components/component-applications')
 
@@ -33,10 +33,17 @@ router.get('/', jwtAuth, (req, res) => {
   const profId = req.query.profId;
   const userId = req.user.userId;
   
-  // Select which Portal View to build
+  let indProfPromise = indProf.getIndProfPromise(profId);
   
-  // NOTE: Function Arguments used for dev purposes
-  return res.send(portal.buildPortal(userType, profId, userId));
+  indProfPromise.then(
+    function(profile) {
+
+      return res.send(portal.buildPortal(userType, profId, userId, profile));
+    },
+    function(err) {
+      return err;
+    }
+  );
 
 });
 

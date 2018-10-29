@@ -14,18 +14,18 @@ const window = new JSDOM(
 global.$ = require('jquery')(window);
   
 // Load module
-const tabNavMenu = require('../../server/portal/components/component-tabNavMenu');
+const tabNavMenu = require('../../server/portal/components/tabNavMenu');
 
 
 // BEGIN TESTING
 
-describe('tabNavMenu.buildComponent()', function() {
+describe('tabNavMenu.buildMenu()', function() {
   
   it('Should be a function', function() {
-    expect(tabNavMenu.buildComponent).to.be.a('function');
+    expect(tabNavMenu.buildMenu).to.be.a('function');
   });
   it('Should return a string', function() {
-    expect(tabNavMenu.buildComponent()).to.be.a('string');
+    expect(tabNavMenu.buildMenu()).to.be.a('string');
   });
 
 });

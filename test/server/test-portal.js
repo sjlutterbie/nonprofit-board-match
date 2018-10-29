@@ -16,6 +16,7 @@ const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../../config');
 
 describe('Portal: View', function() {
   
+/*
   describe('portalView()', function() {
     it('Should be a function', function() {
       expect(portal.buildPortal).to.be.a('function');
@@ -24,5 +25,6 @@ describe('Portal: View', function() {
       expect(portal.buildPortal()).to.be.a('string');
     });
   });
+*/
   
 });

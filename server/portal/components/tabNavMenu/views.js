@@ -31,9 +31,6 @@ function buildMenu(userType, userId, profId) {
   
 }
 
-
-
-
 module.exports = {
-  buildComponent
+  buildMenu
 };

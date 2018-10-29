@@ -1,9 +1,9 @@
 'use strict';
 
-const tabNavMenu = require('./components/component-tabNavMenu');
+const tabNavMenu = require('./components/tabNavMenu');
 const indProf = require('./components/indprof');
 
-function buildPortal(userType, profId, userId, viewType) {
+function buildPortal(userType, profId, userId, profile) {
   
   const outputHtml = `
     <header>
@@ -14,10 +14,11 @@ function buildPortal(userType, profId, userId, viewType) {
     </header>
     
     <nav class="tab-nav">
-      ${tabNavMenu.buildComponent(userType, userId, profId)}
+      ${tabNavMenu.buildMenu(userType, userId, profId)}
     </nav>
     
     <main role="main">
+      ${indProf.staticMode(profile)}
     </main>
   `;
   
