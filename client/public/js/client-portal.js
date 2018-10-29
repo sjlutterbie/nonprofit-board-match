@@ -74,7 +74,7 @@ $('html').on('submit', '.js-indprof-create', e =>
 
 // Handle click on tabNavMenu: Profile link
 
-$('.js-tabnavmenu-profile').click(e =>
+$('html').on('click', '.js-tabnavmenu-profile', e =>
   loadIndProf(e, localStorage.JWT, updateMain, handleAjaxError));
 
   function loadIndProf(event, authToken, onSuccess, onError) {
@@ -85,7 +85,8 @@ $('.js-tabnavmenu-profile').click(e =>
     // Extract data from event, prepare to pass to GET request
     const data = {
       userType: event.currentTarget.dataset.usertype,
-      profId: event.currentTarget.dataset.profid
+      profId: event.currentTarget.dataset.profid,
+      mode: event.currentTarget.dataset.mode
     };
     
     // Create authentication headers
@@ -94,8 +95,7 @@ $('.js-tabnavmenu-profile').click(e =>
       contentType: 'application/json'
     };
 
-    const id = 'foo'; // HARD-CODED FROM DEV PURPOSES
-    const reqUrl = `/portal/components/indprof/${id}`;
+    const reqUrl = `/portal/components/indprof`;
     
     let request = $.ajax({
       url: reqUrl,

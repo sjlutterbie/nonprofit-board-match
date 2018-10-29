@@ -14,7 +14,7 @@ function buildPortal(userType, profId, userId, viewType) {
     </header>
     
     <nav class="tab-nav">
-      ${tabNavMenu.buildComponent(userType, profId)}
+      ${tabNavMenu.buildComponent(userType, userId, profId)}
     </nav>
     
     <main role="main">

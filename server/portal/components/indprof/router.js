@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
   const jsonParser = bodyParser.json();
   
 const views = require('./views');
+const ctrls = require('./controllers');
 
 // Get request to load an indProf
 
@@ -22,15 +23,29 @@ router.get('/', jwtAuth, (req, res) => {
 
   // Select view to return
   if (mode === 'create') {
-    
     // Build userData
     const userData = {
       userId: userId
     };
-    
     // Send response
     return res.send(views.createMode(userData));
+  }
+  
+  if (mode === 'static') {
     
+    // Get indProf
+    let indProfPromise = ctrls.getIndProfPromise(profId);
+    
+    console.log(indProfPromise);
+    
+    indProfPromise.then(
+     function(profile) {
+       return res.send(views.staticMode(profile));
+     },
+     function(err) {
+       return err;
+     }
+    );
   }
 
 });
