@@ -56,15 +56,21 @@ $('.js-login-form').submit(function(e) {
     logInUser()
       .then(function(res) {
         storeJWTToken(res);
+        
         // Determine which user path to follow
+        let pathFunction;
+        
         if(res.user.indProf) {
-          loadPortal(res);
+          pathFunction = loadPortal;
         } else {
-          loadCreateIndProf(res)
-            .then(loadContentSuccess)
-            .catch(loadContentFailure);
+          pathFunction = loadCreateIndProf;
         }
+        
+        // Execute user path
+        pathFunction(res)
+          .then(loadContentSuccess);
       }) 
+      // Catch statement for all above promises
       .catch(loadContentFailure);
   }
 });
@@ -111,8 +117,6 @@ function logInUser() {
     
   return promObj;
 }
-
-
 
   function storeJWTToken(res) {
     // Upon successful login, store the JWT token for session authentication
@@ -167,18 +171,24 @@ function logInUser() {
     // Set API url
     const reqUrl = '/portal';
 
-    // Execute the request
-    let request = $.ajax({
-      url: reqUrl,
-      type: 'GET',
-      headers: {
-        Authorization: `Bearer ${res.authToken}`,
-        contentType: 'application/json'
-      },
-      data: requestData,
-      success: loadContentSuccess,
-      error: loadContentFailure
+    let promObj = new Promise(function(resolve, reject) {
+    
+      // Execute the request
+      $.ajax({
+        url: reqUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${res.authToken}`,
+          contentType: 'application/json'
+        },
+        data: requestData,
+        success: resolve,
+        error: reject
+      });
     });
+
+    return promObj;
+
   }
     
     function loadContentSuccess(res) {

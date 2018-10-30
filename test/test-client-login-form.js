@@ -16,6 +16,10 @@ const window = new JSDOM(
   `<!DOCTYPE html><html><body></body></html>`).window;
 global.$ = require('jquery')(window);
 
+// Load helper files
+const {User} = require('../server/api/users');
+
+// Load target file
 const lF = require('../client/public/js/login-form');
 
 // Load testing server details
@@ -194,7 +198,23 @@ describe('Form submission', function() {
       it('Should be a function', function() {
         expect(lF.loadPortal).to.be.a('function');
       });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
+      it('Should return a promise', function() {
+        // Create test response object
+        const res = {
+          userType: faker.random.alphaNumeric(10),
+          user: {
+            userId: faker.random.alphaNumeric(10),
+            indProf: faker.random.alphaNumeric(10)
+          },
+          authToken: faker.random.alphaNumeric(10)
+        };
+        // Run test
+        let testObj = lF.loadPortal(res);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(result){},function(err){});
+      });
+      // See 'Promise testing' for full functionality testing
     });
     
     describe('loadContentSuccess(res)', function() {
@@ -294,7 +314,7 @@ describe('Form submission', function() {
          <a class="js-create-account-link">Log In</a>
          <div class="alert-area"></div>
       `);
-      // Create test responst object
+      // Create test response object
       const res = {
         username: faker.random.alphaNumeric(10)
       }
@@ -337,56 +357,106 @@ describe('Form submission', function() {
     });
   });
 
-  describe('Integration tests', function() {
-    
+  describe('Promise testing', function() {
+
     // Initialize test server
     before(function() {
       return runServer(TEST_DATABASE_URL);
     });
     
-    // Create test user for login tests
+    // Set up test environment
+    
     const testUser = {
       username: faker.random.alphaNumeric(10),
       password: faker.random.alphaNumeric(10)
     };
     
-    // Test clean up
-    // TODO: REMOVE USERS/PROFILES
-    
+    before(function() {
+      return new Promise(function(resolve, reject) {
+        User.create(testUser)
+          .then(function(user) {
+            resolve();
+          }).catch(function(err) {
+              return err;
+          });
+      });
+    });
+
+    // Clean up test environment
+    after(function() {
+      return new Promise(function(resolve) {
+        User.remove({})
+          .then(function(res) {
+            resolve();
+          });
+      })
+        .catch(function(err) {
+          return err;
+        });
+    });
+
     // Close test server
     after(function() {
       return closeServer();
     });
-
-    describe('User creation', function() {
-
-      describe('Success case', function() {
-        // Build test user creation form
-        $('body').html(`
-          <form name="js-login-form" class="create-account">
-            <input name="username" value="${testUser.username}">
-            <input name="password" value="${testUser.password}">
-            <input name="password-repeat" value="${testUser.password}">
-          </form>
-        `);
-        // Create test event
-        const e = {
-          preventDefault: sinon.spy()
-        };
-        // Trigger form submit
-          // $('.js-login-form').submit();
-        //  Monitor response
-          //  expect(e.preventDefault.called).to.equal(true);
-      });
-  });
     
-    describe('User login', function() {
+    // Functions to test:
+    describe('createUser Promise', function() {
+      let result;
+      const testCases = [
+        // Case format: [username, password1, password2, expectedResult]
+        // Case: user already exists
+        [testUser.username, testUser.password, testUser.password, 'Reject'],
+        // Case: User successfully created
+        [testUser.username+'X',testUser.password, testUser.password, 'Resolve']
+      ];
       
-      // TODO: BUILD LOGIN INTEGRATION TEST (NEST WITHIN USER CREATION?)
-      
+      it('Resolves/Rejects as expected', function() {
+        testCases.forEach(function(testCase) {
+          // Create test DOM
+          $('body').html(`
+            <form>
+              <input name="username" value="${testCase[0]}">
+              <input name="password" value="${testCase[1]}">
+              <input name="password-repeat" value="${testCase[2]}">
+            </form>
+          `);
+          
+          // Run test
+          it('Resolves as expected', function() {
+            return lF.createUser().then(function(res) {
+              // Resolves
+              result = 'Resolve';
+              expect(result).to.equal(testCase[3]);
+            },
+            function(err) {
+              // Rejects
+              result = 'Reject';
+              expect(result).to.equal(testCase[3]);
+            });
+            
+          });
+          // Clean up test DOM
+          $('body').html('');
+        });
+      });  
     });
+    
+    
+        
+
+      // logInUser
+        // Failure:
+          // Username doesn't exist
+          // Incorrect password
+
+      // loadCreateIndProf
+        // Expected status in then/catch cases
+
+      // loadPortal
+        // Expected status in then/catch cases
 
   });
-    
+
 });
 
