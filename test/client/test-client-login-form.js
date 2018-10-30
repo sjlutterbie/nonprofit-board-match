@@ -17,15 +17,15 @@ const window = new JSDOM(
 global.$ = require('jquery')(window);
 
 // Load helper files
-const {User} = require('../server/api/users');
+const {User} = require('../../server/api/users');
 
 // Load target file
-const lF = require('../client/public/js/login-form');
+const lF = require('../../client/public/js/login-form');
 
 // Load testing server details
 require('dotenv').config();
-const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../config');
-const {app, runServer, closeServer } = require('../index');
+const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../../config');
+const {app, runServer, closeServer } = require('../../index');
 
 
 // BEGIN TESTING
