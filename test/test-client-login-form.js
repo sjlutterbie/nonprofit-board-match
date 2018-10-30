@@ -385,7 +385,7 @@ describe('Form submission', function() {
     // Clean up test environment
     after(function() {
       return new Promise(function(resolve) {
-        User.remove({})
+        User.deleteMany({})
           .then(function(res) {
             resolve();
           });
@@ -409,10 +409,10 @@ describe('Form submission', function() {
         [testUser.username, testUser.password, testUser.password, 'Reject'],
         // Case: User successfully created
         [testUser.username+'X',testUser.password, testUser.password, 'Resolve']
+        // Note: Password mismatch case already tested by verifyPasswordMatch()
       ];
-      
-      it('Resolves/Rejects as expected', function() {
-        testCases.forEach(function(testCase) {
+
+      testCases.forEach(function(testCase) {
           // Create test DOM
           $('body').html(`
             <form>
@@ -421,35 +421,46 @@ describe('Form submission', function() {
               <input name="password-repeat" value="${testCase[2]}">
             </form>
           `);
-          
           // Run test
-          it('Resolves as expected', function() {
-            return lF.createUser().then(function(res) {
-              // Resolves
-              result = 'Resolve';
-              expect(result).to.equal(testCase[3]);
-            },
-            function(err) {
-              // Rejects
-              result = 'Reject';
-              expect(result).to.equal(testCase[3]);
-            });
-            
+          it('Should resolve/reject as expected', function() {
+            console.log(testCase);
+            return lF.createUser()
+              .then(function(promiseResult) {
+                result = 'Resolve';
+              })
+              .catch(function(promiseError) {
+                console.log(promiseError);
+                result = 'Reject';
+              })
+              .finally(function(promiseResult) {
+                expect(result).to.equal(testCase[3]);
+              });
           });
           // Clean up test DOM
           $('body').html('');
-        });
       });  
     });
     
+/*
+    describe('logInUser promise', function() {
+      
+      let result;
+      const testCases = [
+        // Case format: [username, password, expectedResult]
+        // Case: Username doesn't exist
+        [testUser.username+"x", testUser.password, 'Reject'],
+        // Case: Incorrect password
+        [testUser.username, testUser.password+'X', 'Reject'],
+        // Case: Successful login
+        [testUser.username, testUser.password, 'Resolve']
+      ];
+    
+    });
+*/
     
         
 
-      // logInUser
-        // Failure:
-          // Username doesn't exist
-          // Incorrect password
-
+  
       // loadCreateIndProf
         // Expected status in then/catch cases
 

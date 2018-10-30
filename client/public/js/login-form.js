@@ -50,9 +50,6 @@ $('.js-login-form').submit(function(e) {
       .catch(createUserError);
   } else {
     // Handle ajax call as promise object
-    
-    // NOTE: Can I simplify this structure, once all then/catch are in place?
-    
     logInUser()
       .then(function(res) {
         storeJWTToken(res);
@@ -280,11 +277,11 @@ function logInUser() {
       
     }
     
-    function createUserError(res) {
+    function createUserError(err) {
       // Inform user of account creation error, without clearing form data
-      
+    
       $('.alert-area').text(
-        `${res.responseJSON.reason}: ${res.responseJSON.message}`
+        `${err.responseJSON.reason}: ${err.responseJSON.message}`
       );
       
       return;
