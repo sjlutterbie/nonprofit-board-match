@@ -29,7 +29,6 @@ const cP = require('../client/public/js/client-portal.js')
 require('dotenv').config();
 const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../config');
 const {app, runServer, closeServer } = require('../index');
-const { localStrategy, jwtStrategy } = require('../server/api/auth');
 
 // Generate valid token
 const token = jwt.sign(
@@ -46,6 +45,165 @@ const token = jwt.sign(
 // TESTING
 
 describe('Portal: Client-side user interaction', function() {
+  
+  describe('Menu items', function() {
+    
+    describe('loadIndProf()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.loadIndProf).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        // Create test event
+        const event = {
+          currentTarget: {
+            dataset: { 
+              usertype: faker.random.alphaNumeric(10),
+              profid: faker.random.alphaNumeric(10),
+              mode: faker.random.alphaNumeric(10)
+            }
+          }
+        };
+        // Run test
+        let testObj = cP.loadIndProf(event, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+    });
+    
+    describe('loadPositions()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.loadPositions).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        // Create test event
+        const event = {
+          currentTarget: {
+            dataset: { 
+              usertype: faker.random.alphaNumeric(10),
+              profid: faker.random.alphaNumeric(10)
+            }
+          }
+        };
+        // Run test
+        let testObj = cP.loadPositions(event, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+    });
+    
+    describe('loadApplications()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.loadApplications).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        // Create test event
+        const event = {
+          currentTarget: {
+            dataset: { 
+              usertype: faker.random.alphaNumeric(10),
+              profid: faker.random.alphaNumeric(10)
+            }
+          }
+        };
+        // Run test
+        let testObj = cP.loadApplications(event, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+    });
+  });
+  
+  describe('Form actions', function() {
+    
+    describe('createIndProf()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.createIndProf).to.be.a('function');
+      });
+
+      it('Should return a promise', function() {
+        // Create test DOM
+        $('body').html(`
+          <form>
+            <input name="firstname" value="${faker.name.firstName()}">
+            <input name="lastName" value="${faker.name.lastName()}">
+            <input name="email" value="${faker.internet.email()}">
+            <input name="phone" value="${faker.phone.phoneNumber()}">
+            <input name="linkedin" value="${faker.internet.url()}">
+            <input name="userid" value="${faker.random.alphaNumeric(10)}">
+          </form>
+        `);
+        // Run test
+        let testObj = cP.createIndProf(token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+        // Reset test DOM
+        $('body').html();
+      });
+    });
+    
+    describe('cancelIndProfEdit()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.cancelIndProfEdit).to.be.a('function');
+      });
+
+      it('Should return a promise', function() {
+        // Create test event
+        const event = {
+          currentTarget: {
+            dataset: {
+              userid: faker.random.alphaNumeric(10),
+              profId: faker.random.alphaNumeric(10)
+            }
+          }
+        };
+        // Run test
+        let testObj = cP.cancelIndProfEdit(event, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+    });
+    
+
+    
+    
+    
+    
+    
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
   
   describe('Helper functionss', function() {
 
@@ -69,7 +227,7 @@ describe('Portal: Client-side user interaction', function() {
     
     describe('handleAjaxError()', function() {
       it('Should be a function', function() {
-        expect(cP.handleAjaxError).to.be.a('function');
+        expect(cP.handleError).to.be.a('function');
       });
     });
     
@@ -116,4 +274,7 @@ describe('Portal: Client-side user interaction', function() {
     });
     
   });
+*/  
+  
+  
 });
