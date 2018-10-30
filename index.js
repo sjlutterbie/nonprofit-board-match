@@ -19,6 +19,7 @@ const { router: orgProfsRouter } = require('./server/api/orgProf');
 const { router: positionsRouter } = require('./server/api/positions');
 const { router: applicationsRouter } = require('./server/api/applications');
 const { router: indProfCompRouter } = require('./server/portal/components/indprof');
+const { router: positionsCompRouter } = require('./server/portal/components/positions');
 
 // Set port & DB information
 const { PORT, DATABASE_URL } = require('./config');
@@ -50,6 +51,7 @@ app.use('/api/orgprofs', orgProfsRouter);
 app.use('/api/positions', positionsRouter);
 app.use('/api/applications', applicationsRouter);
 app.use('/portal/components/indprof', indProfCompRouter);
+app.use('/portal/components/positions', positionsCompRouter);
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 

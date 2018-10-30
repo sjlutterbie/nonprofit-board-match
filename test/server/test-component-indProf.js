@@ -15,13 +15,13 @@ const { JSDOM } = jsdom;
 const window = new JSDOM(
   `<!DOCTYPE html><html><body></body></html>`).window;
 global.$ = require('jquery')(window);
-const { app, runServer, closeServer} = require('../index');
-const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../config');
+const { app, runServer, closeServer} = require('../../index');
+const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
   
 // Load modules
-const indProf = require('../server/portal/components/indprof');
-const { IndProf } = require('../server/api/indProf');
-const { User } = require('../server/api/users');
+const indProf = require('../../server/portal/components/indprof');
+const { IndProf } = require('../../server/api/indProf');
+const { User } = require('../../server/api/users');
 
 // BEGIN TESTING
 

@@ -60,16 +60,6 @@ router.get('/components/indprof/:id',jsonParser, jwtAuth, (req, res) => {
   
 });
 
-// GET request to load positions view
-
-router.get('/components/positions', jsonParser, jwtAuth, (req, res) => {
-  
-  const { userType, profId } = req.query;
-
-  return res.send(positions.buildComponent(userType, profId));
-  
-});
-
 
 // GET request to load applications view
 

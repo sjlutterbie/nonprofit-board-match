@@ -20,7 +20,10 @@ function buildMenu(userType, userId, profId) {
                     class="js-tabnavmenu-profile">Profile</a>
       </li>
       <li>
-        <a href="#" data-usertype="${userType}" data-profid="${profId}" class="js-tabnavmenu-positions">Open Positions</a>
+        <a href="#" data-usertype="${userType}"
+                    data-userid="${userId}"
+                    data-profid="${profId}"
+                    class="js-tabnavmenu-positions">Open Positions</a>
       </li>
       <li>
         <a href="#" data-usertype="${userType}" data-profid="${profId}" class="js-tabnavmenu-applications">Applications</a>
