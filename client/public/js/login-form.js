@@ -47,7 +47,6 @@ $('.js-login-form').submit(function(e) {
   } else {
     logInUser(e);
   }
-
 });
 
   function chooseSubmitAction() {
@@ -266,9 +265,17 @@ function logInUser(e) {
 try {
   module.exports = {
     toggleFormType,
+    chooseSubmitAction,
     logInUser,
+    chooseLoginPath,
+    storeJWTToken,
+    loadCreateIndProf,
+    loadPortal,
+    loadContentSuccess,
+    loadContentFailure,
     createUser,
-    chooseSubmitAction
+    createUserSuccess,
+    createUserError
   };
 }
 catch(error) {

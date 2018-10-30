@@ -99,58 +99,220 @@ describe('Login Form User Interactions', function() {
   });
 });
 
-describe('Login form submission', function() {
+describe('Form submission', function() {
   
-  // Initialize test server
-  before(function() {
-    return runServer(TEST_DATABASE_URL);
-  });
+  describe('Function unit tests', function() {
   
-  // Create test user for login tests
-  const testUser = {
-    username: faker.random.alphaNumeric(10),
-    password: faker.random.alphaNumeric(10)
-  };
-  
-  // Test clean up
-  
-  // Close test server
-  after(function() {
-    return closeServer();
-  });
-  
-  describe('chooseSubmitAction(e)', function() {
-    it('Should be a function', function() {
-      expect(lF.chooseSubmitAction).to.be.a('function');
-    });
-    it('Should return a string', function() {
-      expect(lF.chooseSubmitAction()).to.be.a('string');
-    });
-
-    it('Should evaluate the DOM correctly', function() {
+    describe('chooseSubmitAction(e)', function() {
       
-      // Create 'login form' test DOM
-      $('body').html(`
-        <div class="js-login-form"></div>
-      `);
-      // Run test
-      expect(lF.chooseSubmitAction()).to.equal('logInUser');
+      it('Should be a function', function() {
+        expect(lF.chooseSubmitAction).to.be.a('function');
+      });
       
-      // Create 'create user' test DOM
+      it('Should return a string', function() {
+        expect(lF.chooseSubmitAction()).to.be.a('string');
+      });
+  
+      it('Should evaluate the DOM correctly', function() {
+        // Create 'login form' test DOM
+        $('body').html(`
+          <div class="js-login-form"></div>
+        `);
+        // Run test
+        expect(lF.chooseSubmitAction()).to.equal('logInUser');
+        // Create 'create user' test DOM
+        $('body').html(`
+          <div class="js-login-form create-account"></div>
+        `);
+        // Run test
+        expect(lF.chooseSubmitAction()).to.equal('createUser');
+        // Reset test DOM
+        $('body').html('');
+      });
+    }); 
+    
+    describe('logInUser()', function() {
+      it('Should be a function', function() {
+        expect(lF.logInUser).to.be.a('function');
+      });
+      // Part of ajax chain: See 'Integration tests' for functionality testing
+    });
+    
+    describe('chooseLoginPath()', function() {
+      it('Should be a function', function() {
+        expect(lF.chooseLoginPath).to.be.a('function');
+      });
+      // Part of ajax chain: See 'Integration tests' for functionality testing
+    });
+    
+    describe('storeJWTToken', function() {
+      it('Should be a function', function() {
+        expect(lF.storeJWTToken).to.be.a('function');
+      });
+      it('Should store an object `JWT` in `localStorage`', function() {
+        // Create test res object
+        const res = {
+          authToken: 'foo'
+        };
+        lF.storeJWTToken(res);
+        expect(localStorage.JWT).to.equal('foo');
+      });
+    });
+    
+    describe('loadCreateIndProf()', function() {
+      it('Should be a function', function() {
+        expect(lF.loadCreateIndProf).to.be.a('function');
+      });
+      // Part of ajax chain: See 'Integration tests' for functionality testing
+    });
+    
+    describe('loadPortal()', function() {
+      it('Should be a function', function() {
+        expect(lF.loadPortal).to.be.a('function');
+      });
+      // Part of ajax chain: See 'Integration tests' for functionality testing
+    });
+    
+    describe('loadContentSuccess(res)', function() {
+      it('Should be a function', function(){
+        expect(lF.loadContentSuccess).to.be.a('function');
+      });
+      it('Should manipulate the DOM as expected', function() {
+        // Create test DOM
+        $('body').html(`
+          <div class="content-wrapper login-wrapper"></div>
+        `);
+        // Create test response
+        const res = faker.random.alphaNumeric(10);
+        // Run test
+        lF.loadContentSuccess(res);
+        expect($('.content-wrapper').text()).to.equal(res);
+        expect($('.content-wrapper').hasClass('login-wrapper')).to.equal(false);
+        // Rest test DOM
+        $('body').html('');
+      });
+    });
+    
+    describe('loadContentFailure', function() {
+      it('Should be a function', function(){ 
+        expect(lF.loadContentFailure).to.be.a('function');
+      });
+      it('Should manipulate the DOM as expected', function() {
+        // Create test DOM
+        $('body').html('');
+        // Create test res object
+        const res = {
+          status: faker.random.alphaNumeric(10),
+          responseText: faker.random.alphaNumeric(10)
+        };
+        // Run test
+        lF.loadContentFailure(res);
+        expect($('html').text()).to.equal(`${res.status}: ${res.responseText}`);
+        // Reset test DOM
+        $('body').html('');
+      });
+    });
+    
+    describe('createUser()', function() {
+      it('Should be a function', function() {
+        expect(lF.createUser).to.be.a('function');
+      });
+      // Part of ajax chain: See 'Integration tests' for functionality testing
+    });
+    
+    describe('createUserSuccess()', function() {
+      it('Should be a function', function() {
+        expect(lF.createUserSuccess).to.be.a('function');
+      });
+      it('Should manipulate the DOM as expected', function() {
+      // Create test DOM
       $('body').html(`
-        <div class="js-login-form create-account"></div>
+         <div class="js-login-form create-account"></div>
+         <div class="js-login-form-heading">Create Account</div>
+         <input type="text" class="js-repeat-password"
+                name="password-repeat" style="display: block;" required></input>
+         <input type="submit" value="Create Account" class="js-login-submit"></input>
+         <a class="js-create-account-link">Log In</a>
+         <div class="alert-area"></div>
       `);
+      // Create test responst object
+      const res = {
+        username: faker.random.alphaNumeric(10)
+      }
       // Run test
-      expect(lF.chooseSubmitAction()).to.equal('createUser');
+      lF.createUserSuccess(res);
+      expect($('.js-login-form').hasClass('create-account')).to.equal(false);
+      expect($('.js-login-form-heading').text()).to.equal('Log In');
+      expect($('.js-repeat-password').css('display')).to.equal('none');
+      expect($('.js-repeat-password').prop('required')).to.equal(false);
+      expect($('.js-login-submit').val()).to.equal('Log In');
+      expect($('.js-create-account-link').text()).to.equal('Create Account');
+      expect($('.alert-area').text()).to.equal(
+        `User '${res.username}' created! You may now log in.`);
       // Reset test DOM
       $('body').html('');
+      });
     });
     
+    describe('createUserError', function() {
+      it('Should be a function', function() {
+        expect(lF.createUserError).to.be.a('function');
+      });
+      it('Should manipulate the DOM as expected', function() {
+        // Create test DOM
+        $('body').html(`<div class="alert-area"></div>`);
+        // Create test response object
+        const res = {
+          responseJSON: {
+            reason: faker.random.alphaNumeric(10),
+            message: faker.random.alphaNumeric(10)
+          }
+        };
+        // Run test
+        lF.createUserError(res);
+        expect($('.alert-area').text()).to.equal(
+          `${res.responseJSON.reason}: ${res.responseJSON.message}`);
+        // Reset test DOM
+        $('body').html('');
+      });
+    });
+  });
+
+  describe('Integration tests', function() {
     
+    // Initialize test server
+    before(function() {
+      return runServer(TEST_DATABASE_URL);
+    });
     
-  });  
-  
-  
-  
+    // Create test user for login tests
+    const testUser = {
+      username: faker.random.alphaNumeric(10),
+      password: faker.random.alphaNumeric(10)
+    };
+    
+    // Test clean up
+    // TODO: REMOVE USERS/PROFILES
+    
+    // Close test server
+    after(function() {
+      return closeServer();
+    });
+
+    
+    describe('User creation', function() {
+      
+      // TODO: BUILD USER CREATION INTEGRATION TEST
+      
+    });
+    
+    describe('User login', function() {
+      
+      // TODO: BUILD LOGIN INTEGRATION TEST (NEST WITHIN USER CREATION?)
+      
+    });
+
+  });
+    
 });
 
