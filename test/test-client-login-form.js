@@ -357,6 +357,9 @@ describe('Form submission', function() {
     });
   });
 
+
+/* NOTE: THIS SECTION ON HOLD UNTIL FAKE HTTP REQUESTS CAN BE IMPLEMENTED
+
   describe('Promise testing', function() {
 
     // Initialize test server
@@ -423,7 +426,6 @@ describe('Form submission', function() {
           `);
           // Run test
           it('Should resolve/reject as expected', function() {
-            console.log(testCase);
             return lF.createUser()
               .then(function(promiseResult) {
                 result = 'Resolve';
@@ -441,7 +443,7 @@ describe('Form submission', function() {
       });  
     });
     
-/*
+
     describe('logInUser promise', function() {
       
       let result;
@@ -456,7 +458,7 @@ describe('Form submission', function() {
       ];
     
     });
-*/
+
     
         
 
@@ -467,7 +469,10 @@ describe('Form submission', function() {
       // loadPortal
         // Expected status in then/catch cases
 
+
   });
+
+*/
 
 });
 
