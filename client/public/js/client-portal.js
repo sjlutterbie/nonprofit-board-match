@@ -15,7 +15,7 @@ $('html').on('click', '.js-tabnavmenu-profile', e =>
   loadIndProf(e, localStorage.JWT, updateMain, handleAjaxError));
 
   function loadIndProf(event, authToken, onSuccess, onError) {
-    // Make an API call to /portal/components/indprof/:id; handle result.
+    // Make an API call to /portal/components/indprof; handle result.
 
     event.preventDefault();
     
@@ -46,7 +46,7 @@ $('html').on('click', '.js-tabnavmenu-profile', e =>
   }
 
 // Handle click on tabNavMenu: Positions link
-$('.js-tabnavmenu-positions').click(e =>
+$('html').on('click', '.js-tabnavmenu-positions', e =>
   loadPositions(e, localStorage.JWT, updateMain, handleAjaxError));
   
   function loadPositions(event, authToken, onSuccess, onError) {
