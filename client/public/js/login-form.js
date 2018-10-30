@@ -1,15 +1,24 @@
 'use strict';
 
+/*
+Handles user interactions on the login form and "create individual profile"
+  form. Upon login (and creation of an individual profile, if necessary),
+  loads the 'portal view', after which point user interactions are handled by
+  client-portal.js
+*/
+
+
 // Handle click on "Create account" link (Toggle)
 
-$('.js-create-account-link').click(toggleFormType);
+$('html').on('click', '.js-create-account-link', e => 
+  toggleFormType(e));
 
   function toggleFormType(e) {
     e.preventDefault();
 
     // Check current state of form
     if (!$('.js-login-form').hasClass('create-account')) {
-      // Log In -> CreateAccount
+      // Convert 'Log In' -> 'CreateAccount'
       $('.js-login-form').addClass('create-account');
       $('.js-login-form-heading').text('Create Account');
       $('.js-repeat-password').show();
@@ -17,7 +26,7 @@ $('.js-create-account-link').click(toggleFormType);
       $('.js-login-submit').val('Create Account');
       $('.js-create-account-link').text('Log In');
     } else {
-      // Create Account -> Log In
+      // Convert 'Create Account' -> 'Log In'
       $('.js-login-form').removeClass('create-account');
       $('.js-login-form-heading').text('Log In');
       $('.js-repeat-password').hide();
@@ -25,10 +34,9 @@ $('.js-create-account-link').click(toggleFormType);
       $('.js-login-submit').val('Log In')
       $('.js-create-account-link').text('Create Account');
     }
-
   }
 
-// Handle form submission
+// Handle login/createAccount form submission
 
 $('.js-login-form').submit(function(e) {
   e.preventDefault();
@@ -36,121 +44,133 @@ $('.js-login-form').submit(function(e) {
 });
 
   function chooseSubmitAction(e) {
+    // Create a new user, or log in an existing user?
     e.preventDefault();
     
     let output;
     
     if($('.js-login-form').hasClass('create-account')) {
-      // createUser Form
+      // Use form submission event to create a new user
       output = createUser(e);
     } else {
-      // logInUser Form
+      // Use form submission event to log in an existing user
       output = logInUser(e);
     }
     
     return output;
+  }
+
+// USER LOGIN PATHWAY
+
+function logInUser(e) {
+  e.preventDefault();
+  
+  // Extract submission data
+  const formData = {
+    username: $('input[name="username"]').val(),
+    password: $('input[name="password"]').val()
+  };
+  
+  // Execute API call
+  $.ajax({
+    url: '/api/auth/login',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(formData),
+    dataType: 'json',
+    success: chooseLoginPath,
+    error: loadContentFailure
+  });
     
+  // For testing purposes 
+  return 'logInUser';
+
+}
+  
+  function chooseLoginPath(res) {
+    // If the user has an existing individual profile: Load the portal
+    // If the user does NOT have an individual profile: Create one
+    
+    // Store the JWT token in local storage
+    storeJWTToken(res);
+    
+    if (res.user.indProf) {
+      loadPortal(res);
+    } else {
+      loadCreateIndProf(res);
+    }
   }
   
-  // USER LOGIN PATHWAY
-  
-  function logInUser(e) {
-    e.preventDefault();
-    
-    // Build submission data (username, password)
-    const formData = {
-      username: $('input[name="username"]').val(),
-      password: $('input[name="password"]').val()
-    };
-    
-    $.ajax({
-      url: '/api/auth/login',
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(formData),
-      dataType: 'json',
-      success: chooseLoginPath,
-      error: loginError
-    });
-      
-    // For testing purposes 
-    return 'logInUser';
-  
-  }
-  
-    function chooseLoginPath(res) {
-      
-      if (res.user.indProf) {
-        loadPortal(res);
-      } else {
-        loadCreateIndProf(res);
-      }
+    function storeJWTToken(res) {
+      // Upon successful login, store the JWT token for session authentication
+
+      localStorage.setItem('JWT', res.authToken)
       
     }
   
     function loadCreateIndProf(res) {
+      // Request the indProf user creation form from the server
       
-      // Store the JWT in local storage
-      localStorage.setItem('JWT', res.authToken)
-      
+      // Create data for API call
       const requestData = {
         userType: res.userType,
         userId: res.user.userId,
         mode: 'create'
       };
       
-      const resUrl = '/portal/components/indprof';
-    
+      // Set API url
+      const reqUrl = '/portal/components/indprof';
+      
+      // Execute the request
       let request = $.ajax({
-        url: resUrl,
+        url: reqUrl,
         type: 'GET',
         headers: {
           Authorization: `Bearer ${res.authToken}`,
           contentType: 'application/json'
         },
         data: requestData,
-        success: loadPortalSuccess,
-        error: loadPortalFailure
+        success: loadContentSuccess,
+        error: loadContentFailure
       });
       
     }
-
+    
     function loadPortal(res) {
+      // Request the portal interface from the server
 
-      const resUrl = '/portal';
-      
-
-      // Store the JWT in local storage
-      localStorage.setItem('JWT', res.authToken)
-      
+      // Create data for API call      
       const requestData = {
         userType: res.userType,
         userId: res.user.userId,
         profId: res.user.indProf
       };
       
+      // Set API url
+      const reqUrl = '/portal';
+
+      // Execute the request
       let request = $.ajax({
-        url: resUrl,
+        url: reqUrl,
         type: 'GET',
         headers: {
           Authorization: `Bearer ${res.authToken}`,
           contentType: 'application/json'
         },
-        data: requestData, // For finding userAccount
-        success: loadPortalSuccess,
-        error: loadPortalFailure
+        data: requestData,
+        success: loadContentSuccess,
+        error: loadContentFailure
       });
-
     }
       
-      function loadPortalSuccess(res) {
+      function loadContentSuccess(res) {
+        // Clears login/createAccount form, replaces with
+        //  portal/createProfile content.
         
-        // Clears html, to rebuild via the Portal
-        //document.write(res);
-
+        // Replace HTML
         $('.content-wrapper').html(res);
-        
-        // Changes flexbox justify from center to start
+
+        // Update CSS
         $('.content-wrapper').removeClass('login-wrapper');
 
         // For testing purposes
@@ -158,8 +178,10 @@ $('.js-login-form').submit(function(e) {
         
       }
     
-    
-      function loadPortalFailure(res) {
+      function loadContentFailure(res) {
+        
+      // TODO: Implement error handling that doesn't interfere with user
+      //  journey.
         
         $('html').html(`${res.status}: ${res.responseText}`);
         
@@ -167,18 +189,9 @@ $('.js-login-form').submit(function(e) {
         return res;
         
       }
-    
-    
-    function loginError(res) {
 
-      $('body').html(`${res.status}: ${res.responseText}`);
-      
-      // For testing purposes
-      return res
-    }
-    
-    
-  
+// USER CREATION PATHWAY
+
   function createUser(e) {
   
   // Verify password fields match
@@ -187,15 +200,17 @@ $('.js-login-form').submit(function(e) {
   
   if(password != passwordRepeat) {
     $('.alert-area').text('Passwords must match');
+    // Cancel form submission without clearing contents
     return;
   }
   
-  // Handle form submission
+  // Extract form data
   const formData = {
     username: $('input[name="username"]').val(),
     password: $('input[name="password"]').val()
   };
   
+  // Execute API call
   $.ajax({
       url: '/api/users',
       type: 'POST',
@@ -210,33 +225,38 @@ $('.js-login-form').submit(function(e) {
     return 'createUser';
     
   }
-  
+
     function createUserSuccess(res) {
+      // Inform user account was created, and convert createUser form to
+      //  pre-populated login form
       
-      $('.alert-area').text(`User '${res.username}' created! You may now log in.`);
+      $('.alert-area')
+        .text(`User '${res.username}' created! You may now log in.`);
       
-      // Create null event
+      // Create null event, enabling toggleFormType(e) call
       const e = {
         preventDefault: function() {}
-      }
+      };
       
+      // Switch from createUser to login form
       toggleFormType(e);
       
     }
     
     function createUserError(res) {
+      // Inform user of account creation error, without clearing form data
       
       $('.alert-area').text(
         `${res.responseJSON.reason}: ${res.responseJSON.message}`
       );
       
+      return;
+      
     }
 
+////////////////////////////////////////////////////////////////////////////////
 
-
-  
-// Make available as module for testing
-
+// Make functions available as module for testing
 try {
   module.exports = {
     toggleFormType,
@@ -246,4 +266,5 @@ try {
   };
 }
 catch(error) {
+  // Not an error: Just loading the functions client-side
 }
