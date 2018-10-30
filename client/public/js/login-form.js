@@ -76,21 +76,33 @@ function logInUser(e) {
     password: $('input[name="password"]').val()
   };
   
-  // Execute API call
-  $.ajax({
-    url: '/api/auth/login',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(formData),
-    dataType: 'json',
-    success: chooseLoginPath,
-    error: loadContentFailure
-  });
-    
-  // For testing purposes 
-  return 'logInUser';
+  // Initiate login
+  let loginPromise = createLoginPromise(formData);
 
+  // Resolve/reject login path
+  loginPromise
+    .then(chooseLoginPath)
+    .catch(loadContentFailure);
 }
+  
+  function createLoginPromise(formData) {
+    // Wrap the login $.ajax() call in a promise object; return object
+    
+    let promObj = new Promise(function(resolve, reject) {
+      $.ajax({
+        url: '/api/auth/login',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        dataType: 'json',
+        success: resolve,
+        error: reject
+      });
+    });
+    
+    return promObj;
+  }
+  
   
   function chooseLoginPath(res) {
     // If the user has an existing individual profile: Load the portal
@@ -203,7 +215,7 @@ function logInUser(e) {
   const password = $('input[name="password"]').val();
   const passwordRepeat = $('input[name="password-repeat"]').val();
   
-  if(password != passwordRepeat) {
+  if (!verifyPasswordMatch(password, passwordRepeat)){
     $('.alert-area').text('Passwords must match');
     // Cancel form submission without clearing contents
     return;
@@ -230,7 +242,12 @@ function logInUser(e) {
     return 'createUser';
     
   }
-
+  
+    function verifyPasswordMatch(password, passwordRepeat) {
+      // Verify password === passwordRepeat
+      return (password === passwordRepeat);
+    }
+  
     function createUserSuccess(res) {
       // Inform user account was created, and convert createUser form to
       //  pre-populated login form
@@ -267,6 +284,7 @@ try {
     toggleFormType,
     chooseSubmitAction,
     logInUser,
+    createLoginPromise,
     chooseLoginPath,
     storeJWTToken,
     loadCreateIndProf,
@@ -274,6 +292,7 @@ try {
     loadContentSuccess,
     loadContentFailure,
     createUser,
+    verifyPasswordMatch,
     createUserSuccess,
     createUserError
   };

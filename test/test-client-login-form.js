@@ -135,9 +135,22 @@ describe('Form submission', function() {
       it('Should be a function', function() {
         expect(lF.logInUser).to.be.a('function');
       });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
+      // Function takes createLoginPromise() resolve/reject and re-directs it
+      //  to other functions. No direct unit testing here, because 
+      //  createLoginPromise()'s promise object, and the re-direct functions
+      //  are tested elsewhere.
     });
     
+    describe('createLoginPromise()', function() {
+      it('Should be a function', function() {
+        expect(lF.createLoginPromise).to.be.a('function');
+      });
+      it('Should return a promise object', function() {
+        expect(lF.createLoginPromise({})).to.be.a('promise');
+      });
+      // Part of ajax chain: See 'Integration tests' for functionality testing
+    });
+
     describe('chooseLoginPath()', function() {
       it('Should be a function', function() {
         expect(lF.chooseLoginPath).to.be.a('function');
@@ -220,6 +233,23 @@ describe('Form submission', function() {
       // Part of ajax chain: See 'Integration tests' for functionality testing
     });
     
+    describe('verifyPasswordMatch()', function() {
+      it('Should be a function', function() {
+        expect(lF.verifyPasswordMatch).to.be.a('function');
+      });
+      it('Should correctly check if two passwords match', function() {
+        const testPW = faker.random.alphaNumeric(10);
+        const testCases = [
+         [testPW, testPW, true],
+         [testPW, testPW+'X', false]
+        ];
+        testCases.forEach(function(testCase) {
+          expect(lF.verifyPasswordMatch(testCase[0], testCase[1]))
+            .to.equal(testCase[2]);
+        });
+      });
+    });
+    
     describe('createUserSuccess()', function() {
       it('Should be a function', function() {
         expect(lF.createUserSuccess).to.be.a('function');
@@ -299,12 +329,27 @@ describe('Form submission', function() {
       return closeServer();
     });
 
-    
     describe('User creation', function() {
-      
-      // TODO: BUILD USER CREATION INTEGRATION TEST
-      
-    });
+
+      describe('Success case', function() {
+        // Build test user creation form
+        $('body').html(`
+          <form name="js-login-form" class="create-account">
+            <input name="username" value="${testUser.username}">
+            <input name="password" value="${testUser.password}">
+            <input name="password-repeat" value="${testUser.password}">
+          </form>
+        `);
+        // Create test event
+        const e = {
+          preventDefault: sinon.spy()
+        };
+        // Trigger form submit
+          // $('.js-login-form').submit();
+        //  Monitor response
+          //  expect(e.preventDefault.called).to.equal(true);
+      });
+  });
     
     describe('User login', function() {
       
