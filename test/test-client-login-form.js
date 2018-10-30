@@ -16,12 +16,12 @@ const window = new JSDOM(
   `<!DOCTYPE html><html><body></body></html>`).window;
 global.$ = require('jquery')(window);
 
-const lF = require('../../client/public/js/login-form');
+const lF = require('../client/public/js/login-form');
 
 // Load testing server details
 require('dotenv').config();
-const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../../config');
-const {app, runServer, closeServer } = require('../../index');
+const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../config');
+const {app, runServer, closeServer } = require('../index');
 
 
 // BEGIN TESTING
@@ -135,20 +135,23 @@ describe('Form submission', function() {
       it('Should be a function', function() {
         expect(lF.logInUser).to.be.a('function');
       });
-      // Function takes createLoginPromise() resolve/reject and re-directs it
-      //  to other functions. No direct unit testing here, because 
-      //  createLoginPromise()'s promise object, and the re-direct functions
-      //  are tested elsewhere.
-    });
-    
-    describe('createLoginPromise()', function() {
-      it('Should be a function', function() {
-        expect(lF.createLoginPromise).to.be.a('function');
+      it('Should return a promise', function() {
+        // Create test DOM
+        $('body').html(`
+          <form>
+            <input name="username" val="${faker.random.alphaNumeric(10)}">
+            <input name="password" val="${faker.random.alphaNumeric(10)}">
+          </form>
+        `);
+        // Run test
+        let testObj = lF.logInUser(); 
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){}, function(err){});
+        // Reset test DOM
+        $('body').html('');
+        // See 'Promise testing' for full functionality testing
       });
-      it('Should return a promise object', function() {
-        expect(lF.createLoginPromise({})).to.be.a('promise');
-      });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
     });
 
     describe('chooseLoginPath()', function() {
@@ -230,7 +233,25 @@ describe('Form submission', function() {
       it('Should be a function', function() {
         expect(lF.createUser).to.be.a('function');
       });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
+      it('Should return a promise (when form passwords match)', function() {
+        // Create test DOM
+        const testPassword = faker.random.alphaNumeric(10);
+        $('body').html(`
+          <form>
+            <input name="username" val="${faker.random.alphaNumeric(10)}">
+            <input name="password" val="${testPassword}">
+            <input name="password-repeat" val="${testPassword}">
+          </form>
+        `);
+        // Run test
+        let testObj = lF.createUser();
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){}, function(err){});
+        // Reset test DOM
+        $('body').html('');
+        // See 'Promise testing' for full functionality testing
+      });
     });
     
     describe('verifyPasswordMatch()', function() {

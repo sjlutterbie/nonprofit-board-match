@@ -42,10 +42,17 @@ $('.js-login-form').submit(function(e) {
   e.preventDefault();
   
   const formAction = chooseSubmitAction();
+  
   if (formAction === 'createUser') {
-    createUser(e);
+    // Handles ajax call as promise object
+    createUser() 
+      .then(createUserSuccess)
+      .catch(createUserError);
   } else {
-    logInUser(e);
+    // Handle ajax call as promise object
+    logInUser()
+      .then(chooseLoginPath)
+      .catch(loadContentFailure);
   }
 });
 
@@ -67,28 +74,17 @@ $('.js-login-form').submit(function(e) {
 
 // USER LOGIN PATHWAY
 
-function logInUser(e) {
-  e.preventDefault();
-  
+function logInUser() {
+  // Submit login ajax request as promise, return promise object
+
   // Extract submission data
   const formData = {
     username: $('input[name="username"]').val(),
     password: $('input[name="password"]').val()
   };
   
-  // Initiate login
-  let loginPromise = createLoginPromise(formData);
-
-  // Resolve/reject login path
-  loginPromise
-    .then(chooseLoginPath)
-    .catch(loadContentFailure);
-}
-  
-  function createLoginPromise(formData) {
-    // Wrap the login $.ajax() call in a promise object; return object
-    
-    let promObj = new Promise(function(resolve, reject) {
+  // Create ajax call as promise
+  let promObj = new Promise(function(resolve, reject) {
       $.ajax({
         url: '/api/auth/login',
         type: 'POST',
@@ -100,10 +96,9 @@ function logInUser(e) {
       });
     });
     
-    return promObj;
-  }
-  
-  
+  return promObj;
+}
+
   function chooseLoginPath(res) {
     // If the user has an existing individual profile: Load the portal
     // If the user does NOT have an individual profile: Create one
@@ -209,7 +204,10 @@ function logInUser(e) {
 
 // USER CREATION PATHWAY
 
-  function createUser(e) {
+  function createUser() {
+  // Perform initial form validation and submit user creation request as a 
+  //  promise; return promise object.
+  
   
   // Verify password fields match
   const password = $('input[name="password"]').val();
@@ -227,20 +225,21 @@ function logInUser(e) {
     password: $('input[name="password"]').val()
   };
   
-  // Execute API call
-  $.ajax({
-      url: '/api/users',
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(formData),
-      dataType: 'json',
-      success: createUserSuccess,
-      error: createUserError
-    });
-  
-    // For testing purposes
-    return 'createUser';
-    
+  let promObj = new Promise(function(resolve, reject) {
+    // Execute API call
+    $.ajax({
+        url: '/api/users',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        dataType: 'json',
+        success: resolve,
+        error: reject
+      });
+  });
+
+  return promObj;
+
   }
   
     function verifyPasswordMatch(password, passwordRepeat) {
@@ -284,7 +283,6 @@ try {
     toggleFormType,
     chooseSubmitAction,
     logInUser,
-    createLoginPromise,
     chooseLoginPath,
     storeJWTToken,
     loadCreateIndProf,
