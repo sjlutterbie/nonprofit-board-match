@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "mocha --recursive",
+    "test": "mocha",
     "dev": "nodemon index.js"
   },
   "repository": {

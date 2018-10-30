@@ -40,21 +40,27 @@ $('html').on('click', '.js-create-account-link', e =>
 
 $('.js-login-form').submit(function(e) {
   e.preventDefault();
-  chooseSubmitAction(e);
+  
+  const formAction = chooseSubmitAction();
+  if (formAction === 'createUser') {
+    createUser(e);
+  } else {
+    logInUser(e);
+  }
+
 });
 
-  function chooseSubmitAction(e) {
+  function chooseSubmitAction() {
     // Create a new user, or log in an existing user?
-    e.preventDefault();
-    
+
     let output;
     
     if($('.js-login-form').hasClass('create-account')) {
       // Use form submission event to create a new user
-      output = createUser(e);
+      output = 'createUser';
     } else {
       // Use form submission event to log in an existing user
-      output = logInUser(e);
+      output = 'logInUser';
     }
     
     return output;
