@@ -16,6 +16,10 @@ const window = new JSDOM(
   `<!DOCTYPE html><html><body></body></html>`).window;
 global.$ = require('jquery')(window);
 
+// Load helper files
+const {User} = require('../../server/api/users');
+
+// Load target file
 const lF = require('../../client/public/js/login-form');
 
 // Load testing server details
@@ -135,29 +139,25 @@ describe('Form submission', function() {
       it('Should be a function', function() {
         expect(lF.logInUser).to.be.a('function');
       });
-      // Function takes createLoginPromise() resolve/reject and re-directs it
-      //  to other functions. No direct unit testing here, because 
-      //  createLoginPromise()'s promise object, and the re-direct functions
-      //  are tested elsewhere.
-    });
-    
-    describe('createLoginPromise()', function() {
-      it('Should be a function', function() {
-        expect(lF.createLoginPromise).to.be.a('function');
+      it('Should return a promise', function() {
+        // Create test DOM
+        $('body').html(`
+          <form>
+            <input name="username" val="${faker.random.alphaNumeric(10)}">
+            <input name="password" val="${faker.random.alphaNumeric(10)}">
+          </form>
+        `);
+        // Run test
+        let testObj = lF.logInUser(); 
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){}, function(err){});
+        // Reset test DOM
+        $('body').html('');
+        // See 'Promise testing' for full functionality testing
       });
-      it('Should return a promise object', function() {
-        expect(lF.createLoginPromise({})).to.be.a('promise');
-      });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
     });
 
-    describe('chooseLoginPath()', function() {
-      it('Should be a function', function() {
-        expect(lF.chooseLoginPath).to.be.a('function');
-      });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
-    });
-    
     describe('storeJWTToken', function() {
       it('Should be a function', function() {
         expect(lF.storeJWTToken).to.be.a('function');
@@ -176,14 +176,45 @@ describe('Form submission', function() {
       it('Should be a function', function() {
         expect(lF.loadCreateIndProf).to.be.a('function');
       });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
+      it('Should return a promise', function() {
+        // Create response object
+        const res = {
+          userType: 'individual',
+          user: {
+            userId: faker.random.alphaNumeric(10)
+          },
+          authToken: faker.random.alphaNumeric(10)
+        };
+        // Run test
+        let testObj = lF.loadCreateIndProf(res);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(result){}, function(err){});
+      });
+      // See 'Promise testing' for full functionality testing
     });
     
     describe('loadPortal()', function() {
       it('Should be a function', function() {
         expect(lF.loadPortal).to.be.a('function');
       });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
+      it('Should return a promise', function() {
+        // Create test response object
+        const res = {
+          userType: faker.random.alphaNumeric(10),
+          user: {
+            userId: faker.random.alphaNumeric(10),
+            indProf: faker.random.alphaNumeric(10)
+          },
+          authToken: faker.random.alphaNumeric(10)
+        };
+        // Run test
+        let testObj = lF.loadPortal(res);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(result){},function(err){});
+      });
+      // See 'Promise testing' for full functionality testing
     });
     
     describe('loadContentSuccess(res)', function() {
@@ -230,7 +261,25 @@ describe('Form submission', function() {
       it('Should be a function', function() {
         expect(lF.createUser).to.be.a('function');
       });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
+      it('Should return a promise (when form passwords match)', function() {
+        // Create test DOM
+        const testPassword = faker.random.alphaNumeric(10);
+        $('body').html(`
+          <form>
+            <input name="username" val="${faker.random.alphaNumeric(10)}">
+            <input name="password" val="${testPassword}">
+            <input name="password-repeat" val="${testPassword}">
+          </form>
+        `);
+        // Run test
+        let testObj = lF.createUser();
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){}, function(err){});
+        // Reset test DOM
+        $('body').html('');
+        // See 'Promise testing' for full functionality testing
+      });
     });
     
     describe('verifyPasswordMatch()', function() {
@@ -265,7 +314,7 @@ describe('Form submission', function() {
          <a class="js-create-account-link">Log In</a>
          <div class="alert-area"></div>
       `);
-      // Create test responst object
+      // Create test response object
       const res = {
         username: faker.random.alphaNumeric(10)
       }
@@ -308,56 +357,122 @@ describe('Form submission', function() {
     });
   });
 
-  describe('Integration tests', function() {
-    
+
+/* NOTE: THIS SECTION ON HOLD UNTIL FAKE HTTP REQUESTS CAN BE IMPLEMENTED
+
+  describe('Promise testing', function() {
+
     // Initialize test server
     before(function() {
       return runServer(TEST_DATABASE_URL);
     });
     
-    // Create test user for login tests
+    // Set up test environment
+    
     const testUser = {
       username: faker.random.alphaNumeric(10),
       password: faker.random.alphaNumeric(10)
     };
     
-    // Test clean up
-    // TODO: REMOVE USERS/PROFILES
-    
+    before(function() {
+      return new Promise(function(resolve, reject) {
+        User.create(testUser)
+          .then(function(user) {
+            resolve();
+          }).catch(function(err) {
+              return err;
+          });
+      });
+    });
+
+    // Clean up test environment
+    after(function() {
+      return new Promise(function(resolve) {
+        User.deleteMany({})
+          .then(function(res) {
+            resolve();
+          });
+      })
+        .catch(function(err) {
+          return err;
+        });
+    });
+
     // Close test server
     after(function() {
       return closeServer();
     });
-
-    describe('User creation', function() {
-
-      describe('Success case', function() {
-        // Build test user creation form
-        $('body').html(`
-          <form name="js-login-form" class="create-account">
-            <input name="username" value="${testUser.username}">
-            <input name="password" value="${testUser.password}">
-            <input name="password-repeat" value="${testUser.password}">
-          </form>
-        `);
-        // Create test event
-        const e = {
-          preventDefault: sinon.spy()
-        };
-        // Trigger form submit
-          // $('.js-login-form').submit();
-        //  Monitor response
-          //  expect(e.preventDefault.called).to.equal(true);
-      });
-  });
     
-    describe('User login', function() {
+    // Functions to test:
+    describe('createUser Promise', function() {
+      let result;
+      const testCases = [
+        // Case format: [username, password1, password2, expectedResult]
+        // Case: user already exists
+        [testUser.username, testUser.password, testUser.password, 'Reject'],
+        // Case: User successfully created
+        [testUser.username+'X',testUser.password, testUser.password, 'Resolve']
+        // Note: Password mismatch case already tested by verifyPasswordMatch()
+      ];
+
+      testCases.forEach(function(testCase) {
+          // Create test DOM
+          $('body').html(`
+            <form>
+              <input name="username" value="${testCase[0]}">
+              <input name="password" value="${testCase[1]}">
+              <input name="password-repeat" value="${testCase[2]}">
+            </form>
+          `);
+          // Run test
+          it('Should resolve/reject as expected', function() {
+            return lF.createUser()
+              .then(function(promiseResult) {
+                result = 'Resolve';
+              })
+              .catch(function(promiseError) {
+                console.log(promiseError);
+                result = 'Reject';
+              })
+              .finally(function(promiseResult) {
+                expect(result).to.equal(testCase[3]);
+              });
+          });
+          // Clean up test DOM
+          $('body').html('');
+      });  
+    });
+    
+
+    describe('logInUser promise', function() {
       
-      // TODO: BUILD LOGIN INTEGRATION TEST (NEST WITHIN USER CREATION?)
-      
+      let result;
+      const testCases = [
+        // Case format: [username, password, expectedResult]
+        // Case: Username doesn't exist
+        [testUser.username+"x", testUser.password, 'Reject'],
+        // Case: Incorrect password
+        [testUser.username, testUser.password+'X', 'Reject'],
+        // Case: Successful login
+        [testUser.username, testUser.password, 'Resolve']
+      ];
+    
     });
 
-  });
     
+        
+
+  
+      // loadCreateIndProf
+        // Expected status in then/catch cases
+
+      // loadPortal
+        // Expected status in then/catch cases
+
+
+  });
+
+*/
+
 });
 
