@@ -242,14 +242,20 @@ $('html').on('click', '.js-indprof-cancel', function(e) {
   
 // Handle click on "Submit" on edit indProf form.
   
-$('html').on('submit', '.js-indprof-edit', e =>
-  editIndProf(e, localStorage.JWT, moveToPortal, handleErroR));
+$('html').on('submit', '.js-indprof-edit', function(e) {
+  e.preventDefault();
+  
+  // Execute request as promise
+  editIndProf(localStorage.JWT)
+    .then(moveToPortal)
+    .catch(handleError);
+  
+});
 
-  function editIndProf(event, authToken, onSuccess, onError) {
+  function editIndProf(authToken) {
     // Create an indProf
-    event.preventDefault();
-    
-    // Extract data from event
+
+    // Extract data from form
     const data = {
       firstName: $('input[name="firstname"]').val(),
       lastName: $('input[name="lastname"]').val(),
@@ -268,33 +274,38 @@ $('html').on('submit', '.js-indprof-edit', e =>
     
     const reqUrl = `/api/indprofs/${data.indProfId}`;
     
-    $.ajax({
-      url: reqUrl,
-      type: 'PUT',
-      headers: headersObj,
-      contentType: 'application/json',
-      data: JSON.stringify(data),
-      dataType: 'json',
-      success: onSuccess,
-      error: onError
+    let promObj = new Promise(function(resolve, reject) {
+      
+      $.ajax({
+        url: reqUrl,
+        type: 'PUT',
+        headers: headersObj,
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        success: resolve,
+        error: reject
+      });
     });
-
+    
+    return promObj;
   }
-  
-
-
-  
 
 /* ===========
    = BUTTONS =
    =========== */
 
-$('html').on('click', '.js-edit-indprof', e => 
-  handleEditIndProfClick(e, localStorage.JWT, updateMain, handleErroR))
+$('html').on('click', '.js-edit-indprof', function(e) {
+  e.preventDefault();
   
-  function handleEditIndProfClick(event, authToken, onSuccess, onError) {
-    
-    event.preventDefault();
+  // Execute request as promise
+  handleEditIndProfClick(e, localStorage.JWT)
+    .then(updateMain)
+    .catch(handleError);
+  
+});
+
+  function handleEditIndProfClick(event, authToken) {
     
     const requestData = {
       userAccount: event.currentTarget.dataset.userId,
@@ -304,18 +315,22 @@ $('html').on('click', '.js-edit-indprof', e =>
     
     const reqUrl = '/portal/components/indprof';
     
-    let request = $.ajax({
+    let promObj = new Promise(function(resolve, reject) {
+    
+      $.ajax({
         url: reqUrl,
         type: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.JWT}`,
           contentType: 'application/json'
         },
-        data: requestData, // For finding userAccount
-        success: onSuccess,
-        error: onError
+        data: requestData,
+        success: resolve,
+        error: reject
       });
-
+    });
+    
+    return promObj;
   }
   
   
@@ -376,6 +391,8 @@ try {
     loadApplications,
     createIndProf,
     cancelIndProfEdit,
+    editIndProf,
+    handleEditIndProfClick,
     
     
     

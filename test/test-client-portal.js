@@ -176,12 +176,66 @@ describe('Portal: Client-side user interaction', function() {
       });
     });
     
+    describe('editIndProf()', function() {
 
-    
-    
-    
-    
-    
+      it('Should be a function', function() {
+        expect(cP.editIndProf).to.be.a('function');
+      })
+
+      it('Should return a promise', function() {
+        // Create test DOM
+        $('body').html(`
+          <form>
+            <input name="firstname" value="${faker.name.firstName()}">
+            <input name="lastName" value="${faker.name.lastName()}">
+            <input name="email" value="${faker.internet.email()}">
+            <input name="phone" value="${faker.phone.phoneNumber()}">
+            <input name="linkedin" value="${faker.internet.url()}">
+            <input name="userid" value="${faker.random.alphaNumeric(10)}">
+            <input name="profid" value="${faker.random.alphaNumeric(10)}">
+          </form>
+        `);
+        // Run test
+        let testObj = cP.editIndProf(token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+        // Reset test DOM
+        $('body').html();
+      });
+    });
+  });
+  
+  describe('Non-Form Buttons', function() {
+  
+    describe('handleEditIndProfClick()', function() {
+
+      it('Should be a function', function() {
+        expect(cP.handleEditIndProfClick).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        // Create test event
+        const event = {
+          currentTarget: {
+            dataset: {
+              userAccount: faker.random.alphaNumeric(10),
+              profId: faker.random.alphaNumeric(10)
+            }
+          }
+        };
+        // Run test
+        let testObj = cP.handleEditIndProfClick(event, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+    });
+
+
+
+
+
   });
 
 
