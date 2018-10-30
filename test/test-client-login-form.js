@@ -154,13 +154,6 @@ describe('Form submission', function() {
       });
     });
 
-    describe('chooseLoginPath()', function() {
-      it('Should be a function', function() {
-        expect(lF.chooseLoginPath).to.be.a('function');
-      });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
-    });
-    
     describe('storeJWTToken', function() {
       it('Should be a function', function() {
         expect(lF.storeJWTToken).to.be.a('function');
@@ -179,7 +172,22 @@ describe('Form submission', function() {
       it('Should be a function', function() {
         expect(lF.loadCreateIndProf).to.be.a('function');
       });
-      // Part of ajax chain: See 'Integration tests' for functionality testing
+      it('Should return a promise', function() {
+        // Create response object
+        const res = {
+          userType: 'individual',
+          user: {
+            userId: faker.random.alphaNumeric(10)
+          },
+          authToken: faker.random.alphaNumeric(10)
+        };
+        // Run test
+        let testObj = lF.loadCreateIndProf(res);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(result){}, function(err){});
+      });
+      // See 'Promise testing' for full functionality testing
     });
     
     describe('loadPortal()', function() {

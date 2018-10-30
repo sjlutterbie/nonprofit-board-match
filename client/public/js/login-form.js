@@ -50,8 +50,21 @@ $('.js-login-form').submit(function(e) {
       .catch(createUserError);
   } else {
     // Handle ajax call as promise object
+    
+    // NOTE: Can I simplify this structure, once all then/catch are in place?
+    
     logInUser()
-      .then(chooseLoginPath)
+      .then(function(res) {
+        storeJWTToken(res);
+        // Determine which user path to follow
+        if(res.user.indProf) {
+          loadPortal(res);
+        } else {
+          loadCreateIndProf(res)
+            .then(loadContentSuccess)
+            .catch(loadContentFailure);
+        }
+      }) 
       .catch(loadContentFailure);
   }
 });
@@ -99,108 +112,101 @@ function logInUser() {
   return promObj;
 }
 
-  function chooseLoginPath(res) {
-    // If the user has an existing individual profile: Load the portal
-    // If the user does NOT have an individual profile: Create one
+
+
+  function storeJWTToken(res) {
+    // Upon successful login, store the JWT token for session authentication
+
+    localStorage.setItem('JWT', res.authToken)
     
-    // Store the JWT token in local storage
-    storeJWTToken(res);
+  }
+
+  function loadCreateIndProf(res) {
+    // Request the indProf user creation form from the server
     
-    if (res.user.indProf) {
-      loadPortal(res);
-    } else {
-      loadCreateIndProf(res);
-    }
+    // Create data for API call
+    const requestData = {
+      userType: res.userType,
+      userId: res.user.userId,
+      mode: 'create'
+    };
+    
+    // Set API url
+    const reqUrl = '/portal/components/indprof';
+    
+    let promObj = new Promise(function(resolve, reject) {
+      
+      // Execute the request
+      $.ajax({
+        url: reqUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${res.authToken}`,
+          contentType: 'application/json'
+        },
+        data: requestData,
+        success: resolve,
+        error: reject
+      });
+    });
+    
+    return promObj;
+
   }
   
-    function storeJWTToken(res) {
-      // Upon successful login, store the JWT token for session authentication
+  function loadPortal(res) {
+    // Request the portal interface from the server
 
-      localStorage.setItem('JWT', res.authToken)
+    // Create data for API call      
+    const requestData = {
+      userType: res.userType,
+      userId: res.user.userId,
+      profId: res.user.indProf
+    };
+    
+    // Set API url
+    const reqUrl = '/portal';
+
+    // Execute the request
+    let request = $.ajax({
+      url: reqUrl,
+      type: 'GET',
+      headers: {
+        Authorization: `Bearer ${res.authToken}`,
+        contentType: 'application/json'
+      },
+      data: requestData,
+      success: loadContentSuccess,
+      error: loadContentFailure
+    });
+  }
+    
+    function loadContentSuccess(res) {
+      // Clears login/createAccount form, replaces with
+      //  portal/createProfile content.
+      
+      // Replace HTML
+      $('.content-wrapper').html(res);
+
+      // Update CSS
+      $('.content-wrapper').removeClass('login-wrapper');
+
+      // For testing purposes
+      return res;
       
     }
   
-    function loadCreateIndProf(res) {
-      // Request the indProf user creation form from the server
+    function loadContentFailure(res) {
       
-      // Create data for API call
-      const requestData = {
-        userType: res.userType,
-        userId: res.user.userId,
-        mode: 'create'
-      };
+    // TODO: Implement error handling that doesn't interfere with user
+    //  journey.
       
-      // Set API url
-      const reqUrl = '/portal/components/indprof';
+      $('html').html(`${res.status}: ${res.responseText}`);
       
-      // Execute the request
-      let request = $.ajax({
-        url: reqUrl,
-        type: 'GET',
-        headers: {
-          Authorization: `Bearer ${res.authToken}`,
-          contentType: 'application/json'
-        },
-        data: requestData,
-        success: loadContentSuccess,
-        error: loadContentFailure
-      });
+      // For testing purposes
+      return res;
       
     }
-    
-    function loadPortal(res) {
-      // Request the portal interface from the server
-
-      // Create data for API call      
-      const requestData = {
-        userType: res.userType,
-        userId: res.user.userId,
-        profId: res.user.indProf
-      };
-      
-      // Set API url
-      const reqUrl = '/portal';
-
-      // Execute the request
-      let request = $.ajax({
-        url: reqUrl,
-        type: 'GET',
-        headers: {
-          Authorization: `Bearer ${res.authToken}`,
-          contentType: 'application/json'
-        },
-        data: requestData,
-        success: loadContentSuccess,
-        error: loadContentFailure
-      });
-    }
-      
-      function loadContentSuccess(res) {
-        // Clears login/createAccount form, replaces with
-        //  portal/createProfile content.
-        
-        // Replace HTML
-        $('.content-wrapper').html(res);
-
-        // Update CSS
-        $('.content-wrapper').removeClass('login-wrapper');
-
-        // For testing purposes
-        return res;
-        
-      }
-    
-      function loadContentFailure(res) {
-        
-      // TODO: Implement error handling that doesn't interfere with user
-      //  journey.
-        
-        $('html').html(`${res.status}: ${res.responseText}`);
-        
-        // For testing purposes
-        return res;
-        
-      }
 
 // USER CREATION PATHWAY
 
@@ -283,7 +289,6 @@ try {
     toggleFormType,
     chooseSubmitAction,
     logInUser,
-    chooseLoginPath,
     storeJWTToken,
     loadCreateIndProf,
     loadPortal,
