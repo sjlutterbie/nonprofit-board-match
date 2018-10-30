@@ -16,12 +16,12 @@ const window = new JSDOM(
   `<!DOCTYPE html><html><body></body></html>`).window;
 global.$ = require('jquery')(window);
 
-const lF = require('../client/public/js/login-form');
+const lF = require('../../client/public/js/login-form');
 
 // Load testing server details
 require('dotenv').config();
-const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../config');
-const {app, runServer, closeServer } = require('../index');
+const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../../config');
+const {app, runServer, closeServer } = require('../../index');
 
 
 // BEGIN TESTING

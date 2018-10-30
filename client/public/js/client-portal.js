@@ -1,9 +1,9 @@
 'use strict';
 
-// This file contains the user interaction controls for Portal view, which 
-//  loads once the user has authenticated.
-
-
+/*
+Handles user interactions within the Portal, which loads once the user has 
+  authenticated, and created an individual profile.
+*/
 
 /* ==============
    = MENU ITEMS =
