@@ -18,44 +18,38 @@ const {User} = require('../../server/api/users');
 
 // DATA MODEL TESTING
 
-describe('OrgProf API: Data Model', function() {
+describe('OrgProf API', function() {
   
-  it('Should be an object', function() {
-    expect(orgProfSchema).to.be.an('object');
+  describe('Data model', function() {
+  
+    it('Should be an object', function() {
+      expect(orgProfSchema).to.be.an('object');
+    });
+  
+    it('OrgProf should include the expected keys', function() {
+      const requiredKeys = ['name', 'website', 'email', 'phone', 'summary',
+        'userAccount', 'positions'];
+      expect(orgProfSchema.obj).to.include.keys(requiredKeys);
+    });
   });
-  it('OrgProf should include the expected keys', function() {
-    const requiredKeys = ['name', 'website', 'email', 'phone', 'summary',
-      'userAccount', 'positions'];
-    expect(orgProfSchema.obj).to.include.keys(requiredKeys);
-  });
   
-});
-
-// ROUTE TESTING
-
-// Create test _id storage
-
-const testIds = {
-  userId: '',
-  indProfId: '',
-  orgProfId: '',
-  posId: ''
-};
-
-// Generate valid token
-const token = jwt.sign(
-  {
-    user: faker.random.alphaNumeric(10),
-  },
-  JWT_SECRET,
-  {
-    algorithm: 'HS256',
-    expiresIn: '1d'
-  }
-);
-
-describe('api/orgprofs routes', function() {
+  describe('Routes', function() {
+  // Create test _id storage
   
+  const testIds = {};
+  
+  // Generate valid token
+  const token = jwt.sign(
+    {
+      user: faker.random.alphaNumeric(10),
+    },
+    JWT_SECRET,
+    {
+      algorithm: 'HS256',
+      expiresIn: '1d'
+    }
+  );
+
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
@@ -80,11 +74,14 @@ describe('api/orgprofs routes', function() {
   
   // Remove all created objects  
   after(function() {
-    return new Promise(function(resolve, reject) {
-      User.remove({})
-        .then(OrgProf.remove({}))
-        .then(resolve());
-    });
+    let userProm = User.deleteMany({}).exec();
+    let orgProm = OrgProf.deleteMany({}).exec();
+    
+    Promise.all([userProm, orgProm])
+      .then(function(results){})
+      .catch(function(err){
+        console.log(err);
+      });
   });
   
   after(function() {
@@ -100,6 +97,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(401);
         });
     });
+    
     it('Should reject users with an incorrect JWT', function() {
       return chai.request(app)
         .get('/api/orgprofs/foo')
@@ -108,7 +106,8 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(401);
         }
       );
-    });
+
+
     it('Should reject users with an incorrect :id', function() {
       return chai.request(app)
         .get('/api/orgprofs/foo')
@@ -173,6 +172,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(401);
         });
     });
+    
     it('Should reject users with an incorrect JWT', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -189,6 +189,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(401);
       });
     });
+    
     it('Should reject submissions with a missing name', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -206,6 +207,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject submissions with a missing email', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -223,6 +225,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject submissions with a missing userAccount', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -240,6 +243,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject submissions with a non-string name', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -258,6 +262,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject submissions with a non-string website', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -276,6 +281,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject submissions with a non-string email', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -294,6 +300,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject submissions with a non-string name', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -312,6 +319,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject submissions with a non-string name', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -330,6 +338,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject submissions with an invalid userAccount', function() {
       return chai.request(app)
         .post('/api/orgprofs')
@@ -348,6 +357,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should create a new orgProf', function() {
       
       const testOrg = {
@@ -479,6 +489,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(401);
         });
     });
+    
     it('Should reject requests with an incorrect JWT', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -513,6 +524,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with a missing email', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -529,6 +541,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with a missing userAccount', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -545,6 +558,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with a missing orgProfId', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -579,6 +593,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with a non-string email', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -595,6 +610,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with a non-string email', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -612,6 +628,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with a non-string phone', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -629,6 +646,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with a non-string summary', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -646,6 +664,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with an empty-string name', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -663,6 +682,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with an empty-string email', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -680,6 +700,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with an empty-string userAccount', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -697,6 +718,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with an empty-string orgProfId', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}`)
@@ -732,6 +754,7 @@ describe('api/orgprofs routes', function() {
           expect(res).to.have.status(422);
         });
     });
+    
     it('Should reject requests with an invalid orgProfId', function() {
       return chai.request(app)
         .put(`/api/orgprofs/${testIds.orgProfId}XX`)
@@ -777,7 +800,9 @@ describe('api/orgprofs routes', function() {
         })
         .then(function(res) {
           expect(res).to.have.status(204);
+        });
       });
+    });
     });
   });
 });
