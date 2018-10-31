@@ -30,5 +30,6 @@ function staticMode(positions) {
 
 
 module.exports = {
-  staticMode
+  staticMode,
+  makeStaticPosition
 };

@@ -26,6 +26,7 @@ $('html').on('click', '.js-tabnavmenu-profile', function(e) {
     // Extract data from event, prepare to pass to GET request
     const data = {
       userType: event.currentTarget.dataset.usertype,
+      userId: event.currentTarget.dataset.userid,
       profId: event.currentTarget.dataset.profid,
       mode: event.currentTarget.dataset.mode
     };
@@ -216,7 +217,7 @@ $('html').on('click', '.js-indprof-cancel', function(e) {
   function cancelIndProfEdit(event, authToken) {
     
     const requestData = {
-      userAccount: event.currentTarget.dataset.userid,
+      userId: event.currentTarget.dataset.userid,
       profId: event.currentTarget.dataset.profid,
       mode: 'static'
     };
@@ -310,7 +311,7 @@ $('html').on('click', '.js-edit-indprof', function(e) {
   function handleEditIndProfClick(event, authToken) {
     
     const requestData = {
-      userAccount: event.currentTarget.dataset.userId,
+      userId: event.currentTarget.dataset.userid,
       profId: event.currentTarget.dataset.profid,
       mode: 'edit'
     };
