@@ -1,13 +1,5 @@
 'use strict';
 
-// This file contains the API routes for the Portal, and its various components.
-//  Each API route calls the component's buildView() function, which returns a
-//  string of HTML content. When called from the server-side, this HTML can be
-//  inserted via template string. When called from the client-side, the HTML
-//  will be the response body, which can then be inserted into the DOM via
-//  client-side jQuery.
-
-
 const express = require('express');
   const router = express.Router();
 const passport = require('passport');
@@ -35,7 +27,6 @@ router.get('/', jwtAuth, (req, res) => {
   
   indProfPromise.then(
     function(profile) {
-
       return res.send(portal.buildPortal(userType, profId, userId, profile));
     },
     function(err) {
@@ -44,31 +35,6 @@ router.get('/', jwtAuth, (req, res) => {
   );
 
 });
-
-// Get request to load an indProf
-
-router.get('/components/indprof/:id',jsonParser, jwtAuth, (req, res) => {
-
-  // Extract query data
-  const { userType, profId } = req.query;
-
-  const resHTML = indProf.buildComponent(userType, profId);
-  
-  return res.send(resHTML);
-  
-});
-
-
-// GET request to load applications view
-
-router.get('/components/applications', jsonParser, jwtAuth, (req, res) => {
-  
-  const { userType, profId } = req.query;
-
-  return res.send(applications.buildComponent(userType, profId));
-  
-});
-
 
 ///////////////////////////////////////////////////////////////////////////////
 
