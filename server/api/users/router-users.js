@@ -130,17 +130,4 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
-// Get a specific userAccount
-
-const jwtAuth = passport.authenticate('jwt', {session: false});
-
-router.get('/:id', jwtAuth, (req, res) => {
-  
-  // Requires 
-  
-  // Requires a valid JWT token, which will include the username to find.
-  
-});
-
-
 module.exports = {router};

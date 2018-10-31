@@ -2,34 +2,202 @@
 
 // Load testing packages
 const chai = require('chai');
-  const expect = chai.expect;
 const chaiHttp = require('chai-http');
+  const expect = chai.expect;
   chai.use(chaiHttp);
 const mongoose = require('mongoose');
   mongoose.Promise = global.Promise;
+const faker = require('faker');
 
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 const { app, runServer, closeServer } = require('../../index');
 const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../../config');
   
 //Load module
-const { User } = require('../../server/api/users');
+const { User, UserSchema } = require('../../server/api/users');
 
-describe('/api/users', function() {
-
-  describe('POST / (create user)', function() {
-    
-    // TODO
-    
-  });  
+describe('Users API', function() {
   
-  describe('GET /:id (retrieve userAccount information)', function() {
+  describe('Data model', function() {
     
-    it('Should reject unauthenticated users', function() {
-      
+    it('Should be an object', function() {
+      expect(UserSchema).to.be.an('object');
     });
     
-    
+    it('Should include the expected keys', function() {
+      const requiredKeys = ['username', 'password', 'firstName', 'lastName',
+        'indProf'];
+      expect(UserSchema.obj).to.include.keys(requiredKeys);
+    });
   });
   
+  describe('Routes', function() {
+    
+    before(function() {
+      return runServer(TEST_DATABASE_URL);
+    });
+    
+    after(function() {
+      User.deleteMany({}).exec()
+        .then(function(res){})
+        .catch(function(err){
+          console.log(err);
+        });
+    });
+      
+    after(function() {
+      return closeServer();
+    });
+
+    describe('POST /', function() {
+    
+      it('Should reject requests with missing fields', function() {
+        const testCases = [
+          // Missing username
+          {password: faker.random.alphaNumeric(10)},
+          // Missing password
+          {username: faker.random.alphaNumeric(10)}
+        ];
+        testCases.forEach(function(testCase){
+          return chai.request(app)
+            .post('/api/users')
+            .send(testCase)
+            .then(function(res){
+              expect(res).to.have.status(422);
+            });
+        });
+      });
+
+      it('Should reject requests with non-string fields', function() {
+        const testCases = [
+          {
+            username: 1234,
+            password: faker.random.alphaNumeric(10),
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
+          },
+          {
+            username: faker.random.alphaNumeric(10),
+            password: 1234,
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
+          },
+          {
+            username: faker.random.alphaNumeric(10),
+            password: faker.random.alphaNumeric(10),
+            firstName: 1234,
+            lastName: faker.name.lastName()
+          },
+          {
+            username: faker.random.alphaNumeric(10),
+            password: faker.random.alphaNumeric(10),
+            firstName: faker.name.firstName(),
+            lastName: 1234
+          }
+        ];
+        testCases.forEach(function(testCase){
+          return chai.request(app)
+            .post('/api/users')
+            .send(testCase)
+            .then(function(res){
+              expect(res).to.have.status(422);
+            });
+        });
+      });
+      
+      it('Should reject requests with non-trimmed fields', function() {
+        const testCases = [
+          {
+            username: `   ${faker.random.alphaNumeric(10)}  `,
+            password: faker.random.alphaNumeric(10),
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
+          },
+          {
+            username: faker.random.alphaNumeric(10),
+            password: `  ${faker.random.alphaNumeric(10)}  `,
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
+          }
+        ];
+        testCases.forEach(function(testCase){
+          return chai.request(app)
+            .post('/api/users')
+            .send(testCase)
+            .then(function(res){
+              expect(res).to.have.status(422);
+            });
+        });
+      });
+      
+      it('Should reject requests with too short/long fields', function() {
+        const testCases = [
+          {
+            // Min username length = 1
+            username: '',
+            password: faker.random.alphaNumeric(10),
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
+          },
+          {
+            username: faker.random.alphaNumeric(10),
+            // Min password length = 10
+            password: faker.random.alphaNumeric(9),
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
+          },
+          {
+            username: faker.random.alphaNumeric(10),
+            // Maximum password length = 75
+            password: faker.random.alphaNumeric(76),
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
+          }
+        ];
+        testCases.forEach(function(testCase){
+          return chai.request(app)
+            .post('/api/users')
+            .send(testCase)
+            .then(function(res){
+              expect(res).to.have.status(422);
+            });
+        });
+      });
+      
+      it('Should reject requests with an existing username', function() {
+        const testUser = {
+          username: faker.random.alphaNumeric(10),
+          password: faker.random.alphaNumeric(10)
+        };
+        User.create(testUser)
+          .then(function(user){
+            return chai.request(app)
+              .post('/api/users')
+              .send(testUser)
+              .then(function(res){
+                expect(res).to.have.status(422);
+              });
+          })
+          .catch(function(err){
+            console.log(err);
+          });
+      });
+      
+      it('Should successfully create a user for a valid request', function() {
+        const testUser = {
+          username: faker.random.alphaNumeric(10),
+          password: faker.random.alphaNumeric(10)
+        };
+        return chai.request(app)
+          .post('/api/users')
+          .send(testUser)
+          .then(function(res){
+            expect(res).to.have.status(201);
+            expect(res).to.be.an('object');
+            expect(res.body).to.include.keys(['username', 'firstName',
+                                              'lastName', 'indProf', 'userId']);
+          });
+      });
+    });
+  });
 });
