@@ -20,88 +20,74 @@ const { app, runServer, closeServer} = require('../../index');
 const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
   
 // Load modules
-const iP = require('../../server/portal/components/indprof');
-const { IndProf } = require('../../server/api/indProf');
-const { User } = require('../../server/api/users');
 
-describe('Component: indprof', function() {
+const pos = require('../../server/portal/components/positions');
+const { User } = require('../../server/api/users');
+const { IndProf } = require('../../server/api/indProf');
+
+describe('Component: positions', function() {
   
   describe('Controllers', function() {
-
-    describe('getIndProfPromise', function() {
+    
+    describe('getOpenPositionsPromise', function() {
       
       it('Should be a function', function() {
-        expect(iP.getIndProfPromise).to.be.a('function');
+        expect(pos.getOpenPositionsPromise).to.be.a('function');
       });
       
       it('Should return a promise', function() {
-        const profId = faker.random.alphaNumeric(10);
-        let testObj = iP.getIndProfPromise(profId);
+        let testObj = pos.getOpenPositionsPromise();
         expect(testObj).to.be.a('promise');
         // Resolve/reject promise to avoid errors
         testObj.then(function(res){},function(err){});
       });
       
-      // The contents of this resolved promise are tested in the IndProf API
+      // The contents of this resolved promise are tested in the Position API
       
     });
   });
   
-  describe('Views', function() {
+  describe('Views', function(){
     
-    describe('editMode()', function() {
+    describe('staticMode', function() {
       
       it('Should be a function', function() {
-        expect(iP.editMode).to.be.a('function');
+        expect(pos.staticMode).to.be.a('function');
       });
       
       it('Should return a string', function() {
-        const userData = {
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
-          email: faker.internet.email(),
-          phone: faker.phone.phoneNumber(),
-          linkedIn: faker.internet.url()
-        };
-        expect(iP.editMode(userData)).to.be.a('string');
+        const testPositions = [
+          {
+            title: faker.random.alphaNumeric(10),
+            orgProf: {
+              name: faker.random.alphaNumeric(10)
+            },
+            description: faker.random.alphaNumeric(10)
+          }
+        ];
+        expect(pos.staticMode(testPositions)).to.be.a('string');
       });
     });
     
-    describe('createMode()', function() {
-
-      it('Should be a function', function() {
-        expect(iP.createMode).to.be.a('function');
-      });
-
-      it('Should return a string', function() {
-        const userData = {
-          userId: faker.random.alphaNumeric(10)
-        };
-        expect(iP.createMode(userData)).to.be.a('string');
-      });
-    });
-    
-    describe('staticMode()', function() {
+    describe('makeStaticPosition()', function() {
       
       it('Should be a function', function() {
-        expect(iP.staticMode).to.be.a('function');
+        expect(pos.makeStaticPosition).to.be.a('function');
       });
       
       it('Should return a string', function() {
-        const userData = {
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
-          email: faker.internet.email(),
-          phone: faker.phone.phoneNumber(),
-          linkedIn: faker.internet.url(),
-          userAccount: faker.random.alphaNumeric(10),
-          _id: faker.random.alphaNumeric(10)
+        const testPosition = {
+          title: faker.random.alphaNumeric(10),
+          orgProf: {
+            name: faker.random.alphaNumeric(10)
+          },
+          description: faker.random.alphaNumeric(10)
         };
-        expect(iP.staticMode(userData)).to.be.a('string');
+        expect(pos.makeStaticPosition(testPosition)).to.be.a('string');
       });
     });
   });
-  
+
   describe('Routes', function() {
     
     // Create authToken
@@ -169,10 +155,9 @@ describe('Component: indprof', function() {
       return closeServer();
     });
 
-    
-    describe('GET /portal/components/indprof', function() {
+    describe('GET /portal/components/positions', function() {
       
-      const testUrl = '/portal/components/indprof';
+      const testUrl = '/portal/components/positions';
 
       it('Should reject requests with no JWT', function() {
         return chai.request(app)
@@ -214,58 +199,15 @@ describe('Component: indprof', function() {
           });
       });
       
-      it('Should reject requests with missing query variables', function() {
-        const testCases = [
-          // No values
-          '',
-          // Missing mode
-          `?indProf=${testIds.profId}&userId=${testIds.userId}`,
-          // Missing userProf
-          `?mode=static&indProf=${testIds.profId}`
-        ];
-        testCases.forEach(function(testCase) {
-          const wrongUrl = testUrl + testCase;
+      it('Should accept an authorized request', function() {
           return chai.request(app)
-            .get(wrongUrl)
-            .set('authorization', `Bearer ${token}`)
-            .then(function(res) {
-              expect(res).to.have.status(422);
-          });
-        });
-      });
-      
-      it('Should reject requests with invalid query values', function() {
-        const testCases = [
-          // Incorrect mode
-          `?mode=XXX&userId=${testIds.userId}&profId=${testIds.profId}`,
-          // Incorrect userId
-          `?mode=static&userId=XXX&profId=${testIds.profId}`
-        ];
-        testCases.forEach(function(testCase) {
-          const wrongUrl = testUrl + testCase;
-          return chai.request(app)
-            .get(wrongUrl)
-            .set('authorization', `Bearer ${token}`)
-            .then(function(res) {
-              expect(res).to.have.status(422);
-            });
-        });
-      });
-      
-      it('Should accept an authorized request for each mode', function() {
-        const testCases = ['static', 'edit', 'create'];
-        testCases.forEach(function(testCase) {
-          const goodUrl = testUrl + 
-            `?mode=${testCase}&userId=${testIds.userId}&profId=${testIds.profId}`;
-          return chai.request(app)
-            .get(goodUrl)
+            .get(testUrl)
             .set('authorization', `Bearer ${token}`)
             .then(function(res) {
               expect(res).to.have.status(200);
               expect(res).to.be.an('object');
               expect(res.text).to.be.a('string');
             });
-        });
       });
     });
   });

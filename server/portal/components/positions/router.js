@@ -18,9 +18,6 @@ const ctrls = require('./controllers');
 
 router.get('/', jwtAuth, (req, res) => {
   
-  // Extract query data
-  const {profId} = req.query;
-  
   let PositionPromise = ctrls.getOpenPositionsPromise();
   
   PositionPromise.then(
@@ -33,6 +30,8 @@ router.get('/', jwtAuth, (req, res) => {
     );
 
 });
+
+////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
   router

@@ -22,7 +22,7 @@ const { IndProf } = require('../../../api/indProf')
 router.get('/', jwtAuth, (req, res) => {
   
   // Set required query vars, detect missing vars
-  const requiredFields = ['mode', 'userId', 'profId'];
+  const requiredFields = ['mode', 'userId'];
   const missingField = requiredFields.find(field => !(field in req.query));
   
   // Handle missing fields
