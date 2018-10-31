@@ -27,7 +27,7 @@ const { router: positionsCompRouter } = require('./server/portal/components/posi
 // Create core app
 const app = express();
 
-app.use(morgan('common'));
+//app.use(morgan('common'));
 
 // CORS middleware setup
 app.use(function (req, res, next) {

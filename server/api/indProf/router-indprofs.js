@@ -2,16 +2,13 @@
 const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
-
 const {IndProf} = require('./models-indprofs');
 const {User} = require('../users');
-
-
 
 // GET an individual profile
 
