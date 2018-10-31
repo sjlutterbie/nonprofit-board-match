@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 // Load environment and config variables
-const { PORT, DATABASE_URL } = require('./config');
 require('dotenv').config();
+const { PORT, DATABASE_URL, JWT_SECRET } = require('./config');
 
 // Load routers
 const { router: usersRouter } = require('./server/api/users');
