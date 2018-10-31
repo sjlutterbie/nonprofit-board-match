@@ -1,5 +1,10 @@
 'use strict';
 
+/*
+  Build the overall interface for the portal view. Currently defaults to the
+    individual profile view. 
+*/
+
 const tabNavMenu = require('./components/tabNavMenu');
 const indProf = require('./components/indprof');
 
