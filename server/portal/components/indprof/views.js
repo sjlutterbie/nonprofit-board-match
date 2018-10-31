@@ -57,6 +57,8 @@ function editMode(userData) {
 }
 
 function createMode(userData) {
+  // Renders an HTML form for creating an indProf object. Pre-populates the
+  //  form with the associated userId, for cross-referencing
   
   let outputHTML = `
     <div class="card">
@@ -93,6 +95,8 @@ function createMode(userData) {
 }
 
 function staticMode(userData) {
+  // Renders HTML presenting an indProf object. The button at the end of the
+  //  view triggers a switch to editMode.
   
   const outputHTML = `
     <div class="card">
@@ -113,6 +117,8 @@ function staticMode(userData) {
   return outputHTML;
   
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
   editMode,
