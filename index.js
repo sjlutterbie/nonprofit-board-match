@@ -1,7 +1,6 @@
 'use strict';
 
 // Load required modules
-require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -9,10 +8,14 @@ const mongoose = require('mongoose');
   mongoose.Promise = global.Promise;
 const passport = require('passport');
 
-// Routers
+// Load environment and config variables
+const { PORT, DATABASE_URL } = require('./config');
+require('dotenv').config();
+
+// Load routers
 const { router: usersRouter } = require('./server/api/users');
 const { router: authRouter, localStrategy,
-                jwtStrategy } = require('./server/api/auth');
+        jwtStrategy } = require('./server/api/auth');
 const { router: portalRouter } = require('./server/portal/router-portal');
 const { router: indProfsRouter } = require('./server/api/indProf');
 const { router: orgProfsRouter } = require('./server/api/orgProf');
@@ -20,9 +23,6 @@ const { router: positionsRouter } = require('./server/api/positions');
 const { router: applicationsRouter } = require('./server/api/applications');
 const { router: indProfCompRouter } = require('./server/portal/components/indprof');
 const { router: positionsCompRouter } = require('./server/portal/components/positions');
-
-// Set port & DB information
-const { PORT, DATABASE_URL } = require('./config');
 
 // Create core app
 const app = express();
@@ -40,9 +40,12 @@ app.use(function (req, res, next) {
   next();
 });
 
+// Set up authorization strategies
 passport.use(localStrategy);
 passport.use(jwtStrategy);
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
+// Implement routes
 app.use('/api/users/', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/portal', portalRouter);
@@ -53,20 +56,8 @@ app.use('/api/applications', applicationsRouter);
 app.use('/portal/components/indprof', indProfCompRouter);
 app.use('/portal/components/positions', positionsCompRouter);
 
-const jwtAuth = passport.authenticate('jwt', {session: false});
-
 // Set up static file route
 app.use(express.static('./client/public'));
-
-
-
-// DEVELOPMENT ROUTE FOR TESTING AUTHENTICATION
-
-app.get('/api/protected', jwtAuth, (req, res) => {
-  return res.json({
-    data: 'Welcome, friend!'
-  });
-});
 
 // Catch-all endpoint for requests to non-existing endpoints
 
@@ -86,8 +77,6 @@ function runServer(databaseUrl, port = PORT) {
       if (err) {
         return reject(err);
       }
-    
-      
       server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();

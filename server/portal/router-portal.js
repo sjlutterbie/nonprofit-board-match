@@ -11,7 +11,7 @@
 const express = require('express');
   const router = express.Router();
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const config = require('../../config');
 const { jwtStrategy } = require('../api/auth');
   passport.use(jwtStrategy);
@@ -22,8 +22,6 @@ const bodyParser = require('body-parser');
 // Load View
 const portal = require('./portal');
 const indProf = require('./components/indprof');
-const positions = require('./components/component-positions');
-const applications = require('./components/component-applications')
 
 // Get request to load portal
 router.get('/', jwtAuth, (req, res) => {
