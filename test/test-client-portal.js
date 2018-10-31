@@ -233,38 +233,71 @@ describe('Portal: Client-side user interaction', function() {
     });
   });
 
-describe('Helper functions', function() {
-
-  describe('updateMain()', function() {
-    
-    it('Should be a function', function() {
-      expect(cP.updateMain).to.be.a('function');
-    });
+  describe('Helper functions', function() {
+  
+    describe('updateMain()', function() {
       
-    it('Should update the <main> element', function() {
-      // Set up test DOM & content
-      $('body').html('<main></main>');
-      const testContent = 'foo';
-      // Run the test
-      cP.updateMain(testContent);
-      expect($('main').html()).to.equal(testContent);
-      // Reset test DOM
-      $('body').html();
+      it('Should be a function', function() {
+        expect(cP.updateMain).to.be.a('function');
+      });
+        
+      it('Should update the <main> element', function() {
+        // Set up test DOM & content
+        $('body').html('<main></main>');
+        const testContent = 'foo';
+        // Run the test
+        cP.updateMain(testContent);
+        expect($('main').html()).to.equal(testContent);
+        // Reset test DOM
+        $('body').html();
+      });
+    });
+    
+    describe('handleError()', function() {
+      it('Should be a function', function() {
+        expect(cP.handleError).to.be.a('function');
+      });
+    });
+    
+    describe('moveToPortal()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.moveToPortal).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        // Create test response
+        const res = {
+          userAccount: faker.random.alphaNumeric(10),
+          _id: faker.random.alphaNumeric(10)
+        };
+        // Run test
+        let testObj = cP.moveToPortal(res, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+    });
+    
+    describe('loadPortalSuccess()', function() {
+      it('Should be a function', function() {
+        expect(cP.loadPortalSuccess).to.be.a('function');
+      });
+      
+      it('Should update the DOM as expected', function() {
+        // Create test DOM
+        $('body').html(`
+          <div class="content-wrapper login-wrapper"></div>
+        `);
+        // Create test response
+        const res = faker.random.alphaNumeric(10);
+        // Run test
+        cP.loadPortalSuccess(res);
+        expect($('.content-wrapper').text()).to.equal(res);
+        expect($('.content-wrapper').hasClass('login-wrapper')).to.equal(false);
+        // Reset test DOM
+        $('body').html('');
+      });
     });
   });
-  
-  describe('handleError()', function() {
-    it('Should be a function', function() {
-      expect(cP.handleError).to.be.a('function');
-    });
-  });
-  
-  // TODO:
-    // moveToPortal
-    // loadPortalSuccess
-  
-});
-
-
-
 });

@@ -355,7 +355,7 @@ function handleError(err) {
 }
 
 
-function moveToPortal(res) {
+function moveToPortal(res, authToken) {
 
   const reqUrl = '/portal';
   
