@@ -23,12 +23,12 @@ global.$ = require('jquery')(window);
 
 // Load module
 
-const cP = require('../client/public/js/client-portal.js') 
+const cP = require('../../client/public/js/client-portal.js') 
 
 // Load testing server details
 require('dotenv').config();
-const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../config');
-const {app, runServer, closeServer } = require('../index');
+const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../../config');
+const {app, runServer, closeServer } = require('../../index');
 
 // Generate valid token
 const token = jwt.sign(
