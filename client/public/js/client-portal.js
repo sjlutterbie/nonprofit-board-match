@@ -154,11 +154,12 @@ $('html').on('click', '.js-tabnavmenu-applications', function(e) {
 // Handle click on "Create individual profile" form
 
 $('html').on('submit', '.js-indprof-create', function(e) {
-  e.preventDefault()
+  e.preventDefault();
   
   // Execute request as a promise
   createIndProf(localStorage.JWT)
     .then(moveToPortal)
+    .then(loadPortalSuccess)
     .catch(handleError);
   
 });
@@ -203,7 +204,7 @@ $('html').on('submit', '.js-indprof-create', function(e) {
   
 // Handle click on 'Cancel' during indProf edit mode
 $('html').on('click', '.js-indprof-cancel', function(e) {
-  e.prevenDefault();  
+  e.preventDefault();  
   
   // Execute request as promise
   cancelIndProfEdit(e, localStorage.JWT)
@@ -218,7 +219,7 @@ $('html').on('click', '.js-indprof-cancel', function(e) {
       userAccount: event.currentTarget.dataset.userid,
       profId: event.currentTarget.dataset.profid,
       mode: 'static'
-    }
+    };
     
     const reqUrl = '/portal/components/indprof';
     
@@ -228,7 +229,7 @@ $('html').on('click', '.js-indprof-cancel', function(e) {
         url: reqUrl,
         type: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.JWT}`,
+          Authorization: `Bearer ${authToken}`,
           contentType: 'application/json'
         },
         data: requestData,
@@ -247,7 +248,8 @@ $('html').on('submit', '.js-indprof-edit', function(e) {
   
   // Execute request as promise
   editIndProf(localStorage.JWT)
-    .then(moveToPortal)
+    .then(moveToPortal) // Also a promise function
+    .then(loadPortalSuccess)
     .catch(handleError);
   
 });
@@ -332,10 +334,6 @@ $('html').on('click', '.js-edit-indprof', function(e) {
     
     return promObj;
   }
-  
-  
-
-
 
 /* ====================
    = HELPER FUNCTIONS =
@@ -352,7 +350,7 @@ function updateMain(content) {
 function handleError(err) {
   // Consistently handle how .ajax() errors are handled in a testable fashion.
 
-  console.log(err);  
+  console.log(err); 
   
 }
 
@@ -367,7 +365,9 @@ function moveToPortal(res) {
     profId: res._id
   }
   
-  let request = $.ajax({
+  let promObj = new Promise(function(resolve, reject) {
+  
+    $.ajax({
       url: reqUrl,
       type: 'GET',
       headers: {
@@ -375,11 +375,28 @@ function moveToPortal(res) {
         contentType: 'application/json'
       },
       data: requestData, // For finding userAccount
-      success: loadPortalSuccess,
-      error: loadPortalFailure
+      success: resolve,
+      error: reject
     });
-  
+  });
+
+  return promObj;  
 }
+  
+  function loadPortalSuccess(res) {
+    // Clears login/createAccount form, replaces with
+    //  portal/createProfile content.
+    
+    // Replace HTML
+    $('.content-wrapper').html(res);
+
+    // Update CSS
+    $('.content-wrapper').removeClass('login-wrapper');
+
+    // For testing purposes
+    return res;
+    
+  }
 
 
 // Make available as module for testing
@@ -393,11 +410,10 @@ try {
     cancelIndProfEdit,
     editIndProf,
     handleEditIndProfClick,
-    
-    
-    
     updateMain,
-    handleError
+    handleError,
+    moveToPortal,
+    loadPortalSuccess
   };
 }
 catch(error) {
