@@ -25,7 +25,6 @@ router.get('/', jwtAuth, (req, res) => {
   
   PositionPromise.then(
     function(positions){
-      console.log(positions);
       return res.send(views.staticMode(positions));
     },
     function(err) {
