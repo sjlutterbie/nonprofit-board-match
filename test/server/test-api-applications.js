@@ -37,12 +37,7 @@ describe('Applications API: Data Model', function() {
 
 // Create test _id storage
 
-const testIds = {
-  userId: '',
-  indProfId: '',
-  orgProfId: '',
-  posId: ''
-};
+const testIds = {};
 
 // Generate valid token
 const token = jwt.sign(

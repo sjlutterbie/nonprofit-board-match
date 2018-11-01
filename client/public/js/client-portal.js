@@ -417,15 +417,27 @@ $('html').on('click', '.js-position-app-handler', function(e) {
   const posId = e.currentTarget.dataset.posid;
   const profId = e.currentTarget.dataset.profid;
   
-  // TODO: Apply or View Application?
+  // Determine which view to render
+  const view = determineAppButtonAction(e.currentTarget);
   
-  // Execute request as promise
-  handlePosApplyClick(posId, profId, localStorage.JWT)
-    .then(res => {
-      updatePosAppView(res, posId);
-      toggleApplicationButton(posId);
-    })
-    .catch(handleError);
+  if (view === 'apply') {
+    // Application submission form
+    handlePosApplyClick(posId, profId, localStorage.JWT)
+      .then(res => {
+        updatePosAppView(res, posId);
+        toggleApplicationButton(posId);
+      })
+      .catch(handleError);
+  }
+  
+  if (view === 'viewapp') {
+    // Static application view
+    
+    // TODO: BUILD THE STATIC APPLICATION VIEW ROUTES, ETC.
+    
+  }
+  
+
 
 });
 
@@ -487,6 +499,17 @@ function updatePosAppView(content, posId) {
 function toggleApplicationButton(posId) {
   
   $(`button[data-posid="${posId}"]`).toggle();
+  
+}
+
+function determineAppButtonAction(button) {
+  
+  if($(button).hasClass('apply')) {
+    return 'apply';
+  }
+  if($(button).hasClass('viewapp')) {
+    return 'viewapp';
+  }
   
 }
 
@@ -556,6 +579,7 @@ try {
     handleEditIndProfClick,
     handlePosApplyClick,
     toggleApplicationButton,
+    determineAppButtonAction,
     updateMain,
     updatePosAppView,
     handleError,

@@ -331,6 +331,27 @@ describe('Portal: Client-side user interaction', function() {
       });
     });
     
+    describe('determineAppButtonAction()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.determineAppButtonAction).to.be.a('function');
+      });
+      it('Should detect the expected class in the DOM', function() {
+        const testCases = ['apply', 'viewapp'];
+        testCases.forEach(function(testCase) {
+          // Create test DOM
+          $('body').html(`
+            <button class="${testCase}"></button>
+          `);
+          // Run test
+          expect(cP.determineAppButtonAction($('button'))).to.equal(testCase);
+          // Reset test DOM
+          $('body').html('');
+        });
+      });
+      
+    });
+    
     describe('handleError()', function() {
       it('Should be a function', function() {
         expect(cP.handleError).to.be.a('function');

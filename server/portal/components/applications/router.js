@@ -31,6 +31,26 @@ router.get('/apply', jwtAuth, (req, res) => {
 
 });
 
+// GET /viewapp/:id Return a single applicationin staticMode
+
+router.get('/viewapp/:id', jwtAuth, (req, res) => {
+
+  const appId = req.params.id;
+  console.log(appId);
+  
+  let ApplicationPromise =   ctrls.getApplicationPromise(appId);
+  
+  ApplicationPromise.then(
+    function(application) {
+      return res.status(200).send(views.staticMode(application));
+    },
+    function(err) {
+      return err;
+    }
+  );
+
+});
+
 ////////////////////////////////////////////////////////////////////////////////
 
 module.exports = { router };
