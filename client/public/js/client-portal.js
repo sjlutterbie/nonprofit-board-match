@@ -340,18 +340,24 @@ $('html').on('click', '.js-edit-indprof', function(e) {
 $('html').on('click', '.js-position-app-handler', function(e) {
   e.preventDefault();
   
+  // Extract posId
+  const posId = e.currentTarget.dataset.posid;
+  
+  
   // TODO: Apply or View Application?
   
   // Execute request as promise
-  handlePosApplyClick(e, localStorage.JWT)
-    .then(res => console.log(res))
+  handlePosApplyClick(posId, localStorage.JWT)
+    .then(res => {
+      updatePosAppView(res, posId);
+    })
     .catch(handleError);
   
   
 
 });
 
-  function handlePosApplyClick(event, authToken) {
+  function handlePosApplyClick(posId, authToken) {
 
     // Identify position ID clicked.
     const requestData = {
@@ -401,6 +407,18 @@ function updateMain(content) {
   //  testability.
   
   $('main').html(content);
+  
+}
+
+function updatePosAppView(content, posId) {
+  
+  console.log('You called?');
+  console.log(posId);
+  console.log(content);
+  
+  $(`div[data-posid="${posId}"]`)
+    .find('.application-view')
+    .html(content);
   
 }
 
@@ -469,6 +487,7 @@ try {
     handleEditIndProfClick,
     handlePosApplyClick,
     updateMain,
+    updatePosAppView,
     handleError,
     moveToPortal,
     loadPortalSuccess

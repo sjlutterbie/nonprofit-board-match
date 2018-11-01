@@ -270,6 +270,14 @@ describe('Portal: Client-side user interaction', function() {
       });
     });
     
+    describe('updatePosAppView()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.updatePosAppView).to.be.a('function');
+      });
+      
+    });
+    
     describe('handleError()', function() {
       it('Should be a function', function() {
         expect(cP.handleError).to.be.a('function');

@@ -18,7 +18,7 @@ function staticMode(positions) {
     
     const outputHtml = `
       <div class="card">
-        <div data-posid="position pos-${position._id}">
+        <div class="position" data-posid="${position._id}">
           <h2>${position.title}</h2>
           <h3>${position.orgProf.name}</h3>
           <p>${position.description}</p>
