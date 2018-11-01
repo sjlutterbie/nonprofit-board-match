@@ -262,6 +262,20 @@ describe('Portal: Client-side user interaction', function() {
       
     });
     
+    describe('handlePosViewAppClick()', function() {
+      it('Should be a function', function() {
+        expect(cP.handlePosViewAppClick).to.be.a('function');
+      });
+      it('Should return a promise', function() {
+        const appId = faker.random.alphaNumeric(10);
+        let testObj = cP.handlePosViewAppClick(appId, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){}, function(err){});
+      });
+
+    });
+    
   });
 
   describe('Helper functions', function() {

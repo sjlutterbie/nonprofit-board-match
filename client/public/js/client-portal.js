@@ -325,7 +325,13 @@ $('html').on('submit', '.js-application-create', function(e){
   };
 
   submitApplication(formData, localStorage.JWT)
-    .then(function(res) {console.log(res)})
+    .then(function(res) {
+      handlePosViewAppClick(res._id, localStorage.JWT)
+        .then(res => {
+          updatePosAppView(res, posId);
+        })
+        .catch(handleError);
+    })
     .catch(handleError);
     
     // Once the application is returned, I need to update the Position view.
@@ -433,10 +439,15 @@ $('html').on('click', '.js-position-app-handler', function(e) {
   if (view === 'viewapp') {
     // Static application view
     
-    // TODO: BUILD THE STATIC APPLICATION VIEW ROUTES, ETC.
+    const appId = e.currentTarget.dataset.appid;
     
+    handlePosViewAppClick(appId, localStorage.JWT)
+      .then(res => {
+        updatePosAppView(res, posId);
+        toggleApplicationButton(posId);
+      })
+      .catch(handleError);
   }
-  
 
 
 });
@@ -470,6 +481,31 @@ $('html').on('click', '.js-position-app-handler', function(e) {
     return promObj;
     
   }
+  
+  function handlePosViewAppClick(appId, authToken) {
+    
+    const reqUrl = `/portal/components/applications/viewapp/${appId}`;
+    
+    let promObj = new Promise(function(resolve, reject) {
+      
+      $.ajax({
+        url: reqUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        success: resolve,
+        error: reject
+      });
+      
+    });
+    
+    return promObj;
+    
+  }
+
+
 
 
   
@@ -578,6 +614,7 @@ try {
     submitApplication,
     handleEditIndProfClick,
     handlePosApplyClick,
+    handlePosViewAppClick,
     toggleApplicationButton,
     determineAppButtonAction,
     updateMain,
