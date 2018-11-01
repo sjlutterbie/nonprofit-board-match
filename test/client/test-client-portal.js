@@ -231,6 +231,23 @@ describe('Portal: Client-side user interaction', function() {
         testObj.then(function(res){},function(err){});
       });
     });
+    
+    describe('handlePosApplyClick()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.handlePosApplyClick).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        const event = {}
+        let testObj = cP.handlePosApplyClick(event, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+      
+    });
+    
   });
 
   describe('Helper functions', function() {

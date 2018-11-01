@@ -17,9 +17,16 @@ const ctrls = require('./controllers');
 const { User } = require('../../../api/users');
 const { IndProf } = require('../../../api/indProf')
 
-// GET / - Load all applications
 
-router.get('/', jwtAuth, (req, res) => {
+
+
+// GET /apply - Return an Application createMode form
+
+router.get('/apply', jwtAuth, (req, res) => {
+
+  const posId = req.query.posId;
+
+  res.send(views.createMode(posId));
 
 });
 

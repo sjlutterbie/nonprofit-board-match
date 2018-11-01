@@ -64,6 +64,79 @@ describe('Component: applications', function() {
 
   describe('Routes', function() {
     
- 
+    // Create authToken
+    const token = jwt.sign(
+      {
+        user: faker.random.alphaNumeric(10),
+      },
+      JWT_SECRET,
+      {
+        algorithm: 'HS256',
+        expiresIn: '1d'
+      }
+    );
+    
+    before(function() {
+      return runServer(TEST_DATABASE_URL);
+    });
+    
+    after(function() {
+      return closeServer();
+    });
+    
+    describe('/apply', function() {
+      
+      const testUrl = '/portal/components/applications/apply';
+
+      it('Should reject requests with no JWT', function() {
+        return chai.request(app)
+          .get(testUrl)
+          .then(function(res) {
+            expect(res).to.have.status(401);
+          });
+      });
+
+      it('Should reject users with an incorrect JWT', function() {
+        return chai.request(app)
+          .get(testUrl)
+          .set('authorization', `Bearer ${token}XX`)
+          .then(function(res) {
+            expect(res).to.have.status(401);
+          }
+        );
+      });
+      
+      it('Should reject user with an expired token', function() {
+        // Generate an expired token
+        const token = jwt.sign(
+          {
+            user: faker.random.alphaNumeric(10),
+            exp: (Math.floor(Date.now()/1000) - 10) // Expired 10 seconds ago
+          },
+          JWT_SECRET,
+          {
+            algorithm: 'HS256',
+            subject: faker.random.alphaNumeric(10)
+          }
+        );
+        // Run the test
+        return chai.request(app)
+          .get(testUrl)
+          .set('authorization', `Bearer ${token}`)
+          .then(function(res) {
+            expect(res).to.have.status(401);
+          });
+      });
+      
+      it('Should accept an authorized request', function() {
+        return chai.request(app)
+          .get(testUrl)
+          .set('authorization', `Bearer ${token}`)
+          .then(function(res) {
+            expect(res).to.have.status(200);
+            expect(res).to.be.an('object');
+          });
+      });
+    });
   });
 });

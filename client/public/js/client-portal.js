@@ -335,6 +335,62 @@ $('html').on('click', '.js-edit-indprof', function(e) {
     
     return promObj;
   }
+  
+// The [Apply | View Application] button on Position cards
+$('html').on('click', '.js-position-app-handler', function(e) {
+  e.preventDefault();
+  
+  // TODO: Apply or View Application?
+  
+  // Execute request as promise
+  handlePosApplyClick(e, localStorage.JWT)
+    .then(res => console.log(res))
+    .catch(handleError);
+  
+  
+
+});
+
+  function handlePosApplyClick(event, authToken) {
+
+    // Identify position ID clicked.
+    const requestData = {
+     posId: event.currentTarget.dataset.posid 
+    };
+    
+    const reqUrl = '/portal/components/applications/apply';
+    
+    let promObj = new Promise(function(resolve, reject) {
+      
+      $.ajax({
+        url: reqUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.JWT}`,
+          contentType: 'application/json'
+        },
+        data: requestData,
+        success: resolve,
+        error: reject
+      });
+      
+    });
+    
+    return promObj;
+    
+  }
+
+// On click...
+  // Determine [Apply] or [View Application]
+    // Apply:
+      // Render Application: createMode
+    // View Application
+      // Render Application: static Mode
+
+
+  
+  
+  
 
 /* ====================
    = HELPER FUNCTIONS =
@@ -411,6 +467,7 @@ try {
     cancelIndProfEdit,
     editIndProf,
     handleEditIndProfClick,
+    handlePosApplyClick,
     updateMain,
     handleError,
     moveToPortal,

@@ -16,7 +16,7 @@ function staticMode(application) {
   
 }
 
-function createMode() {
+function createMode(posId) {
   
   const outputHTML = `
     <div class="application-form-wrapper">
@@ -26,6 +26,8 @@ function createMode() {
           <input type="textarea" name="covermessage">
           <input type="button" class="js-application-cancel"
                  value="Cancel">
+          <input type="hidden" name="posid"
+                 value="${posId}">
           <input type="reset" value="Reset">
           <input type="submit" class="js-application-submit"
                  value="Submit">

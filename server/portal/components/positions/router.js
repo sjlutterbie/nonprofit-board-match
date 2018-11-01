@@ -22,7 +22,7 @@ router.get('/', jwtAuth, (req, res) => {
   
   PositionPromise.then(
     function(positions){
-      return res.send(views.staticMode(positions));
+      return res.status(200).send(views.staticMode(positions));
     },
     function(err) {
       return err;
