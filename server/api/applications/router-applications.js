@@ -181,8 +181,11 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
           )
           .then(
             function(_app) {
-              // Application created
-              return res.status(201).json(_app);
+              Position.findByIdAndUpdate(_app.position,
+              {$push: {applications: _app._id}})
+                .then(function(pos) {
+                 return res.status(201).json(_app);                  
+                });
             },
             function(err) {
               return res.status(500).json(

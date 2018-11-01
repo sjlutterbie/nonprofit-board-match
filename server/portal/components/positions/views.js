@@ -6,6 +6,8 @@ function staticMode(positions, profId) {
   
   let outputHtml = '';
   
+  console.log(positions);
+  
   positions.forEach(function(position) {
     outputHtml += makeStaticPosition(position, profId);
   });

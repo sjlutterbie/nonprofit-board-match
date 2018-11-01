@@ -45,6 +45,30 @@ describe('Component: positions', function() {
       // The contents of this resolved promise are tested in the Position API
       
     });
+    
+    describe('getSinglePositionPromise()', function(){
+      
+      it('Should be a function', function() {
+        expect(pos.getSinglePositionPromise).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        const posId = faker.random.alphaNumeric(10);
+        let testObj = pos.getSinglePositionPromise(posId);  
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+    });
+    
+    describe('hasIndProfApplied()', function() {
+      it('Should be a function', function() {
+        expect(pos.hasIndProfApplied).to.be.a('function');
+      });
+    });
+    
+    
+    
   });
   
   describe('Views', function(){

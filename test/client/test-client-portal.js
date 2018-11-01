@@ -216,6 +216,8 @@ describe('Portal: Client-side user interaction', function() {
       });
       
     });
+    
+
   });
   
   describe('Non-Form Buttons', function() {

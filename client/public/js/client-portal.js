@@ -327,6 +327,11 @@ $('html').on('submit', '.js-application-create', function(e){
   submitApplication(formData, localStorage.JWT)
     .then(function(res) {console.log(res)})
     .catch(handleError);
+    
+    // Once the application is returned, I need to update the Position view.
+      // Apply button -> "Hide" button
+        // Class changes from 'apply' to 'viewapp'
+      // application view -> static
   
 });
 
@@ -353,6 +358,10 @@ $('html').on('submit', '.js-application-create', function(e){
     });
 
     return promObj;
+    
+  }
+  
+  function viewApplication(application, authToken) {
     
   }
 

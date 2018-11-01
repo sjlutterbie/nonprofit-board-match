@@ -1,11 +1,13 @@
 'use strict';
 
 const { staticMode, makeStaticPosition } = require('./views');
-const { getOpenPositionsPromise } = require('./controllers');
+const { getOpenPositionsPromise,
+        getSinglePositionPromise,
+        hasIndProfApplied} = require('./controllers');
 const { router } = require('./router');
 
 module.exports = {
   staticMode, makeStaticPosition,
-  getOpenPositionsPromise,
+  getOpenPositionsPromise, getSinglePositionPromise, hasIndProfApplied,
   router
 };
