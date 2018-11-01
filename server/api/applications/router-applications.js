@@ -18,8 +18,20 @@ router.delete('/:id', jsonParser, jwtAuth, (req, res) => {
     .then(
       // Success
       function(application) {
-        Application.findByIdAndDelete(req.params.id)
+        let posProm = Position.findByIdAndUpdate(
+          application.position,
+          {
+            $pull: {applications: application._id}
+          });
+        let indProm = IndProf.findByIdAndUpdate(
+          application.indProf,
+          {
+            $pull: {applications: application._id}
+          });
+        Promise.all([posProm, indProm])
         .then(
+          Application.findByIdAndDelete(req.params.id)
+        ).then(
           // Success
           function(application) {
             return res.status(202).json({id: application._id});

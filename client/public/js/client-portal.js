@@ -339,11 +339,6 @@ $('html').on('submit', '.js-application-create', function(e){
     })
     .catch(handleError);
     
-    // Once the application is returned, I need to update the Position view.
-      // Apply button -> "Hide" button
-        // Class changes from 'apply' to 'viewapp'
-      // application view -> static
-  
 });
 
   function submitApplication(formData, authToken) {

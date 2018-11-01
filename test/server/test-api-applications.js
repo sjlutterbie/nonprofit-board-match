@@ -531,6 +531,7 @@ describe('/api/applications routes', function() {
         .then (
           // Application created, now delete it & test
           function(application) {
+            const appId = application.body._id;
             const testURL = `/api/applications/${application.body._id}`;
             return chai.request(app)
             .delete(testURL)
@@ -538,6 +539,21 @@ describe('/api/applications routes', function() {
             .then(
               function(res) {
                 expect(res).to.have.status(202);
+                // Confirm _id is removed from position and indProf
+                return Position.findById(testIds.posId)
+                  .then(function(position) {
+                    expect(position.applications).to.not.include(appId);
+                  },
+                  function(err) {
+                    return err;
+                  });
+                return IndProf.findById(testIds.indProfId)
+                  .then(function(profile){
+                    expect(profile.applications).to.not.include(appId);
+                  },
+                  function(err) {
+                    return err;
+                  });
               },
               function(err) {
                 return err;
