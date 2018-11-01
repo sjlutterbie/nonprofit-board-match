@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "mocha --recursive --require mock-local-storage --grep 'Helper functions'",
+    "test": "mocha --recursive --require mock-local-storage --grep 'Form actions'",
     "dev": "nodemon index.js"
   },
   "repository": {

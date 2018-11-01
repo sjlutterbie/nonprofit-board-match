@@ -1,20 +1,20 @@
 'use strict';
 
-function staticMode(positions) {
+function staticMode(positions, profId) {
   // Build a list of open positions.
   // For each open position, insert the data into an HTML template string
   
   let outputHtml = '';
   
   positions.forEach(function(position) {
-    outputHtml += makeStaticPosition(position);
+    outputHtml += makeStaticPosition(position, profId);
   });
   
   return outputHtml;
   
 }
 
-  function makeStaticPosition(position) {
+  function makeStaticPosition(position, profId) {
     
     const outputHtml = `
       <div class="card">
@@ -26,7 +26,8 @@ function staticMode(positions) {
             <div class="application-view"></div>
             <div class="application-view-controls">
               <button class="js-position-app-handler apply"
-                      data-posid="${position._id}">Apply</button>
+                      data-posid="${position._id}"
+                      data-profid="${profId}">Apply</button>
             </div>
           </div>
         </div>

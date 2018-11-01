@@ -204,6 +204,18 @@ describe('Portal: Client-side user interaction', function() {
         $('body').html();
       });
     });
+    
+    describe('submitApplication()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.submitApplication).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        expect(cP.submitApplication()).to.be.a('promise');
+      });
+      
+    });
   });
   
   describe('Non-Form Buttons', function() {
@@ -310,14 +322,11 @@ describe('Portal: Client-side user interaction', function() {
         `);
         // Run test
         cP.toggleApplicationButton(posId);
-        console.log($('body').html());
         expect($('.wasvisible').css('display')).to.equal('none');
         expect($('.washidden').css('display')).to.equal('inline-block');
         // Reset test DOM
         $('body').html('');
       });
-      
-      
     });
     
     describe('handleError()', function() {

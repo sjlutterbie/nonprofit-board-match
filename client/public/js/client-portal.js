@@ -309,6 +309,46 @@ $('html').on('click', '.js-application-cancel', function(e){
 
 });
 
+// Handle Application form submission
+$('html').on('submit', '.js-application-create', function(e){
+  e.preventDefault();
+  
+  const posId = e.currentTarget.dataset.posid;
+  const profId = e.currentTarget.dataset.profid;
+  
+  const formData = {
+    coverMessage:
+      $(`form[data-posid="${posId}"] input[name="covermessage"]`).val(),
+    applicationDate: new Date(),
+    position: posId,
+    profId: profId
+  };
+
+  console.log(formData);
+  
+});
+
+  function submitApplication() {
+
+
+
+// 'coverMessage', 'applicationDate', 
+// 'position', 'indProf'];
+
+
+
+      // Submit form (promise action to data API)
+    const promObj = new Promise(function(resolve, reject){
+      
+      
+    });
+
+    return promObj;
+    
+  }
+
+
+
 /* ===========
    = BUTTONS =
    =========== */
@@ -357,27 +397,26 @@ $('html').on('click', '.js-position-app-handler', function(e) {
   
   // Extract posId
   const posId = e.currentTarget.dataset.posid;
-  
+  const profId = e.currentTarget.dataset.profid;
   
   // TODO: Apply or View Application?
   
   // Execute request as promise
-  handlePosApplyClick(posId, localStorage.JWT)
+  handlePosApplyClick(posId, profId, localStorage.JWT)
     .then(res => {
       updatePosAppView(res, posId);
       toggleApplicationButton(posId);
     })
     .catch(handleError);
-  
-  
 
 });
 
-  function handlePosApplyClick(posId, authToken) {
+  function handlePosApplyClick(posId, profId, authToken) {
 
     // Identify position ID clicked.
     const requestData = {
-     posId: posId 
+     posId: posId, 
+     profId: profId
     };
     
     const reqUrl = '/portal/components/applications/apply';
@@ -401,13 +440,6 @@ $('html').on('click', '.js-position-app-handler', function(e) {
     return promObj;
     
   }
-
-// On click...
-  // Determine [Apply] or [View Application]
-    // Apply:
-      // Render Application: createMode
-    // View Application
-      // Render Application: static Mode
 
 
   
@@ -502,6 +534,7 @@ try {
     createIndProf,
     cancelIndProfEdit,
     editIndProf,
+    submitApplication,
     handleEditIndProfClick,
     handlePosApplyClick,
     toggleApplicationButton,

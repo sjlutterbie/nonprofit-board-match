@@ -16,18 +16,18 @@ function staticMode(application) {
   
 }
 
-function createMode(posId) {
+function createMode(posId, profId) {
   
   const outputHTML = `
     <div class="application-form-wrapper">
-      <form class="js-application-create">
+      <form class="js-application-create"
+            data-posid="${posId}"
+            data-profid="${profId}">
         <fieldset>
           <legend>Apply with a cover message</legend>
-          <input type="textarea" name="covermessage">
+          <input type="textarea" name="covermessage" required>
           <input type="button" class="js-application-cancel"
                  data-posid="${posId}" value="Cancel">
-          <input type="hidden" name="posid"
-                 value="${posId}">
           <input type="reset" value="Reset">
           <input type="submit" class="js-application-submit"
                  data-posid="${posId}" value="Submit">

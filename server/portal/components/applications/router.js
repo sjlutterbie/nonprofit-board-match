@@ -25,9 +25,9 @@ const { IndProf } = require('../../../api/indProf')
 router.get('/apply', jwtAuth, (req, res) => {
 
   const posId = req.query.posId;
-  console.log('posId: ' + posId);
+  const profId= req.query.profId;
 
-  res.send(views.createMode(posId));
+  res.send(views.createMode(posId, profId));
 
 });
 
