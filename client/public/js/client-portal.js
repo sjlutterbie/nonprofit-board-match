@@ -326,9 +326,14 @@ $('html').on('submit', '.js-application-create', function(e){
 
   submitApplication(formData, localStorage.JWT)
     .then(function(res) {
-      handlePosViewAppClick(res._id, localStorage.JWT)
+      const appId = res._id;
+      handlePosViewAppClick(res._id, posId,localStorage.JWT)
         .then(res => {
           updatePosAppView(res, posId);
+          // Update class of 'View app' button
+          updateAppViewApplyButton(
+            posId, 'View Application', 'viewapp', appId
+          );
         })
         .catch(handleError);
     })
@@ -366,11 +371,6 @@ $('html').on('submit', '.js-application-create', function(e){
     return promObj;
     
   }
-  
-  function viewApplication(application, authToken) {
-    
-  }
-
 
 
 /* ===========
@@ -467,7 +467,7 @@ $('html').on('click', '.js-position-app-handler', function(e) {
         url: reqUrl,
         type: 'GET',
         headers: {
-          Authorization: `Bearer ${localStorage.JWT}`,
+          Authorization: `Bearer ${authToken}`,
           contentType: 'application/json'
         },
         data: requestData,
@@ -566,6 +566,20 @@ function determineAppButtonAction(button) {
   
 }
 
+function updateAppViewApplyButton(posId, text, cssClass, appId) {
+  // Sets the text, and class of the [Apply | View Application] button
+  $(`button.js-position-app-handler[data-posid="${posId}"]`)
+    .text(text)
+    // Reset CSS classes
+    .removeClass('apply')
+    .removeClass('viewapp')
+    // Add desired class
+    .addClass(cssClass)
+    .attr('data-appid', appId);
+    
+  
+}
+
 function handleError(err) {
   // Consistently handle how .ajax() errors are handled in a testable fashion.
 
@@ -636,6 +650,7 @@ try {
     determineAppButtonAction,
     updateMain,
     updatePosAppView,
+    updateAppViewApplyButton,
     handleError,
     moveToPortal,
     loadPortalSuccess

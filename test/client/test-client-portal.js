@@ -332,8 +332,10 @@ describe('Portal: Client-side user interaction', function() {
         const posId = faker.random.alphaNumeric(10);
         // Create test DOM
         $('body').html(`
-          <button class="wasvisible" data-posid="${posId}"></button>
-          <button class="washidden" data-posid="${posId}"
+          <button class="wasvisible js-position-app-handler"
+                  data-posid="${posId}"></button>
+          <button class="washidden js-position-app-handler"
+                  data-posid="${posId}"
                   style="display: none;"></button>
         `);
         // Run test
@@ -365,6 +367,42 @@ describe('Portal: Client-side user interaction', function() {
       });
       
     });
+    
+    describe('updateAppViewApplyButton()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.updateAppViewApplyButton).to.be.a('function');
+      });
+      it('Should update the DOM as expected', function() {
+        const posId1 = faker.random.alphaNumeric(10);
+        const posId2 = faker.random.alphaNumeric(10);
+        // Create test DOM
+        $('body').html(`
+          <button class="button1 js-position-app-handler apply"
+                  data-posid="${posId1}">Start text 1</button>
+          <button class="button2 js-position-app-handler viewapp"
+                  data-posid="${posId2}">Start text 2</button>
+        `);
+        // Run tests
+        cP.updateAppViewApplyButton(posId1, posId1, 'viewapp', posId1);
+          expect($('.button1').text()).to.equal(posId1)
+          expect($('.button1').hasClass('viewapp')).to.equal(true);
+          expect($('.button1').attr('data-appid')).to.equal(posId1);
+        cP.updateAppViewApplyButton(posId2, posId2, 'apply', '');
+          expect($('.button2').text()).to.equal(posId2)
+          expect($('.button2').hasClass('apply')).to.equal(true);
+          expect($('.button2').attr('data-appid')).to.equal('');
+        
+        // Reset test DOM
+        $('body').html('');
+        
+        
+        
+        
+      });
+      
+    });
+    
     
     describe('handleError()', function() {
       it('Should be a function', function() {
