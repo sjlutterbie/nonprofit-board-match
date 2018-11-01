@@ -36,13 +36,14 @@ router.get('/apply', jwtAuth, (req, res) => {
 router.get('/viewapp/:id', jwtAuth, (req, res) => {
 
   const appId = req.params.id;
-  console.log(appId);
+  const posId = req.query.posId;
   
+
   let ApplicationPromise =   ctrls.getApplicationPromise(appId);
   
   ApplicationPromise.then(
     function(application) {
-      return res.status(200).send(views.staticMode(application));
+      return res.status(200).send(views.staticMode(application, posId));
     },
     function(err) {
       return err;

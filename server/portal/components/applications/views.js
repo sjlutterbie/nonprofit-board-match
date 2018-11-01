@@ -1,14 +1,15 @@
 'use strict';
 
-function staticMode(application) {
+function staticMode(application, posId) {
   
   const outputHTML = `
     <div class="application-content">
       <h3>Cover message</h3>
       <p>${application.coverMessage}</p>
       <button class="js-application-withdraw"
-              data-appid="${application._id}">Withdraw Application</button>
-      <button class="js-application-hide">Hide Application</button>
+              data-appid="${application._id}">Withdraw Application (TODO)</button>
+      <button class="js-application-hide"
+              data-posid="${posId}">Hide Application</button>
     </div>
   `;
   

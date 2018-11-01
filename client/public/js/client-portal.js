@@ -441,14 +441,13 @@ $('html').on('click', '.js-position-app-handler', function(e) {
     
     const appId = e.currentTarget.dataset.appid;
     
-    handlePosViewAppClick(appId, localStorage.JWT)
+    handlePosViewAppClick(appId, posId, localStorage.JWT)
       .then(res => {
         updatePosAppView(res, posId);
         toggleApplicationButton(posId);
       })
       .catch(handleError);
   }
-
 
 });
 
@@ -482,9 +481,13 @@ $('html').on('click', '.js-position-app-handler', function(e) {
     
   }
   
-  function handlePosViewAppClick(appId, authToken) {
+  function handlePosViewAppClick(appId, posId, authToken) {
     
     const reqUrl = `/portal/components/applications/viewapp/${appId}`;
+    
+    const requestData = {
+      posId: posId
+    };
     
     let promObj = new Promise(function(resolve, reject) {
       
@@ -495,6 +498,7 @@ $('html').on('click', '.js-position-app-handler', function(e) {
           Authorization: `Bearer ${authToken}`,
           contentType: 'application/json'
         },
+        data: requestData,
         success: resolve,
         error: reject
       });
@@ -505,6 +509,19 @@ $('html').on('click', '.js-position-app-handler', function(e) {
     
   }
 
+// 'Hide Application' in Application view on Position Cards
+$('html').on('click', '.js-application-hide', function(e) {
+  e.preventDefault();
+  
+  
+  // Clear the application view
+  $('.application-view').html('');
+  
+  // Toggle the "View Application" button
+   toggleApplicationButton(e.currentTarget.dataset.posid);
+  
+  
+});
 
 
 
@@ -534,7 +551,7 @@ function updatePosAppView(content, posId) {
 
 function toggleApplicationButton(posId) {
   
-  $(`button[data-posid="${posId}"]`).toggle();
+  $(`button.js-position-app-handler[data-posid="${posId}"]`).toggle();
   
 }
 
