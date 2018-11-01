@@ -9,8 +9,9 @@ function getOpenPositionsPromise() {
   let query = Position
     .find({currentlyOpen: true})
     .sort({dateCreated: 'descending'})
-    .populate('orgProf');
-  
+    .populate('orgProf')
+    .populate('applications');
+
   let promObj = query.exec();
   
   return promObj;
@@ -36,9 +37,14 @@ function hasIndProfApplied(position, indProf) {
   // Check whether or not `position` has an `application` connected to `indProf`
   // If it does, return the application.
   // If not, return false
+
+  // Find relevant application
+  const targetApp = position.applications.find(function(application) {
+    
+    return (application.indProf == indProf);
+  });
   
-  console.log(position);
-  
+  return targetApp;
   
 }
 

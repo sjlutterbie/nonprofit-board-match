@@ -65,10 +65,22 @@ describe('Component: positions', function() {
       it('Should be a function', function() {
         expect(pos.hasIndProfApplied).to.be.a('function');
       });
+      it('Should correctly find/reject a target application', function() {
+        const targetIndProf = faker.random.alphaNumeric(10);
+        const testCases = [
+          // Position has no applications
+          [{applications: []}, undefined],
+          // Position has an irrelevant application
+          [{applications: [{indProf: targetIndProf+'X'}]}, undefined],
+          // Position has a relevant application
+          [{applications: [{indProf: targetIndProf}]}, {indProf: targetIndProf}]
+        ];
+        testCases.forEach(function(testCase) {
+          expect(pos.hasIndProfApplied(testCase[0], targetIndProf))
+            .to.deep.equal(testCase[1]);
+        });
+      });
     });
-    
-    
-    
   });
   
   describe('Views', function(){

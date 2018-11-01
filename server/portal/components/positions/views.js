@@ -1,12 +1,12 @@
 'use strict';
 
+const { hasIndProfApplied } = require('./controllers');
+
 function staticMode(positions, profId) {
   // Build a list of open positions.
   // For each open position, insert the data into an HTML template string
   
   let outputHtml = '';
-  
-  console.log(positions);
   
   positions.forEach(function(position) {
     outputHtml += makeStaticPosition(position, profId);
@@ -18,6 +18,23 @@ function staticMode(positions, profId) {
 
   function makeStaticPosition(position, profId) {
     
+
+    let buttonText = 'Apply';
+    let buttonClass = 'apply'
+    let buttonData = '';
+
+    // Check if a relevant application exists
+    const targetApp = hasIndProfApplied(position, profId);
+    
+    // If an application exists...
+    if (targetApp) {
+      // ... update the Application button 
+      buttonText = 'View Application';
+      buttonClass = 'viewapp';
+      buttonData = `data-appid="${targetApp._id}"`;
+    }  
+
+  
     const outputHtml = `
       <div class="card">
         <div class="position" data-posid="${position._id}">
@@ -27,9 +44,10 @@ function staticMode(positions, profId) {
           <div class="application-container">
             <div class="application-view"></div>
             <div class="application-view-controls">
-              <button class="js-position-app-handler apply"
+              <button class="js-position-app-handler ${buttonClass}"
+                      ${buttonData}
                       data-posid="${position._id}"
-                      data-profid="${profId}">Apply</button>
+                      data-profid="${profId}">${buttonText}</button>
             </div>
           </div>
         </div>
