@@ -21,6 +21,10 @@ function staticMode(positions) {
         <h2>${position.title}</h2>
         <h3>${position.orgProf.name}</h3>
         <p>${position.description}</p>
+        <div class="application-container">
+          <div class="application-view"></div>
+          <div class="application-view-controls"></div>
+        </div>
       </div>
     `;
     
