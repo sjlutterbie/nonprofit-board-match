@@ -321,26 +321,35 @@ $('html').on('submit', '.js-application-create', function(e){
       $(`form[data-posid="${posId}"] input[name="covermessage"]`).val(),
     applicationDate: new Date(),
     position: posId,
-    profId: profId
+    indProf: profId
   };
 
-  console.log(formData);
+  submitApplication(formData, localStorage.JWT)
+    .then(function(res) {console.log(res)})
+    .catch(handleError);
   
 });
 
-  function submitApplication() {
-
-
-
-// 'coverMessage', 'applicationDate', 
-// 'position', 'indProf'];
-
-
-
+  function submitApplication(formData, authToken) {
+    
+    const reqUrl = '/api/applications';
+    
       // Submit form (promise action to data API)
     const promObj = new Promise(function(resolve, reject){
       
-      
+      $.ajax({
+        url: reqUrl,
+        type: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: resolve,
+        error: reject
+      });
     });
 
     return promObj;
