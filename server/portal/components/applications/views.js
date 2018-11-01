@@ -7,7 +7,8 @@ function staticMode(application, posId) {
       <h3>Cover message</h3>
       <p>${application.coverMessage}</p>
       <button class="js-application-withdraw"
-              data-appid="${application._id}">Withdraw Application (TODO)</button>
+              data-appid="${application._id}"
+              data-posid="${posId}">Withdraw Application</button>
       <button class="js-application-hide"
               data-posid="${posId}">Hide Application</button>
     </div>

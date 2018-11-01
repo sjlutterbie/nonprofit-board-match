@@ -518,6 +518,48 @@ $('html').on('click', '.js-application-hide', function(e) {
   
 });
 
+// "Withdraw Application" in Application view on Position Cards
+$('html').on('click', '.js-application-withdraw', function(e) {
+  e.preventDefault();
+  
+  const appId = e.currentTarget.dataset.appid;
+  const posId = e.currentTarget.dataset.posid;
+  
+  deleteApplication(appId, localStorage.JWT)
+    .then(function(res) {
+      // Clear application view
+      $(`.position[data-posid="${posId}"]`).find('.application-content').html('');
+      // Update Apply button
+      updateAppViewApplyButton(posId,'Apply', 'apply', '');
+      // Toggle button
+      toggleApplicationButton(posId);
+    })
+    .catch(handleError);
+  
+});
+
+  function deleteApplication(appId, authToken) {
+    
+    const reqUrl = `/api/applications/${appId}`;
+    
+    let promObj = new Promise(function(resolve, reject) {
+      
+      $.ajax({
+        url: reqUrl,
+        type: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        success: resolve,
+        error: reject
+      });
+
+    });
+    
+    return promObj;
+    
+  }
 
 
   
@@ -643,6 +685,7 @@ try {
     handlePosViewAppClick,
     toggleApplicationButton,
     determineAppButtonAction,
+    deleteApplication,
     updateMain,
     updatePosAppView,
     updateAppViewApplyButton,

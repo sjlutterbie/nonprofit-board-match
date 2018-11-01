@@ -276,6 +276,22 @@ describe('Portal: Client-side user interaction', function() {
 
     });
     
+    describe('deleteApplication()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.deleteApplication).to.be.a('function');
+      });
+      it('Should return a promise', function() {
+        const appId = faker.random.alphaNumeric(10);
+        let testObj = cP.deleteApplication(appId, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+      
+    });
+    
+    
   });
 
   describe('Helper functions', function() {
