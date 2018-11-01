@@ -276,6 +276,48 @@ describe('Portal: Client-side user interaction', function() {
         expect(cP.updatePosAppView).to.be.a('function');
       });
       
+      it('Should update the DOM as expected', function() {
+        const posId = faker.random.alphaNumeric(10);
+        const content = faker.random.alphaNumeric(10);
+        // Create test DOM
+        $('body').html(`
+          <div data-posid="${posId}">
+            <div class="application-view"></div>
+          </div>
+        `);
+        // Run test
+        cP.updatePosAppView(content, posId);
+        expect($('.application-view').text()).to.equal(content);
+        // Reset test DOM
+        $('body').html('');
+      });
+      
+    });
+    
+    describe('toggleApplicationButton()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.toggleApplicationButton).to.be.a('function');
+      });
+      
+      it('Should update the DOM as expected', function() {
+        const posId = faker.random.alphaNumeric(10);
+        // Create test DOM
+        $('body').html(`
+          <button class="wasvisible" data-posid="${posId}"></button>
+          <button class="washidden" data-posid="${posId}"
+                  style="display: none;"></button>
+        `);
+        // Run test
+        cP.toggleApplicationButton(posId);
+        console.log($('body').html());
+        expect($('.wasvisible').css('display')).to.equal('none');
+        expect($('.washidden').css('display')).to.equal('inline-block');
+        // Reset test DOM
+        $('body').html('');
+      });
+      
+      
     });
     
     describe('handleError()', function() {

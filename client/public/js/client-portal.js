@@ -293,6 +293,21 @@ $('html').on('submit', '.js-indprof-edit', function(e) {
     
     return promObj;
   }
+  
+// Handle click 'Cancel' on Application form
+$('html').on('click', '.js-application-cancel', function(e){
+  e.preventDefault();
+  
+  // Extract posId
+  const posId = e.currentTarget.dataset.posid;
+  
+  // Clear the form
+  $(`div[data-posid="${posId}"]`)
+    .find('.application-view').html('');
+    
+  toggleApplicationButton(posId);
+
+});
 
 /* ===========
    = BUTTONS =
@@ -350,6 +365,7 @@ $('html').on('click', '.js-position-app-handler', function(e) {
   handlePosApplyClick(posId, localStorage.JWT)
     .then(res => {
       updatePosAppView(res, posId);
+      toggleApplicationButton(posId);
     })
     .catch(handleError);
   
@@ -361,7 +377,7 @@ $('html').on('click', '.js-position-app-handler', function(e) {
 
     // Identify position ID clicked.
     const requestData = {
-     posId: event.currentTarget.dataset.posid 
+     posId: posId 
     };
     
     const reqUrl = '/portal/components/applications/apply';
@@ -412,13 +428,15 @@ function updateMain(content) {
 
 function updatePosAppView(content, posId) {
   
-  console.log('You called?');
-  console.log(posId);
-  console.log(content);
-  
   $(`div[data-posid="${posId}"]`)
     .find('.application-view')
     .html(content);
+  
+}
+
+function toggleApplicationButton(posId) {
+  
+  $(`button[data-posid="${posId}"]`).toggle();
   
 }
 
@@ -486,6 +504,7 @@ try {
     editIndProf,
     handleEditIndProfClick,
     handlePosApplyClick,
+    toggleApplicationButton,
     updateMain,
     updatePosAppView,
     handleError,

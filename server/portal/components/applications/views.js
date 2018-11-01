@@ -25,12 +25,12 @@ function createMode(posId) {
           <legend>Apply with a cover message</legend>
           <input type="textarea" name="covermessage">
           <input type="button" class="js-application-cancel"
-                 value="Cancel">
+                 data-posid="${posId}" value="Cancel">
           <input type="hidden" name="posid"
                  value="${posId}">
           <input type="reset" value="Reset">
           <input type="submit" class="js-application-submit"
-                 value="Submit">
+                 data-posid="${posId}" value="Submit">
         </fieldset>
       </form>
     </div>
