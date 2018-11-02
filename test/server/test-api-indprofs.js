@@ -1,22 +1,8 @@
 'use strict';
 
-// Load testing tools
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-  const expect = chai.expect;
-  chai.use(chaiHttp);
-const faker = require('faker');
-const mongoose = require('mongoose');
-  mongoose.Promise = global.Promise;
-const jwt = require('jsonwebtoken');
-const { app, runServer, closeServer} = require('../../index');
-const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
 
-// Load module
+// Load required components
 const {indProfSchema, IndProf} = require('../../server/api/indProf');
-const {User} = require('../../server/api/users');
-
-// DATA MODEL TESTING
 
 describe('IndProf API', function() {
   
@@ -36,59 +22,6 @@ describe('IndProf API', function() {
   
   describe('Routes', function() {
   
-    const testIds = {};
-    
-    // Generate valid token
-    const token = jwt.sign(
-      {
-        user: faker.random.alphaNumeric(10),
-      },
-      JWT_SECRET,
-      {
-        algorithm: 'HS256',
-        expiresIn: '1d'
-      }
-    );
-    
-    before(function() {
-      return runServer(TEST_DATABASE_URL);
-    });
-    
-    // Build required linked objects
-    before(function() {
-      return new Promise(function(resolve, reject) {
-        User.create(
-          {
-            username: faker.random.alphaNumeric(10),
-            password: faker.random.alphaNumeric(10)
-          }
-          ).then(function(user) {
-              testIds.userId = user._id;
-              resolve();
-            }
-          ).catch(function(err) {
-            console.log(err);
-          });
-      });
-    });
-      
-    // Remove all created objects  
-    after(function() {
-      let userProm = User.deleteMany({}).exec();
-      let indprofProm = IndProf.deleteMany({}).exec();
-      
-      Promise.all([userProm, indprofProm])
-        .then(function(values){
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
-    });
-    
-    after(function() {
-      return closeServer();
-    });
-
     describe('GET /api/indprofs/:id', function() {
       
       it('Should reject requests with no JWT', function() {
