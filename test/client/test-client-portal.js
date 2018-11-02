@@ -204,6 +204,23 @@ describe('Portal: Client-side user interaction', function() {
         $('body').html();
       });
     });
+    
+    describe('submitApplication()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.submitApplication).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        let testObj = cP.submitApplication();
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(rej){});
+      });
+      
+    });
+    
+
   });
   
   describe('Non-Form Buttons', function() {
@@ -231,6 +248,53 @@ describe('Portal: Client-side user interaction', function() {
         testObj.then(function(res){},function(err){});
       });
     });
+    
+    describe('handlePosApplyClick()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.handlePosApplyClick).to.be.a('function');
+      });
+      
+      it('Should return a promise', function() {
+        const event = {}
+        let testObj = cP.handlePosApplyClick(event, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+      
+    });
+    
+    describe('handlePosViewAppClick()', function() {
+      it('Should be a function', function() {
+        expect(cP.handlePosViewAppClick).to.be.a('function');
+      });
+      it('Should return a promise', function() {
+        const appId = faker.random.alphaNumeric(10);
+        let testObj = cP.handlePosViewAppClick(appId, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){}, function(err){});
+      });
+
+    });
+    
+    describe('deleteApplication()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.deleteApplication).to.be.a('function');
+      });
+      it('Should return a promise', function() {
+        const appId = faker.random.alphaNumeric(10);
+        let testObj = cP.deleteApplication(appId, token);
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(err){});
+      });
+      
+    });
+    
+    
   });
 
   describe('Helper functions', function() {
@@ -252,6 +316,112 @@ describe('Portal: Client-side user interaction', function() {
         $('body').html();
       });
     });
+    
+    describe('updatePosAppView()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.updatePosAppView).to.be.a('function');
+      });
+      
+      it('Should update the DOM as expected', function() {
+        const posId = faker.random.alphaNumeric(10);
+        const content = faker.random.alphaNumeric(10);
+        // Create test DOM
+        $('body').html(`
+          <div data-posid="${posId}">
+            <div class="application-view"></div>
+          </div>
+        `);
+        // Run test
+        cP.updatePosAppView(content, posId);
+        expect($('.application-view').text()).to.equal(content);
+        // Reset test DOM
+        $('body').html('');
+      });
+      
+    });
+    
+    describe('toggleApplicationButton()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.toggleApplicationButton).to.be.a('function');
+      });
+      
+      it('Should update the DOM as expected', function() {
+        const posId = faker.random.alphaNumeric(10);
+        // Create test DOM
+        $('body').html(`
+          <button class="wasvisible js-position-app-handler"
+                  data-posid="${posId}"></button>
+          <button class="washidden js-position-app-handler"
+                  data-posid="${posId}"
+                  style="display: none;"></button>
+        `);
+        // Run test
+        cP.toggleApplicationButton(posId);
+        expect($('.wasvisible').css('display')).to.equal('none');
+        expect($('.washidden').css('display')).to.equal('inline-block');
+        // Reset test DOM
+        $('body').html('');
+      });
+    });
+    
+    describe('determineAppButtonAction()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.determineAppButtonAction).to.be.a('function');
+      });
+      it('Should detect the expected class in the DOM', function() {
+        const testCases = ['apply', 'viewapp'];
+        testCases.forEach(function(testCase) {
+          // Create test DOM
+          $('body').html(`
+            <button class="${testCase}"></button>
+          `);
+          // Run test
+          expect(cP.determineAppButtonAction($('button'))).to.equal(testCase);
+          // Reset test DOM
+          $('body').html('');
+        });
+      });
+      
+    });
+    
+    describe('updateAppViewApplyButton()', function() {
+      
+      it('Should be a function', function() {
+        expect(cP.updateAppViewApplyButton).to.be.a('function');
+      });
+      it('Should update the DOM as expected', function() {
+        const posId1 = faker.random.alphaNumeric(10);
+        const posId2 = faker.random.alphaNumeric(10);
+        // Create test DOM
+        $('body').html(`
+          <button class="button1 js-position-app-handler apply"
+                  data-posid="${posId1}">Start text 1</button>
+          <button class="button2 js-position-app-handler viewapp"
+                  data-posid="${posId2}">Start text 2</button>
+        `);
+        // Run tests
+        cP.updateAppViewApplyButton(posId1, posId1, 'viewapp', posId1);
+          expect($('.button1').text()).to.equal(posId1)
+          expect($('.button1').hasClass('viewapp')).to.equal(true);
+          expect($('.button1').attr('data-appid')).to.equal(posId1);
+        cP.updateAppViewApplyButton(posId2, posId2, 'apply', '');
+          expect($('.button2').text()).to.equal(posId2)
+          expect($('.button2').hasClass('apply')).to.equal(true);
+          expect($('.button2').attr('data-appid')).to.equal('');
+        
+        // Reset test DOM
+        $('body').html('');
+        
+        
+        
+        
+      });
+      
+    });
+    
     
     describe('handleError()', function() {
       it('Should be a function', function() {

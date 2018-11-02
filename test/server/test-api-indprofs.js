@@ -86,7 +86,7 @@ describe('IndProf API', function() {
     });
     
     after(function() {
-      closeServer();
+      return closeServer();
     });
 
     describe('GET /api/indprofs/:id', function() {

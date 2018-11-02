@@ -18,11 +18,14 @@ const ctrls = require('./controllers');
 
 router.get('/', jwtAuth, (req, res) => {
   
+  // For passing on to Application forms
+  const profId = req.query.profId;
+  
   let PositionPromise = ctrls.getOpenPositionsPromise();
   
   PositionPromise.then(
     function(positions){
-      return res.send(views.staticMode(positions));
+      return res.status(200).send(views.staticMode(positions, profId));
     },
     function(err) {
       return err;

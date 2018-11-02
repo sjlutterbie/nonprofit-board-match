@@ -25,9 +25,11 @@ function buildMenu(userType, userId, profId) {
                     data-profid="${profId}"
                     class="js-tabnavmenu-positions">Open Positions</a>
       </li>
+      <!-- Non-MVP Feature
       <li>
         <a href="#" data-usertype="${userType}" data-profid="${profId}" class="js-tabnavmenu-applications">Applications</a>
       </li>
+      --!>
     </ul>`;
   
   return outputHTML;

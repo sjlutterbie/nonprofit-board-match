@@ -21,8 +21,12 @@ const { router: indProfsRouter } = require('./server/api/indProf');
 const { router: orgProfsRouter } = require('./server/api/orgProf');
 const { router: positionsRouter } = require('./server/api/positions');
 const { router: applicationsRouter } = require('./server/api/applications');
-const { router: indProfCompRouter } = require('./server/portal/components/indprof');
-const { router: positionsCompRouter } = require('./server/portal/components/positions');
+const { router: indProfCompRouter } = 
+  require('./server/portal/components/indprof');
+const { router: positionsCompRouter } = 
+  require('./server/portal/components/positions');
+const { router: appsCompRouter } = 
+  require('./server/portal/components/applications');
 
 // Create core app
 const app = express();
@@ -55,6 +59,7 @@ app.use('/api/positions', positionsRouter);
 app.use('/api/applications', applicationsRouter);
 app.use('/portal/components/indprof', indProfCompRouter);
 app.use('/portal/components/positions', positionsCompRouter);
+app.use('/portal/components/applications', appsCompRouter);
 
 // Set up static file route
 app.use(express.static('./client/public'));

@@ -293,6 +293,80 @@ $('html').on('submit', '.js-indprof-edit', function(e) {
     
     return promObj;
   }
+  
+// Handle click 'Cancel' on Application form
+$('html').on('click', '.js-application-cancel', function(e){
+  e.preventDefault();
+  
+  // Extract posId
+  const posId = e.currentTarget.dataset.posid;
+  
+  // Clear the form
+  $(`div[data-posid="${posId}"]`)
+    .find('.application-view').html('');
+    
+  toggleApplicationButton(posId);
+
+});
+
+// Handle Application form submission
+$('html').on('submit', '.js-application-create', function(e){
+  e.preventDefault();
+  
+  const posId = e.currentTarget.dataset.posid;
+  const profId = e.currentTarget.dataset.profid;
+  
+  const formData = {
+    coverMessage:
+      $(`form[data-posid="${posId}"] input[name="covermessage"]`).val(),
+    applicationDate: new Date(),
+    position: posId,
+    indProf: profId
+  };
+
+  submitApplication(formData, localStorage.JWT)
+    .then(function(res) {
+      const appId = res._id;
+      handlePosViewAppClick(res._id, posId,localStorage.JWT)
+        .then(res => {
+          updatePosAppView(res, posId);
+          // Update class of 'View app' button
+          updateAppViewApplyButton(
+            posId, 'View Application', 'viewapp', appId
+          );
+        })
+        .catch(handleError);
+    })
+    .catch(handleError);
+    
+});
+
+  function submitApplication(formData, authToken) {
+    
+    const reqUrl = '/api/applications';
+    
+      // Submit form (promise action to data API)
+    const promObj = new Promise(function(resolve, reject){
+      
+      $.ajax({
+        url: reqUrl,
+        type: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: resolve,
+        error: reject
+      });
+    });
+
+    return promObj;
+    
+  }
+
 
 /* ===========
    = BUTTONS =
@@ -335,6 +409,162 @@ $('html').on('click', '.js-edit-indprof', function(e) {
     
     return promObj;
   }
+  
+// The [Apply | View Application] button on Position cards
+$('html').on('click', '.js-position-app-handler', function(e) {
+  e.preventDefault();
+  
+  // Extract posId
+  const posId = e.currentTarget.dataset.posid;
+  const profId = e.currentTarget.dataset.profid;
+  
+  // Determine which view to render
+  const view = determineAppButtonAction(e.currentTarget);
+  
+  if (view === 'apply') {
+    // Application submission form
+    handlePosApplyClick(posId, profId, localStorage.JWT)
+      .then(res => {
+        updatePosAppView(res, posId);
+        toggleApplicationButton(posId);
+      })
+      .catch(handleError);
+  }
+  
+  if (view === 'viewapp') {
+    // Static application view
+    
+    const appId = e.currentTarget.dataset.appid;
+    
+    handlePosViewAppClick(appId, posId, localStorage.JWT)
+      .then(res => {
+        updatePosAppView(res, posId);
+        toggleApplicationButton(posId);
+      })
+      .catch(handleError);
+  }
+
+});
+
+  function handlePosApplyClick(posId, profId, authToken) {
+
+    // Identify position ID clicked.
+    const requestData = {
+     posId: posId, 
+     profId: profId
+    };
+    
+    const reqUrl = '/portal/components/applications/apply';
+    
+    let promObj = new Promise(function(resolve, reject) {
+      
+      $.ajax({
+        url: reqUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        data: requestData,
+        success: resolve,
+        error: reject
+      });
+      
+    });
+    
+    return promObj;
+    
+  }
+  
+  function handlePosViewAppClick(appId, posId, authToken) {
+    
+    const reqUrl = `/portal/components/applications/viewapp/${appId}`;
+    
+    const requestData = {
+      posId: posId
+    };
+    
+    let promObj = new Promise(function(resolve, reject) {
+      
+      $.ajax({
+        url: reqUrl,
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        data: requestData,
+        success: resolve,
+        error: reject
+      });
+      
+    });
+    
+    return promObj;
+    
+  }
+
+// 'Hide Application' in Application view on Position Cards
+$('html').on('click', '.js-application-hide', function(e) {
+  e.preventDefault();
+  
+  
+  // Clear the application view
+  $('.application-view').html('');
+  
+  // Toggle the "View Application" button
+   toggleApplicationButton(e.currentTarget.dataset.posid);
+  
+  
+});
+
+// "Withdraw Application" in Application view on Position Cards
+$('html').on('click', '.js-application-withdraw', function(e) {
+  e.preventDefault();
+  
+  const appId = e.currentTarget.dataset.appid;
+  const posId = e.currentTarget.dataset.posid;
+  
+  deleteApplication(appId, localStorage.JWT)
+    .then(function(res) {
+      // Clear application view
+      $(`.position[data-posid="${posId}"]`).find('.application-content').html('');
+      // Update Apply button
+      updateAppViewApplyButton(posId,'Apply', 'apply', '');
+      // Toggle button
+      toggleApplicationButton(posId);
+    })
+    .catch(handleError);
+  
+});
+
+  function deleteApplication(appId, authToken) {
+    
+    const reqUrl = `/api/applications/${appId}`;
+    
+    let promObj = new Promise(function(resolve, reject) {
+      
+      $.ajax({
+        url: reqUrl,
+        type: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          contentType: 'application/json'
+        },
+        success: resolve,
+        error: reject
+      });
+
+    });
+    
+    return promObj;
+    
+  }
+
+
+  
+  
+  
 
 /* ====================
    = HELPER FUNCTIONS =
@@ -345,6 +575,45 @@ function updateMain(content) {
   //  testability.
   
   $('main').html(content);
+  
+}
+
+function updatePosAppView(content, posId) {
+  
+  $(`div[data-posid="${posId}"]`)
+    .find('.application-view')
+    .html(content);
+  
+}
+
+function toggleApplicationButton(posId) {
+  
+  $(`button.js-position-app-handler[data-posid="${posId}"]`).toggle();
+  
+}
+
+function determineAppButtonAction(button) {
+  
+  if($(button).hasClass('apply')) {
+    return 'apply';
+  }
+  if($(button).hasClass('viewapp')) {
+    return 'viewapp';
+  }
+  
+}
+
+function updateAppViewApplyButton(posId, text, cssClass, appId) {
+  // Sets the text, and class of the [Apply | View Application] button
+  $(`button.js-position-app-handler[data-posid="${posId}"]`)
+    .text(text)
+    // Reset CSS classes
+    .removeClass('apply')
+    .removeClass('viewapp')
+    // Add desired class
+    .addClass(cssClass)
+    .attr('data-appid', appId);
+    
   
 }
 
@@ -410,8 +679,16 @@ try {
     createIndProf,
     cancelIndProfEdit,
     editIndProf,
+    submitApplication,
     handleEditIndProfClick,
+    handlePosApplyClick,
+    handlePosViewAppClick,
+    toggleApplicationButton,
+    determineAppButtonAction,
+    deleteApplication,
     updateMain,
+    updatePosAppView,
+    updateAppViewApplyButton,
     handleError,
     moveToPortal,
     loadPortalSuccess
