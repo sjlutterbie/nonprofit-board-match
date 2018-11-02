@@ -6,7 +6,7 @@ A platform for connecting service-oriented individuals with local non-profit
 organizations in search of board-level support.
 
 _Note: This is a "minimum viable product" prototype for a larger application.
-This application was built using `Node.js, Express, and MongoDB`. The full platform
+This application was built using `Node.js, Express, and MongDB`. The full platform
 would be built using a framework, such as `React [+Native]`._
 
 ## Motivation
@@ -20,7 +20,7 @@ potential stakeholders the following functionalities:
 
 ### Internal motivation
 
-This app was intentionally developed without an advanced framework in order to
+I intentionally developed without an advanced framework in order to
 strengthen my core full-stack development capabilities. In particular, I focused
 on the following skills:
 
@@ -28,6 +28,11 @@ on the following skills:
 * Component-based web app designed
 * Server-side APIs providing full CRUD capabilities
 * Using `promises` to manage complex asynchronous function chains
+
+I also built this without a framework in following with the *"Every Jedi must
+build his own lightsaber"* philosophy - constructing a product from the ground up
+to gain a deeper understanding and appreciation of the technologies and techniques
+involved in its creation.
 
 ## Screenshots
 
@@ -51,3 +56,29 @@ complete, but incorporating only minimal CSS styling._
 
 ![Open positions](screenshots/wireframe-positionView.png "Open positions")
 ![Application](screenshots/wireframe-positionWithApply.png "Application")
+
+## Technologies used
+
+* Languages/modules:
+  * HTML
+  * CSS
+  * Javascript
+  * JQuery
+  * Node.js
+  * Express
+  * Mongoose
+* Testing:
+  * Mocha
+  * Chai
+  * Sinon
+  * Faker
+* Development/hosting environment
+  * AWS
+  * mLab
+  * Travis-CI
+  * Git(Hub)
+  * 
+  
+## Live Demo (current deployment)
+
+<https://serene-chamber-93065.herokuapp.com>
