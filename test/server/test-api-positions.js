@@ -1,25 +1,11 @@
 'use strict';
 
-// Load testing tools
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-  const expect = chai.expect;
-  chai.use(chaiHttp);
-const faker = require('faker');
-const mongoose = require('mongoose');
-  mongoose.Promise = global.Promise;
-const jwt = require('jsonwebtoken');
-const { app, runServer, closeServer} = require('../../index');
-const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
-
-// Load module
-const {Position, positionsSchema} = require('../../server/api/positions');
-const {User} = require('../../server/api/users');
-const {OrgProf} = require('../../server/api/orgProf');
+// Load required components
+const {Position, positionsSchema } = require('../../server/api/positions');
 
 // DATA MODEL TESTING
 
-describe('Position API', function() {
+describe.only('Position API', function() {
   
   describe('Data Model', function() {
     
@@ -35,86 +21,7 @@ describe('Position API', function() {
   });
   
   describe('Routes', function() {
-    
-    // Generate test Org
-    const testOrg = {
-      name: faker.company.companyName(),
-      email: faker.internet.email()
-    };
-    
-    // Generate test User
-    const testUser = {
-      username: faker.random.alphaNumeric(10),
-      password: faker.random.alphaNumeric(10)
-    };
-      
-    
-    // Generate valid token
-    const token = jwt.sign(
-      {
-        user: faker.random.alphaNumeric(10),
-      },
-      JWT_SECRET,
-      {
-        algorithm: 'HS256',
-        expiresIn: '1d'
-      }
-    );
-    
-    before(function() {
-      return runServer(TEST_DATABASE_URL);
-    });
-  
-      afterEach(function() {
-        return Position.remove({});
-      });
-    
-    // Positions require an associated userAccount and orgProf
-    before(function() {
-      User.create(
-        {
-          username: testUser.username,
-          password: testUser.password
-        }
-      )
-      .then(
-        function(user) {
-          testUser._id = user._id;
-          OrgProf.create(
-            {
-              name: faker.company.companyName(),
-              email: faker.internet.email(),
-              userAccount: user._id
-            }  
-          )
-          .then(
-            function(org) {
-              testOrg._id = org._id;
-            },
-            function(err) {return err}
-          );
-        },
-        function(err) {return err}
-      );
-    });
-  
-    
-    after(function() {
-      let userProm = User.deleteMany({}).exec();
-      let orgProm = OrgProf.deleteMany({}).exec();
-      let posProm = Position.deleteMany({}).exec();
-      
-      Promise.all([userProm,orgProm,posProm])
-        .then(function(res){})
-        .catch(function(err){
-          console.log(err);
-        });
-    });
-        
-    after(function() {
-      return closeServer();
-    });
-    
+
     describe('GET /api/positions?queryString...', function() {
 
       it('Should reject requests with no JWT', function() {
@@ -370,7 +277,7 @@ describe('Position API', function() {
           description: faker.lorem.paragraphs(2),
           dateCreated: new Date(),
           currentlyOpen: Math.random() > .5 ? true : false,
-          orgProf: testOrg._id
+          orgProf: testIds.orgProfId
         };
         return chai.request(app)
           .post('/api/positions')
@@ -400,7 +307,7 @@ describe('Position API', function() {
           description: faker.lorem.paragraphs(2),
           dateCreated: new Date(),
           currentlyOpen: Math.random() > .5 ? true : false,
-          orgProf: testOrg._id
+          orgProf: testIds.orgProfId
         };
         return chai.request(app)
           .post('/api/positions')
@@ -470,7 +377,7 @@ describe('Position API', function() {
             description: faker.lorem.paragraphs(2),
             dateCreated: new Date(),
             currentlyOpen: Math.random() > .5 ? true : false,
-            orgProf: testOrg._id
+            orgProf: testIds.orgProfId
           })
           .then (
             // Application created, now delete it & test
