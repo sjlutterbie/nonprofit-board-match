@@ -145,7 +145,7 @@ describe('Portal: Client-side user interaction', function() {
 
       it('Should be a function', function() {
         expect(cP.editIndProf).to.be.a('function');
-      })
+      });
 
       it('Should return a promise', function() {
         // Create test DOM
@@ -182,10 +182,7 @@ describe('Portal: Client-side user interaction', function() {
         // Resolve/reject promise to avoid errors
         testObj.then(function(res){},function(rej){});
       });
-      
     });
-    
-
   });
   
   describe('Non-Form Buttons', function() {
@@ -227,13 +224,14 @@ describe('Portal: Client-side user interaction', function() {
         // Resolve/reject promise to avoid errors
         testObj.then(function(res){},function(err){});
       });
-      
     });
     
     describe('handlePosViewAppClick()', function() {
+
       it('Should be a function', function() {
         expect(cP.handlePosViewAppClick).to.be.a('function');
       });
+      
       it('Should return a promise', function() {
         const appId = faker.random.alphaNumeric(10);
         let testObj = cP.handlePosViewAppClick(appId, token);
@@ -249,6 +247,7 @@ describe('Portal: Client-side user interaction', function() {
       it('Should be a function', function() {
         expect(cP.deleteApplication).to.be.a('function');
       });
+      
       it('Should return a promise', function() {
         const appId = faker.random.alphaNumeric(10);
         let testObj = cP.deleteApplication(appId, token);
@@ -256,10 +255,7 @@ describe('Portal: Client-side user interaction', function() {
         // Resolve/reject promise to avoid errors
         testObj.then(function(res){},function(err){});
       });
-      
     });
-    
-    
   });
 
   describe('Helper functions', function() {
@@ -303,7 +299,6 @@ describe('Portal: Client-side user interaction', function() {
         // Reset test DOM
         $('body').html('');
       });
-      
     });
     
     describe('toggleApplicationButton()', function() {
@@ -349,7 +344,6 @@ describe('Portal: Client-side user interaction', function() {
           $('body').html('');
         });
       });
-      
     });
     
     describe('updateAppViewApplyButton()', function() {
@@ -376,19 +370,14 @@ describe('Portal: Client-side user interaction', function() {
           expect($('.button2').text()).to.equal(posId2)
           expect($('.button2').hasClass('apply')).to.equal(true);
           expect($('.button2').attr('data-appid')).to.equal('');
-        
         // Reset test DOM
         $('body').html('');
-        
-        
-        
-        
       });
-      
     });
     
     
     describe('handleError()', function() {
+      
       it('Should be a function', function() {
         expect(cP.handleError).to.be.a('function');
       });
