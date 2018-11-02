@@ -1,29 +1,7 @@
 'use strict';
 
-// Load testing packages
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-  const expect = chai.expect;
-  chai.use(chaiHttp);
-const faker = require('faker');
-const mongoose = require('mongoose');
-  mongoose.Promise = global.Promise;
-const jwt = require('jsonwebtoken');
-
-// Create DOM testing environment
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
-const window = new JSDOM(
-  `<!DOCTYPE html><html><body></body></html>`).window;
-global.$ = require('jquery')(window);
-const { app, runServer, closeServer} = require('../../index');
-const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
-  
-// Load modules
-
+// Load required components
 const pos = require('../../server/portal/components/positions');
-const { User } = require('../../server/api/users');
-const { IndProf } = require('../../server/api/indProf');
 
 describe('Component: positions', function() {
   
@@ -126,26 +104,6 @@ describe('Component: positions', function() {
 
   describe('Routes', function() {
     
-    // Create authToken
-    const token = jwt.sign(
-      {
-        user: faker.random.alphaNumeric(10),
-      },
-      JWT_SECRET,
-      {
-        algorithm: 'HS256',
-        expiresIn: '1d'
-      }
-    );
-    
-    before(function() {
-      return runServer(TEST_DATABASE_URL);
-    });
-    
-    after(function() {
-      return closeServer();
-    });
-
     describe('GET /portal/components/positions', function() {
       
       const testUrl = '/portal/components/positions';
@@ -169,22 +127,9 @@ describe('Component: positions', function() {
       });
       
       it('Should reject user with an expired token', function() {
-        // Generate an expired token
-        const token = jwt.sign(
-          {
-            user: faker.random.alphaNumeric(10),
-            exp: (Math.floor(Date.now()/1000) - 10) // Expired 10 seconds ago
-          },
-          JWT_SECRET,
-          {
-            algorithm: 'HS256',
-            subject: faker.random.alphaNumeric(10)
-          }
-        );
-        // Run the test
         return chai.request(app)
           .get(testUrl)
-          .set('authorization', `Bearer ${token}`)
+          .set('authorization', `Bearer ${expiredToken}`)
           .then(function(res) {
             expect(res).to.have.status(401);
           });

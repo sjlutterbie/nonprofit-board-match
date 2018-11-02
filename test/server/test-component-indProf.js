@@ -1,28 +1,7 @@
 'use strict';
 
-// Load testing packages
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-  const expect = chai.expect;
-  chai.use(chaiHttp);
-const faker = require('faker');
-const mongoose = require('mongoose');
-  mongoose.Promise = global.Promise;
-const jwt = require('jsonwebtoken');
-
-// Create DOM testing environment
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
-const window = new JSDOM(
-  `<!DOCTYPE html><html><body></body></html>`).window;
-global.$ = require('jquery')(window);
-const { app, runServer, closeServer} = require('../../index');
-const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require ('../../config');
-  
-// Load modules
+// Load required components
 const iP = require('../../server/portal/components/indprof');
-const { IndProf } = require('../../server/api/indProf');
-const { User } = require('../../server/api/users');
 
 describe('Component: indprof', function() {
   
@@ -103,91 +82,7 @@ describe('Component: indprof', function() {
   });
   
   describe('Routes', function() {
-    
-    // Create authToken
-    const token = jwt.sign(
-      {
-        user: faker.random.alphaNumeric(10),
-      },
-      JWT_SECRET,
-      {
-        algorithm: 'HS256',
-        expiresIn: '1d'
-      }
-    );
-    
-    let server;
-    
-    before(function() {
-      server = runServer(TEST_DATABASE_URL);
-      return server;
-    });
-   
-    // Create a valid userId and profId 
-    const testIds = {};
-    
-    const testUser = {
-      username: faker.random.alphaNumeric(10),
-      password: faker.random.alphaNumeric(10)
-    };
-    
-    const testProf = {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email()
-    };
 
-    let userCreation;
-    let profCreation;
-      
-    before(function() {
-      userCreation= User.create(testUser)
-      .then(function(user) {
-        testIds.userId = user._id;
-        testProf.userAccount = user._id;
-        profCreation= IndProf.create(testProf);
-        return profCreation;
-      }).then(function(prof){
-        testIds.profId = prof._id;
-      }).catch(function(err){
-        console.log(err);
-      });
-      
-      return userCreation;
-    });
-
-    let userProm;
-    let indProm;
-  
-    // Clean up test environment
-    after(function() {
-      userProm = User.deleteMany({}).exec();
-      indProm = IndProf.deleteMany({}).exec();
-      
-      Promise.all([userProm, indProm])
-        .then(function(res) {
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
-    });
-
-    
-    after(function() {
-      console.log('server');
-        console.log(server);
-      console.log('userCreation');
-        console.log(userCreation);
-      console.log('userProm');
-        console.log(userProm);
-      console.log('indProm');
-        console.log(indProm);
-      console.log('profCreation');
-        console.log(profCreation);
-      
-      return closeServer();
-    });
-    
     describe('GET /portal/components/indprof', function() {
       
       const testUrl = '/portal/components/indprof';
@@ -211,22 +106,9 @@ describe('Component: indprof', function() {
       });
       
       it('Should reject user with an expired token', function() {
-        // Generate an expired token
-        const token = jwt.sign(
-          {
-            user: faker.random.alphaNumeric(10),
-            exp: (Math.floor(Date.now()/1000) - 10) // Expired 10 seconds ago
-          },
-          JWT_SECRET,
-          {
-            algorithm: 'HS256',
-            subject: faker.random.alphaNumeric(10)
-          }
-        );
-        // Run the test
         return chai.request(app)
           .get(testUrl)
-          .set('authorization', `Bearer ${token}`)
+          .set('authorization', `Bearer ${expiredToken}`)
           .then(function(res) {
             expect(res).to.have.status(401);
           });
@@ -237,9 +119,9 @@ describe('Component: indprof', function() {
           // No values
           '',
           // Missing mode
-          `?indProf=${testIds.profId}&userId=${testIds.userId}`,
+          `?indProf=${testIds.indpRofId}&userId=${testIds.userId}`,
           // Missing userProf
-          `?mode=static&indProf=${testIds.profId}`
+          `?mode=static&indProf=${testIds.indpRofId}`
         ];
         testCases.forEach(function(testCase) {
           const wrongUrl = testUrl + testCase;
@@ -255,9 +137,9 @@ describe('Component: indprof', function() {
       it('Should reject requests with invalid query values', function() {
         const testCases = [
           // Incorrect mode
-          `?mode=XXX&userId=${testIds.userId}&profId=${testIds.profId}`,
+          `?mode=XXX&userId=${testIds.userId}&profId=${testIds.indProfId}`,
           // Incorrect userId
-          `?mode=static&userId=XXX&profId=${testIds.profId}`
+          `?mode=static&userId=XXX&profId=${testIds.indProfId}`
         ];
         testCases.forEach(function(testCase) {
           const wrongUrl = testUrl + testCase;
@@ -274,7 +156,7 @@ describe('Component: indprof', function() {
         const testCases = ['static', 'edit', 'create'];
         testCases.forEach(function(testCase) {
           const goodUrl = testUrl + 
-            `?mode=${testCase}&userId=${testIds.userId}&profId=${testIds.profId}`;
+            `?mode=${testCase}&userId=${testIds.userId}&profId=${testIds.indProfId}`;
           return chai.request(app)
             .get(goodUrl)
             .set('authorization', `Bearer ${token}`)

@@ -3,9 +3,7 @@
 // Load required components
 const {Position, positionsSchema } = require('../../server/api/positions');
 
-// DATA MODEL TESTING
-
-describe.only('Position API', function() {
+describe('Position API', function() {
   
   describe('Data Model', function() {
     

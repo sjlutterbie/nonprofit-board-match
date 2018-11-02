@@ -5,9 +5,7 @@ const {IndProf} = require('../../server/api/indProf');
 const {Position} = require('../../server/api/positions');
 
 
-// DATA MODEL TESTING
-
-describe.only('Applications API: Data Model', function() {
+describe('Applications API', function() {
   
   describe('Data model', function() {
     
@@ -22,7 +20,7 @@ describe.only('Applications API: Data Model', function() {
   
   });
 
-  describe.only('Routes', function() {
+  describe('Routes', function() {
   
     describe('GET /api/applications?queryString...', function() {
       it('Should reject requests with no JWT', function() {

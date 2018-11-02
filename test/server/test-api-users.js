@@ -1,19 +1,6 @@
 'use strict';
 
-// Load testing packages
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-  const expect = chai.expect;
-  chai.use(chaiHttp);
-const mongoose = require('mongoose');
-  mongoose.Promise = global.Promise;
-const faker = require('faker');
-
-//const jwt = require('jsonwebtoken');
-const { app, runServer, closeServer } = require('../../index');
-const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../../config');
-  
-//Load module
+//Load requied components
 const { User, UserSchema } = require('../../server/api/users');
 
 describe('Users API', function() {
@@ -33,22 +20,6 @@ describe('Users API', function() {
   
   describe('Routes', function() {
     
-    before(function() {
-      return runServer(TEST_DATABASE_URL);
-    });
-    
-    after(function() {
-      User.deleteMany({}).exec()
-        .then(function(res){})
-        .catch(function(err){
-          console.log(err);
-        });
-    });
-      
-    after(function() {
-      return closeServer();
-    });
-
     describe('POST /', function() {
     
       it('Should reject requests with missing fields', function() {

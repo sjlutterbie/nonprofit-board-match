@@ -1,48 +1,13 @@
 'use strict';
 
-// Load testing packages
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-  chai.use(chaiHttp);
-const faker = require('faker');
-const mongoose = require('mongoose');
-const sinon = require('sinon');
-const jwt = require('jsonwebtoken');
-
-
-// Simplify expect functions
-const expect = chai.expect;
-
 // Enable jQuery testing
-
 const { JSDOM } = require('jsdom');
 const window = new JSDOM(
   `<!DOCTYPE html><html><body></body></html>`).window;
 global.$ = require('jquery')(window);
 
-
-// Load module
-
-const cP = require('../../client/public/js/client-portal.js') 
-
-// Load testing server details
-require('dotenv').config();
-const { JWT_SECRET, PORT, TEST_DATABASE_URL } = require('../../config');
-const {app, runServer, closeServer } = require('../../index');
-
-// Generate valid token
-const token = jwt.sign(
-  {
-    user: faker.random.alphaNumeric(10),
-  },
-  JWT_SECRET,
-  {
-    algorithm: 'HS256',
-    expiresIn: '1d'
-  }
-);
-
-// TESTING
+// Load required components
+const cP = require('../../client/public/js/client-portal.js'); 
 
 describe('Portal: Client-side user interaction', function() {
   

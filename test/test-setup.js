@@ -18,27 +18,31 @@ global.mongoose = require('mongoose');
 global.jwt = require('jsonwebtoken');
 
 // Environment & config variables
+require('dotenv').config();
 const { app, runServer, closeServer } = require('../index');
   global.app = app;
 
 const { PORT, TEST_DATABASE_URL, JWT_SECRET } = require('../config');
+  global.TEST_DATABASE_URL = TEST_DATABASE_URL;
 
 // DOM testing
+global.sinon = require('sinon');
 global.jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 global.window = new JSDOM(
   '<!DOCTYPE html><html><body></body></html>').window;
 global.$ = require('jquery')(window);
 
+
 // Testing tools
 global.faker = require('faker');
 
 // Data model objects
-const { User, userSchema } = require('../server/api/users');
-const { IndProf, indProfSchema } = require('../server/api/indProf');
-const { OrgProf, orgProfSchema } = require('../server/api/orgProf');
-const { Position, positionSchema } = require('../server/api/positions');
-const { Application, applicationsSchema } = require('../server/api/applications');
+const { User } = require('../server/api/users');
+const { IndProf } = require('../server/api/indProf');
+const { OrgProf } = require('../server/api/orgProf');
+const { Position } = require('../server/api/positions');
+const { Application } = require('../server/api/applications');
 
 
 // Server setup and data object creation
@@ -54,6 +58,18 @@ before(function() {
     {
       algorithm: 'HS256',
       expiresIn: '1d'
+    }
+  );
+  
+  global.expiredToken = jwt.sign(
+    {
+      user: faker.random.alphaNumeric(10),
+      exp: (Math.floor(Date.now()/1000) - 10) // Expired 10 seconds ago
+    },
+    JWT_SECRET,
+    {
+      algorithm: 'HS256',
+      subject: faker.random.alphaNumeric(10)
     }
   );
 
@@ -167,7 +183,6 @@ before(function() {
       ).exec();
     }).then(function(res) {
       console.log('Data objects created successfully');
-      console.log(testIds);
       return;
     }).catch(function(error) {
       console.log(error);
