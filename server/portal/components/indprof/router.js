@@ -37,7 +37,7 @@ router.get('/', jwtAuth, (req, res) => {
   
   // Extract query data
   const { mode, userId, profId } = req.query;
-  
+
   // Verify valid mode value
   if (!['static','edit','create'].includes(mode)){
     return res.status(422).json({

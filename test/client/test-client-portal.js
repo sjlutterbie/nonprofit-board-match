@@ -212,7 +212,10 @@ describe('Portal: Client-side user interaction', function() {
       });
       
       it('Should return a promise', function() {
-        expect(cP.submitApplication()).to.be.a('promise');
+        let testObj = cP.submitApplication();
+        expect(testObj).to.be.a('promise');
+        // Resolve/reject promise to avoid errors
+        testObj.then(function(res){},function(rej){});
       });
       
     });

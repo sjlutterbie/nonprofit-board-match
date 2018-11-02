@@ -141,51 +141,6 @@ describe('Component: positions', function() {
     before(function() {
       return runServer(TEST_DATABASE_URL);
     });
-   
-    // Create a valid userId and profId 
-    const testIds = {};
-    
-   const testUser = {
-      username: faker.random.alphaNumeric(10),
-      password: faker.random.alphaNumeric(10)
-    };
-    
-    const testProf = {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email()
-    };
-      
-    before(function() {
-      return new Promise(function(resolve, reject) {
-        User.create(testUser)
-          .then(function(user) {
-            testIds.userId = user._id;
-            testProf.userAccount = user._id;
-            return IndProf.create(testProf);
-          }).then(function(prof) {
-            testIds.profId = prof._id;
-            resolve();
-          }).catch(function(err) {
-              return err;
-          });
-      });
-    });
-  
-    // Clean up test environment
-    after(function() {
-      return new Promise(function(resolve) {
-        User.deleteMany({})
-          .then(function(res) {
-            IndProf.deleteMany({});
-          }).then(function(res){
-            resolve();
-          });
-      })
-        .catch(function(err) {
-          return err;
-        });
-    });
     
     after(function() {
       return closeServer();

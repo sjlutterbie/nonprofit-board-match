@@ -116,14 +116,17 @@ describe('Component: indprof', function() {
       }
     );
     
+    let server;
+    
     before(function() {
-      return runServer(TEST_DATABASE_URL);
+      server = runServer(TEST_DATABASE_URL);
+      return server;
     });
    
     // Create a valid userId and profId 
     const testIds = {};
     
-   const testUser = {
+    const testUser = {
       username: faker.random.alphaNumeric(10),
       password: faker.random.alphaNumeric(10)
     };
@@ -133,42 +136,57 @@ describe('Component: indprof', function() {
       lastName: faker.name.lastName(),
       email: faker.internet.email()
     };
+
+    let userCreation;
+    let profCreation;
       
     before(function() {
-      return new Promise(function(resolve, reject) {
-        User.create(testUser)
-          .then(function(user) {
-            testIds.userId = user._id;
-            testProf.userAccount = user._id;
-            return IndProf.create(testProf);
-          }).then(function(prof) {
-            testIds.profId = prof._id;
-            resolve();
-          }).catch(function(err) {
-              return err;
-          });
+      userCreation= User.create(testUser)
+      .then(function(user) {
+        testIds.userId = user._id;
+        testProf.userAccount = user._id;
+        profCreation= IndProf.create(testProf);
+        return profCreation;
+      }).then(function(prof){
+        testIds.profId = prof._id;
+      }).catch(function(err){
+        console.log(err);
       });
+      
+      return userCreation;
     });
+
+    let userProm;
+    let indProm;
   
     // Clean up test environment
     after(function() {
-      return new Promise(function(resolve) {
-        User.deleteMany({})
-          .then(function(res) {
-            IndProf.deleteMany({});
-          }).then(function(res){
-            resolve();
-          });
-      })
+      userProm = User.deleteMany({}).exec();
+      indProm = IndProf.deleteMany({}).exec();
+      
+      Promise.all([userProm, indProm])
+        .then(function(res) {
+        })
         .catch(function(err) {
-          return err;
+          console.log(err);
         });
     });
+
     
     after(function() {
+      console.log('server');
+        console.log(server);
+      console.log('userCreation');
+        console.log(userCreation);
+      console.log('userProm');
+        console.log(userProm);
+      console.log('indProm');
+        console.log(indProm);
+      console.log('profCreation');
+        console.log(profCreation);
+      
       return closeServer();
     });
-
     
     describe('GET /portal/components/indprof', function() {
       

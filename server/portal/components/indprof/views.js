@@ -10,6 +10,11 @@ function editMode(userData) {
   //  email: String, required
   //  phone: String
   //  linkedIn: String
+  
+  if (userData == null) {
+    return 'Error finding userData in testing mode';
+  }
+
 
   const outputHTML = `
     <div class="card">
@@ -97,6 +102,11 @@ function createMode(userData) {
 function staticMode(userData) {
   // Renders HTML presenting an indProf object. The button at the end of the
   //  view triggers a switch to editMode.
+  
+  if (userData == null) {
+    return 'Error finding userData in testing mode';
+  }
+  
   
   const outputHTML = `
     <div class="card">
