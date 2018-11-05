@@ -77,6 +77,15 @@ main {
 
 /* COMMON COMPONENTS */
 
+  .card {
+    width: 100%;
+    max-width: 600px;
+    margin: 8px 0px;
+    padding: 8px;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+  }
+
   /* FORM COMPONENTS */
   
   input[type="text"], input[type="password"] {
@@ -137,6 +146,13 @@ main {
     border-radius: 4px; 
   }
   
+  .login-form, .fieldset-container {
+    width: 90%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+  }  
+  
     .login-form {
       height: 300px;
     }
@@ -145,24 +161,43 @@ main {
         height: 100%;
       }
       
+        .fieldset-container label {
+          width: 100%;
+          text-align: center;
+          margin: 4px;
+        }
+      
       fieldset {
         height: 100%;
       }
   
     .login-box legend {
+      width: 80%;
+      margin: 4px;
+      
+      text-align: center;
       font-size: 22px;
       color: var(--secondary-color);
     }
-    
+
     .login-box label input {
       margin: 8px 0px;
+      text-align: center;
+      width: 100%;
+      padding: 4px;
+      text-align: center;
+    }
+    
+    .password-requirements {
+      display: none;
     }
     
     .login-form input[type="submit"] {
       background-color: var(--secondary-light);
       color: var(--on-secondary-light);
+      width: 80%;
+      margin: 4px;
     }
-
 
     .login-box a {
       color: var(--secondary-light);
@@ -182,117 +217,37 @@ main {
 
   
   .login-form .alert-area {
+    text-align: center;
+    margin: 4px;
     color: #f00;
     font-weight: bold;
   }
   
+  .create-account-link {
+    margin: 0px;
+    padding: 0px;
+    font-size: 12px;
+  }
+
+  .password-requirements {
+    text-align: center;
+    font-style: italic;
+  }
+  
+  .default-credentials {
+    text-align: center;
+  }
+  
+    .d-c-title {
+      text-decoration: underline;
+    }
+    
+    .d-c-label {
+      font-weight: bold;
+    }
+  
 
 /* ========================================================================== */
-
-
-/* LOGIN SCREEN */
-
-
-
-
-
-
-
-
-
-
-
-
-/* MAIN CONTENT */
-
-
-
-.card {
-  width: 100%;
-  max-width: 600px;
-  margin: 8px 0px;
-  padding: 8px;
-  border-radius: 4px;
-}
-
-/* LOGIN SCREEN */
-
-
-
-.dev-notice {
-  text-align: center;
-  font-style: italic;
-}
-
-.login-form, .fieldset-container {
-  width: 90%;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-}
-
-.fieldset-contents {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-}
-
-.login-form legend {
-  width: 80%;
-  text-align: center;
-  margin: 4px;
-}
-
-.fieldset-container label {
-  width: 100%;
-  text-align: center;
-  margin: 4px;
-}
-
-.password-requirements {
-  display: none;
-  
-}
-
-.login-form .fieldset-container input {
-  text-align: center;
-  width: 100%;
-  padding: 4px;
-  text-align: center;
-}
-
-  .login-form input[type="submit"] {
-    width: 80%;
-    margin: 4px;
-  }
-
-.alert-area {
-  text-align: center;
-  margin: 4px;
-}
-
-.create-account-link {
-  margin: 0px;
-  padding: 0px;
-  font-size: 12px;
-}
-
-.password-requirements {
-  text-align: center;
-  font-style: italic;
-}
-
-.default-credentials {
-  text-align: center;
-}
-
-  .d-c-title {
-    text-decoration: underline;
-  }
-  
-  .d-c-label {
-    font-weight: bold;
-  }
 
 
 /* PAGE HEADER */
