@@ -1,6 +1,6 @@
 # Nonprofit Board Match MVP
 
-__[Preview current build (Heroku)](https://serene-chamber-93065.herokuapp.com)__
+__[Live demo of current build (Heroku)](https://serene-chamber-93065.herokuapp.com)__
 
 A platform for connecting service-oriented individuals with local non-profit
 organizations in search of board-level support.
@@ -77,7 +77,6 @@ complete, but incorporating only minimal CSS styling._
   * mLab
   * Travis-CI
   * Git(Hub)
-  * 
   
 ## Live Demo (current deployment)
 

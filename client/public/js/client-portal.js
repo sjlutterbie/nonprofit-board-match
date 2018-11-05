@@ -2,7 +2,7 @@
 
 /*
 Handles user interactions within the Portal, which loads once the user has 
-  authenticated, and created an individual profile.
+  authenticated, and has created an individual profile.
 */
 
 /* ==============
@@ -10,10 +10,11 @@ Handles user interactions within the Portal, which loads once the user has
    ============== */
   
 // Handle click on tabNavMenu: Profile link
+
 $('html').on('click', '.js-tabnavmenu-profile', function(e) {
   e.preventDefault();
 
-  // Execute request a promise
+  // Execute request (promise for async handling)
   loadIndProf(e, localStorage.JWT)
     .then(updateMain)
     .catch(handleError);
@@ -21,7 +22,7 @@ $('html').on('click', '.js-tabnavmenu-profile', function(e) {
 });  
 
   function loadIndProf(event, authToken) {
-    // Make an API call to /portal/components/indprof; return as promise
+    // Load Individual Profile View via GET call to /portal/components/indprof
 
     // Extract data from event, prepare to pass to GET request
     const data = {
@@ -39,6 +40,7 @@ $('html').on('click', '.js-tabnavmenu-profile', function(e) {
 
     const reqUrl = `/portal/components/indprof`;
     
+    // Create async request as Promise object    
     let promObj = new Promise(function(resolve, reject) {
       
       $.ajax({
@@ -52,14 +54,16 @@ $('html').on('click', '.js-tabnavmenu-profile', function(e) {
       
     });
     
+    // Return promise object
     return promObj;
   }
 
 // Handle click on tabNavMenu: Positions link
+
 $('html').on('click', '.js-tabnavmenu-positions', function(e) {
   e.preventDefault();
   
-  // Execute request as promise
+  // Execute request (promise for async handling)
   loadPositions(e, localStorage.JWT)
     .then(updateMain)
     .catch(handleError);
@@ -68,8 +72,8 @@ $('html').on('click', '.js-tabnavmenu-positions', function(e) {
 
 
   function loadPositions(event, authToken) {
-    // Make an API call to /portal/components/positions; return as promise
-  
+    // Load Positions View via GET call to /portal/components/positions
+
     // Create authentication headers
     const headersObj = {
       Authorization: `Bearer ${authToken}`,
@@ -83,7 +87,8 @@ $('html').on('click', '.js-tabnavmenu-positions', function(e) {
     };
     
     const reqUrl = `/portal/components/positions`;
-  
+    
+    // Create async request as Promise object  
     let promObj = new Promise(function(resolve, reject) {
       
       $.ajax({
@@ -97,15 +102,17 @@ $('html').on('click', '.js-tabnavmenu-positions', function(e) {
       
     });
     
+    // Return promise object
     return promObj;
 
   }
 
-// Handle click on tabNavMenu: Positions link
+// Handle click on tabNavMenu: Applications link
+
 $('html').on('click', '.js-tabnavmenu-applications', function(e) {
   e.preventDefault();
   
-  // Execute request as promise
+  // Execute request (promise for async handling)
   loadApplications(event, localStorage.JWT)
     .then(updateMain)
     .catch(handleError);
@@ -113,7 +120,7 @@ $('html').on('click', '.js-tabnavmenu-applications', function(e) {
 });
   
   function loadApplications(event, authToken) {
-    // Make an API call to /portal/components/positions; return as promise
+    // Load Applications view via GET call to /portal/components/positions
   
     // Create authentication headers
     const headersObj = {
@@ -129,7 +136,8 @@ $('html').on('click', '.js-tabnavmenu-applications', function(e) {
     };
     
     const reqUrl = `/portal/components/applications`;
-    
+
+    // Create async request as Promise object
     let promObj = new Promise(function(resolve, reject) {
       
       $.ajax({
@@ -143,6 +151,7 @@ $('html').on('click', '.js-tabnavmenu-applications', function(e) {
     
     });
     
+    // Return promise object
     return promObj;
 
   }
@@ -157,7 +166,7 @@ $('html').on('click', '.js-tabnavmenu-applications', function(e) {
 $('html').on('submit', '.js-indprof-create', function(e) {
   e.preventDefault();
   
-  // Execute request as a promise
+  // Execute request (promise for async handling)
   createIndProf(localStorage.JWT)
     .then(moveToPortal)
     .then(loadPortalSuccess)
@@ -166,7 +175,7 @@ $('html').on('submit', '.js-indprof-create', function(e) {
 });
 
   function createIndProf(authToken) {
-    // Create an indProf
+    // Create an indProf via POST call to /api/indprofs
 
     // Extract data from form
     const data = {
@@ -186,6 +195,7 @@ $('html').on('submit', '.js-indprof-create', function(e) {
     
     const reqUrl = "/api/indprofs";
     
+    // Create async request as Promise object
     let promObj = new Promise(function(resolve, reject) {
     
       $.ajax({
@@ -200,6 +210,7 @@ $('html').on('submit', '.js-indprof-create', function(e) {
       });
     });
     
+    // Return promise object
     return promObj;
   }
   
@@ -207,7 +218,7 @@ $('html').on('submit', '.js-indprof-create', function(e) {
 $('html').on('click', '.js-indprof-cancel', function(e) {
   e.preventDefault();  
   
-  // Execute request as promise
+  // Execute request (promise for async handling)
   cancelIndProfEdit(e, localStorage.JWT)
     .then(updateMain)
     .catch(handleError);
@@ -215,7 +226,9 @@ $('html').on('click', '.js-indprof-cancel', function(e) {
 });
 
   function cancelIndProfEdit(event, authToken) {
+    // Cancel editing, return to static view
     
+    // Extract data from current event
     const requestData = {
       userId: event.currentTarget.dataset.userid,
       profId: event.currentTarget.dataset.profid,
@@ -224,6 +237,7 @@ $('html').on('click', '.js-indprof-cancel', function(e) {
     
     const reqUrl = '/portal/components/indprof';
     
+    // Create async request as Promise object
     let promObj = new Promise(function(resolve, reject) {
       
       $.ajax({
@@ -237,17 +251,18 @@ $('html').on('click', '.js-indprof-cancel', function(e) {
         success: resolve,
         error: reject
       });
+      
     });
     
+    // Return promise object
     return promObj;
   }
   
 // Handle click on "Submit" on edit indProf form.
-  
 $('html').on('submit', '.js-indprof-edit', function(e) {
   e.preventDefault();
   
-  // Execute request as promise
+  // Execute request (promise for asynch handling)
   editIndProf(localStorage.JWT)
     .then(moveToPortal) // Also a promise function
     .then(loadPortalSuccess)
@@ -256,7 +271,7 @@ $('html').on('submit', '.js-indprof-edit', function(e) {
 });
 
   function editIndProf(authToken) {
-    // Create an indProf
+    // Edit an existing individual profile via PUT call to /api/indprofs/:id
 
     // Extract data from form
     const data = {
@@ -277,6 +292,7 @@ $('html').on('submit', '.js-indprof-edit', function(e) {
     
     const reqUrl = `/api/indprofs/${data.indProfId}`;
     
+    // Create async request as Promise object
     let promObj = new Promise(function(resolve, reject) {
       
       $.ajax({
@@ -289,8 +305,10 @@ $('html').on('submit', '.js-indprof-edit', function(e) {
         success: resolve,
         error: reject
       });
+      
     });
     
+    // Return promise object
     return promObj;
   }
   
@@ -304,7 +322,8 @@ $('html').on('click', '.js-application-cancel', function(e){
   // Clear the form
   $(`div[data-posid="${posId}"]`)
     .find('.application-view').html('');
-    
+  
+  // Reset the DOM  
   toggleApplicationButton(posId);
 
 });
@@ -313,9 +332,11 @@ $('html').on('click', '.js-application-cancel', function(e){
 $('html').on('submit', '.js-application-create', function(e){
   e.preventDefault();
   
+  // Collect information from current event
   const posId = e.currentTarget.dataset.posid;
   const profId = e.currentTarget.dataset.profid;
   
+  // Compile form data
   const formData = {
     coverMessage:
       $(`form[data-posid="${posId}"] input[name="covermessage"]`).val(),
@@ -324,10 +345,11 @@ $('html').on('submit', '.js-application-create', function(e){
     indProf: profId
   };
 
+  // Execute request (promise for async)
   submitApplication(formData, localStorage.JWT)
     .then(function(res) {
       const appId = res._id;
-      handlePosViewAppClick(res._id, posId,localStorage.JWT)
+      handlePosViewAppClick(res._id, posId,localStorage.JWT) // Returns promise
         .then(res => {
           updatePosAppView(res, posId);
           // Update class of 'View app' button
@@ -342,10 +364,11 @@ $('html').on('submit', '.js-application-create', function(e){
 });
 
   function submitApplication(formData, authToken) {
+    // Submit application via POST call to /api/applications
     
     const reqUrl = '/api/applications';
     
-      // Submit form (promise action to data API)
+    // Create async request as promise object
     const promObj = new Promise(function(resolve, reject){
       
       $.ajax({
@@ -361,8 +384,10 @@ $('html').on('submit', '.js-application-create', function(e){
         success: resolve,
         error: reject
       });
+
     });
 
+    // Return promise object
     return promObj;
     
   }
@@ -372,10 +397,11 @@ $('html').on('submit', '.js-application-create', function(e){
    = BUTTONS =
    =========== */
 
+// Handle click on 'Edit profile' button
 $('html').on('click', '.js-edit-indprof', function(e) {
   e.preventDefault();
   
-  // Execute request as promise
+  // Execute request (promise for async)
   handleEditIndProfClick(e, localStorage.JWT)
     .then(updateMain)
     .catch(handleError);
@@ -383,7 +409,9 @@ $('html').on('click', '.js-edit-indprof', function(e) {
 });
 
   function handleEditIndProfClick(event, authToken) {
+    // Switch from individual profile "staticMode" to "editMode" 
     
+    // Collect data from current event
     const requestData = {
       userId: event.currentTarget.dataset.userid,
       profId: event.currentTarget.dataset.profid,
@@ -392,6 +420,7 @@ $('html').on('click', '.js-edit-indprof', function(e) {
     
     const reqUrl = '/portal/components/indprof';
     
+    // Create async request as promise object
     let promObj = new Promise(function(resolve, reject) {
     
       $.ajax({
@@ -407,14 +436,15 @@ $('html').on('click', '.js-edit-indprof', function(e) {
       });
     });
     
+    // Return promise object
     return promObj;
   }
   
-// The [Apply | View Application] button on Position cards
+// Handle Application display toggle button on Position cards
 $('html').on('click', '.js-position-app-handler', function(e) {
   e.preventDefault();
   
-  // Extract posId
+  // Collect data from current event
   const posId = e.currentTarget.dataset.posid;
   const profId = e.currentTarget.dataset.profid;
   
@@ -423,6 +453,8 @@ $('html').on('click', '.js-position-app-handler', function(e) {
   
   if (view === 'apply') {
     // Application submission form
+    
+    // Execute request (promise for async)
     handlePosApplyClick(posId, profId, localStorage.JWT)
       .then(res => {
         updatePosAppView(res, posId);
@@ -433,9 +465,9 @@ $('html').on('click', '.js-position-app-handler', function(e) {
   
   if (view === 'viewapp') {
     // Static application view
-    
     const appId = e.currentTarget.dataset.appid;
     
+    // Execute request (promise for async)
     handlePosViewAppClick(appId, posId, localStorage.JWT)
       .then(res => {
         updatePosAppView(res, posId);
@@ -447,6 +479,8 @@ $('html').on('click', '.js-position-app-handler', function(e) {
 });
 
   function handlePosApplyClick(posId, profId, authToken) {
+    // Load Application form via GET call to
+    //  /portal/components/applications/apply
 
     // Identify position ID clicked.
     const requestData = {
@@ -456,6 +490,7 @@ $('html').on('click', '.js-position-app-handler', function(e) {
     
     const reqUrl = '/portal/components/applications/apply';
     
+    // Create async request as promise object
     let promObj = new Promise(function(resolve, reject) {
       
       $.ajax({
@@ -472,11 +507,14 @@ $('html').on('click', '.js-position-app-handler', function(e) {
       
     });
     
+    // Return promise object
     return promObj;
     
   }
   
   function handlePosViewAppClick(appId, posId, authToken) {
+    // Load Application static view via GET call to
+    //  /portal/components/applications/viewapp/:id
     
     const reqUrl = `/portal/components/applications/viewapp/${appId}`;
     
@@ -484,6 +522,7 @@ $('html').on('click', '.js-position-app-handler', function(e) {
       posId: posId
     };
     
+    // Create async request as promise object
     let promObj = new Promise(function(resolve, reject) {
       
       $.ajax({
@@ -500,6 +539,7 @@ $('html').on('click', '.js-position-app-handler', function(e) {
       
     });
     
+    // Return promise object
     return promObj;
     
   }
@@ -525,6 +565,7 @@ $('html').on('click', '.js-application-withdraw', function(e) {
   const appId = e.currentTarget.dataset.appid;
   const posId = e.currentTarget.dataset.posid;
   
+  // Execute request (promise for async)
   deleteApplication(appId, localStorage.JWT)
     .then(function(res) {
       // Clear application view
@@ -539,9 +580,11 @@ $('html').on('click', '.js-application-withdraw', function(e) {
 });
 
   function deleteApplication(appId, authToken) {
+    // Remove Application via DELETE call to /api/applications/:id
     
     const reqUrl = `/api/applications/${appId}`;
     
+    // Create async request as promise object
     let promObj = new Promise(function(resolve, reject) {
       
       $.ajax({
@@ -557,22 +600,16 @@ $('html').on('click', '.js-application-withdraw', function(e) {
 
     });
     
+    // Return promise object
     return promObj;
     
   }
-
-
-  
-  
-  
 
 /* ====================
    = HELPER FUNCTIONS =
    ==================== */
 
 function updateMain(content) {
-  // Update the <main> element of the Portal. Converted to a function for
-  //  testability.
   
   $('main').html(content);
   
@@ -593,6 +630,8 @@ function toggleApplicationButton(posId) {
 }
 
 function determineAppButtonAction(button) {
+  // Determines which API call to make in response to a click on the
+  //  [Apply | View Application] button
   
   if($(button).hasClass('apply')) {
     return 'apply';
@@ -605,6 +644,7 @@ function determineAppButtonAction(button) {
 
 function updateAppViewApplyButton(posId, text, cssClass, appId) {
   // Sets the text, and class of the [Apply | View Application] button
+  
   $(`button.js-position-app-handler[data-posid="${posId}"]`)
     .text(text)
     // Reset CSS classes
@@ -614,7 +654,6 @@ function updateAppViewApplyButton(posId, text, cssClass, appId) {
     .addClass(cssClass)
     .attr('data-appid', appId);
     
-  
 }
 
 function handleError(err) {
@@ -626,6 +665,7 @@ function handleError(err) {
 
 
 function moveToPortal(res, authToken) {
+  // Load portal view via GET call to /portal
 
   const reqUrl = '/portal';
   
@@ -633,8 +673,9 @@ function moveToPortal(res, authToken) {
     userType: 'individual',
     userId: res.userAccount,
     profId: res._id
-  }
+  };
   
+  // Create async request as promise object
   let promObj = new Promise(function(resolve, reject) {
   
     $.ajax({
@@ -650,6 +691,7 @@ function moveToPortal(res, authToken) {
     });
   });
 
+  // Return promise object
   return promObj;  
 }
   
@@ -663,13 +705,9 @@ function moveToPortal(res, authToken) {
     // Update CSS
     $('.content-wrapper').removeClass('login-wrapper');
 
-    // For testing purposes
-    return res;
-    
   }
 
-
-// Make available as module for testing
+// Make available as module for testing purposes
 
 try {
   module.exports = {
