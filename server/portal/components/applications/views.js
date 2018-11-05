@@ -32,7 +32,6 @@ function createMode(posId, profId) {
           </label>
           <input type="button" class="js-application-cancel"
                  data-posid="${posId}" value="Cancel">
-          <input type="reset" value="Reset">
           <input type="submit" class="js-application-submit"
                  data-posid="${posId}" value="Submit">
         </fieldset>

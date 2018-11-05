@@ -47,7 +47,6 @@ function editMode(userData) {
                  data-profid="${userData._id}"
                  data-userid="${userData.userAccount}"
                  value="Cancel">
-          <input type="reset" value="Reset">
           <input type="submit" class="js-indprof-submit"
                  data-profid="${userData._id}"
                  value="Submit">
