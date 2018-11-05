@@ -246,27 +246,32 @@ main {
       font-weight: bold;
     }
   
-
-/* ========================================================================== */
-
-
-/* PAGE HEADER */
-
-header {
-  width: 100%;
-  padding: 8px;
-  background: #eee; /* TEMP FOR DESIGN PURPOSES */
-}
-
-.header-nav {
-  background: #ddd; /* TEMP FOR DESIGN PURPOSES */
-}
-
-/* SIDEBAR */
-
-.tab-nav {
-  padding: 8px;
-  background: #ccc; /* TEMP FOR DESIGN PURPOSES */
-  width: 100%;
-}
-
+  /* PAGE HEADER */
+  
+  header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 8px;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+  }
+  
+  .header-nav a {
+    color: var(--secondary-color);
+  }
+    
+    .header-nav a:visited {
+      color: var(--secondary-color);
+    }
+  
+  /* SIDEBAR */
+  
+  .tab-nav {
+    padding: 8px;
+    background: #ccc; /* TEMP FOR DESIGN PURPOSES */
+    width: 100%;
+  }
+  
