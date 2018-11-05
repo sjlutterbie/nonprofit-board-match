@@ -27,7 +27,9 @@ function createMode(posId, profId) {
             data-profid="${profId}">
         <fieldset>
           <legend>Apply with a cover message</legend>
-          <input type="textarea" name="covermessage" required>
+          <label for="covermessage">Cover message
+            <input type="textarea" name="covermessage" required>
+          </label>
           <input type="button" class="js-application-cancel"
                  data-posid="${posId}" value="Cancel">
           <input type="reset" value="Reset">

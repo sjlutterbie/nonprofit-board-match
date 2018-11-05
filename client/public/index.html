@@ -24,19 +24,23 @@
         <h1>Welcome to BoardMatch</h1>
         <p class="dev-notice">Note: This landing page used for development purposes.</p>
         <form class="login-form js-login-form">
+          <div class="fieldset-container">
             <fieldset>
-            <legend class="login-form-heading js-login-form-heading">Log In</legend>
-            <label>Username
-              <input type="text" name="username" required>
-            </label>
-            <label>Password
-              <input type="password" name="password" required>
-            </label>
-            <label class="js-repeat-password" hidden>Repeat password
-              <input type="password" name="password-repeat">
-            </label>
-            <input type="submit" value="Log in" name="login-submit" class="js-login-submit">
-          </fieldset>
+              <div class="fieldset-contents">
+                <legend class="login-form-heading js-login-form-heading">Log In</legend>
+                <label for="username">Username
+                  <input type="text" name="username" required>
+                </label>
+                <label for="password">Password
+                  <input type="password" name="password" required>
+                </label>
+                <label for="password-repeat" class="js-repeat-password" hidden>Repeat password
+                  <input type="password" name="password-repeat">
+                </label>
+                <input type="submit" value="Log in" name="login-submit" class="js-login-submit">
+              </div>
+            </fieldset>
+          </div>
         </form>
         <p class="alert-area"></p>
         <a href="#" class="create-account-link js-create-account-link login">Create account</a>
