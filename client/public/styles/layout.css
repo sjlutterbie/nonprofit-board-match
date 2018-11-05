@@ -90,6 +90,7 @@ main {
 }
 
 .login-form .fieldset-container input {
+  text-align: center;
   width: 100%;
   padding: 4px;
   text-align: center;

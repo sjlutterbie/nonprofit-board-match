@@ -1,10 +1,16 @@
 'use strict';
 
+// Date formatting
+const moment = require('moment');
+
 function staticMode(application, posId) {
   
   const outputHTML = `
     <div class="application-content">
       <h3>Cover message</h3>
+      <h4>
+        Submitted: ${moment(application.dateCreated).format('MMM D, YYYY')}
+      </h4>
       <p>${application.coverMessage}</p>
       <button class="js-application-withdraw"
               data-appid="${application._id}"
