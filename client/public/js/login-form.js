@@ -205,10 +205,7 @@ function logInUser() {
   
     function loadContentFailure(res) {
       
-    // TODO: Implement error handling that doesn't interfere with user
-    //  journey.
-      
-      $('html').html(`${res.status}: ${res.responseText}`);
+      $('.alert-area').html(`${res.status}: ${res.responseText}`);
       
       // For testing purposes
       return res;
@@ -287,6 +284,15 @@ function logInUser() {
       return;
       
     }
+    
+// Clear alerts once user clicks an element on the page
+
+$('html').on('click', document.body, function(e) {
+  
+  // Clear the alert area
+  $('.alert-area').html('');
+
+});
 
 ////////////////////////////////////////////////////////////////////////////////
 

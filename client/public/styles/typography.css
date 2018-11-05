@@ -26,3 +26,8 @@ p {
   font-size: 12px;
   line-height: 16px;
 }
+
+.alert-area {
+  color: #f00;
+  font-weight: bold;
+}
