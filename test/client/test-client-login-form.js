@@ -10,7 +10,7 @@ global.$ = require('jquery')(window);
 require('dotenv').config();
 const lF = require('../../client/public/js/login-form');
 
-describe('Login form JS', function() {
+describe.only('Login form JS', function() {
   
   describe('User Interactions', function() {
     
@@ -34,6 +34,7 @@ describe('Login form JS', function() {
              <input type="text" class="js-repeat-password"
                     name="password-repeat" style="display: none;"></input>
              <input type="submit" value="Log In" class="js-login-submit"></input>
+             <p class="js-password-requirements"></p>
              <a class="js-create-account-link">Create Account</a>
           `);  
           // Create the 'event' object;
@@ -46,6 +47,7 @@ describe('Login form JS', function() {
           expect(e.preventDefault.called).to.equal(true);
           expect($('.js-login-form').hasClass('create-account')).to.equal(true);
           expect($('.js-login-form-heading').text()).to.equal('Create Account');
+          expect($('.js-password-requirements').css('display')).to.equal('block');
           expect($('.js-repeat-password').css('display')).to.equal('inline-block');
           expect($('.js-repeat-password').prop('required')).to.equal(true);
           expect($('.js-login-submit').val()).to.equal('Create Account');
@@ -62,6 +64,7 @@ describe('Login form JS', function() {
              <input type="text" class="js-repeat-password"
                     name="password-repeat" style="display: block;" required></input>
              <input type="submit" value="Create Account" class="js-login-submit"></input>
+             <p class="js-password-requirements"></p>
              <a class="js-create-account-link">Log In</a>
           `);  
           // Create the 'event' object
@@ -74,6 +77,7 @@ describe('Login form JS', function() {
           expect(e.preventDefault.called).to.equal(true);
           expect($('.js-login-form').hasClass('create-account')).to.equal(false);
           expect($('.js-login-form-heading').text()).to.equal('Log In');
+          expect($('.js-password-requirements').css('display')).to.equal('none');
           expect($('.js-repeat-password').css('display')).to.equal('none');
           expect($('.js-repeat-password').prop('required')).to.equal(false);
           expect($('.js-login-submit').val()).to.equal('Log In');
@@ -225,7 +229,9 @@ describe('Login form JS', function() {
         });
         it('Should manipulate the DOM as expected', function() {
           // Create test DOM
-          $('body').html('');
+          $('body').html(`
+            <div class="alert-area"></div>
+          `);
           // Create test res object
           const res = {
             status: faker.random.alphaNumeric(10),
@@ -233,7 +239,7 @@ describe('Login form JS', function() {
           };
           // Run test
           lF.loadContentFailure(res);
-          expect($('html').text()).to.equal(`${res.status}: ${res.responseText}`);
+          expect($('html').text().trim()).to.equal(`${res.status}: ${res.responseText}`);
           // Reset test DOM
           $('body').html('');
         });

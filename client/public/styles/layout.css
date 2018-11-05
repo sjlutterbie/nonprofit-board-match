@@ -49,7 +49,7 @@ main {
   justify-content: space-around;
   flex-grow: 0;
   height: 80%;
-    max-height: 400px;
+    max-height: 450px;
   width: 80%;
     max-width: 300px;
 }
@@ -84,9 +84,15 @@ main {
   margin: 4px;
 }
 
+.password-requirements {
+  display: none;
+  
+}
+
 .login-form .fieldset-container input {
   width: 100%;
   padding: 4px;
+  text-align: center;
 }
 
   .login-form input[type="submit"] {
@@ -94,10 +100,20 @@ main {
     margin: 4px;
   }
 
+.alert-area {
+  text-align: center;
+  margin: 4px;
+}
+
 .create-account-link {
   margin: 0px;
   padding: 0px;
   font-size: 12px;
+}
+
+.password-requirements {
+  text-align: center;
+  font-style: italic;
 }
 
 .default-credentials {

@@ -21,6 +21,7 @@ $('html').on('click', '.js-create-account-link', e =>
       // Convert 'Log In' -> 'CreateAccount'
       $('.js-login-form').addClass('create-account');
       $('.js-login-form-heading').text('Create Account');
+      $('.js-password-requirements').css('display', 'block');
       $('.js-repeat-password').show();
       $('input[name="password-repeat"]').attr('required', true);
       $('.js-login-submit').val('Create Account');
@@ -29,6 +30,7 @@ $('html').on('click', '.js-create-account-link', e =>
       // Convert 'Create Account' -> 'Log In'
       $('.js-login-form').removeClass('create-account');
       $('.js-login-form-heading').text('Log In');
+      $('.js-password-requirements').css('display', 'none');
       $('.js-repeat-password').hide();
       $('input[name="password-repeat"]').attr('required', false);
       $('.js-login-submit').val('Log In')
@@ -205,7 +207,7 @@ function logInUser() {
   
     function loadContentFailure(res) {
       
-      $('.alert-area').html(`${res.status}: ${res.responseText}`);
+      $('.alert-area').html(`${res.status}: ${res.responseText}`.trim());
       
       // For testing purposes
       return res;
@@ -287,7 +289,7 @@ function logInUser() {
     
 // Clear alerts once user clicks an element on the page
 
-$('html').on('click', document.body, function(e) {
+$('html').on('click', 'body', function(e) {
   
   // Clear the alert area
   $('.alert-area').html('');
