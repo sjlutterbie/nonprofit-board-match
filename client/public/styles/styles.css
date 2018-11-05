@@ -259,6 +259,15 @@ main {
     color: var(--secondary-color);
   }
   
+  .header-nav ul {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  .header-nav li {
+    padding: 4px;
+  }
+  
   .header-nav a {
     color: var(--secondary-color);
   }
@@ -267,11 +276,28 @@ main {
       color: var(--secondary-color);
     }
   
-  /* SIDEBAR */
+  /* TAB NAV */
   
   .tab-nav {
-    padding: 8px;
-    background: #ccc; /* TEMP FOR DESIGN PURPOSES */
+    background: var(--secondary-color);
     width: 100%;
+  }
+  
+  .tab-nav ul{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .tab-nav li {
+    padding: 8px;
+    text-align: center;
+    flex-grow: 1;
+  }
+  
+  .tab-nav a, tab-nav a:visited {
+    color: var(--primary-color);
+    text-decoration: none;
   }
   
