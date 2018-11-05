@@ -33,7 +33,7 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
 
 // GET all applications associated with an individual profile
 
-router.get('/:id/apps', (req, res) => {
+router.get('/:id/apps', jwtAuth, (req, res) => {
   
   const indProf = req.params.id;
 

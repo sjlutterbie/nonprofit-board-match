@@ -4,7 +4,7 @@
 // Load required components
 const {indProfSchema, IndProf} = require('../../server/api/indProf');
 
-describe.only('IndProf API', function() {
+describe('IndProf API', function() {
   
   describe('Data model', function() {
   
