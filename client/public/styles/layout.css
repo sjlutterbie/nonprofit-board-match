@@ -59,21 +59,33 @@ main {
   font-style: italic;
 }
 
-.login-form {
+.login-form, .fieldset-container {
+  width: 90%;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
 }
 
-.login-form label {
+.fieldset-contents {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.login-form legend {
   width: 80%;
   text-align: center;
   margin: 4px;
 }
 
-.login-form input {
+.fieldset-container label {
   width: 100%;
   text-align: center;
+  margin: 4px;
+}
+
+.login-form .fieldset-container input {
+  width: 100%;
   padding: 4px;
 }
 
