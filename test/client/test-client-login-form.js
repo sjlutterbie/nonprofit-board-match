@@ -10,7 +10,7 @@ global.$ = require('jquery')(window);
 require('dotenv').config();
 const lF = require('../../client/public/js/login-form');
 
-describe.only('Login form JS', function() {
+describe('Login form JS', function() {
   
   describe('User Interactions', function() {
     
