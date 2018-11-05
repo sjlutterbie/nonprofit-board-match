@@ -1,11 +1,11 @@
 'use strict';
 
-const { staticMode, createMode } = require('./views');
-const { getApplicationPromise } = require('./controllers');
+const { staticMode, createMode, listMode } = require('./views');
+const { getApplicationPromise, getIndProfAppsPromise } = require('./controllers');
 const { router } = require('./router');
 
 module.exports = {
-  staticMode, createMode,
-  getApplicationPromise,
+  staticMode, createMode, listMode,
+  getApplicationPromise,getIndProfAppsPromise,
   router
 };
