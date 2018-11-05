@@ -15,9 +15,8 @@ const views = require('./views');
 const ctrls = require('./controllers');
 
 const { User } = require('../../../api/users');
-const { IndProf } = require('../../../api/indProf')
-
-
+const { IndProf } = require('../../../api/indProf');
+const pos = require('../positions');
 
 
 // GET /apply - Return an Application createMode form
@@ -51,6 +50,30 @@ router.get('/viewapp/:id', jwtAuth, (req, res) => {
   );
 
 });
+
+// GET /apps/:id Return all applications for a specified indProf
+
+router.get('/apps/:id', jwtAuth, (req, res) => {
+  
+  const indProfId = req.params.id;
+  
+  let ApplicationPromise = ctrls.getIndProfAppsPromise(indProfId);
+  
+  ApplicationPromise.then(
+    function(apps) {
+      
+      return res.status(200).send(views.listMode(apps, indProfId));
+    },
+    function(err) {
+      return err;
+    }
+  );
+  
+  
+
+});
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 

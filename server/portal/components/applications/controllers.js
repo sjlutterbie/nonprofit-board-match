@@ -14,6 +14,25 @@ function getApplicationPromise(appId) {
 
 }
 
+function getIndProfAppsPromise(indProfId) {
+  
+  let query = Application.find({indProf: indProfId})
+    .populate(
+      {
+        path: 'position',
+        populate: { path: 'orgProf' }
+      }
+      );
+  
+  let promObj = query.exec();
+  
+  return promObj;
+  
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
 module.exports = {
-  getApplicationPromise
+  getApplicationPromise, getIndProfAppsPromise
 };

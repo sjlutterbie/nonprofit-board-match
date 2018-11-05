@@ -113,14 +113,14 @@ $('html').on('click', '.js-tabnavmenu-applications', function(e) {
   e.preventDefault();
   
   // Execute request (promise for async handling)
-  loadApplications(event, localStorage.JWT)
+  loadApplications(e, localStorage.JWT)
     .then(updateMain)
     .catch(handleError);
   
 });
   
   function loadApplications(event, authToken) {
-    // Load Applications view via GET call to /portal/components/positions
+    // Load Applications view via GET call to /portal/components/applications/apps/:id
   
     // Create authentication headers
     const headersObj = {
@@ -135,7 +135,7 @@ $('html').on('click', '.js-tabnavmenu-applications', function(e) {
       profId: event.currentTarget.dataset.profid
     };
     
-    const reqUrl = `/portal/components/applications`;
+    const reqUrl = `/portal/components/applications/apps/${data.profId}`;
 
     // Create async request as Promise object
     let promObj = new Promise(function(resolve, reject) {
@@ -144,7 +144,6 @@ $('html').on('click', '.js-tabnavmenu-applications', function(e) {
         url: reqUrl,
         type: 'GET',
         headers: headersObj,
-        data: data,
         success: resolve,
         error: reject
       });

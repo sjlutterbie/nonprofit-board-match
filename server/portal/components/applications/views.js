@@ -2,6 +2,7 @@
 
 // Date formatting
 const moment = require('moment');
+const positions = require('../positions');
 
 function staticMode(application, posId) {
   
@@ -49,9 +50,45 @@ function createMode(posId, profId) {
   
 }
 
+function listMode(apps, profId) {
+  
+  // Use positions.view.makeStaticPosition to avoid duplicate HTML
+  
+  let outputHtml = '';
+  
+  apps.forEach(function(application) {
+
+    outputHtml += `
+      <div class="card">
+        <div class="position" data-posid="${application.position._id}">
+          <h2>${application.position.title}</h2>
+          <h3>${application.position.orgProf.name}</h3>
+          <h4>
+            Date created: ${moment(application.position.dateCreated)
+                                              .format('MMM D, YYYY')}
+          </h4>
+          <p>${application.position.description}</p>
+          <div class="application-container">
+            <div class="application-view"></div>
+            <div class="application-view-controls">
+              <button class="js-position-app-handler viewapp"
+                      data-appid="${application._id}"
+                      data-posid="${application.position._id}"
+                      data-profid="${profId}">View Application</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+  });
+
+  return outputHtml;
+  
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
-  staticMode, createMode
+  staticMode, createMode, listMode
 };
