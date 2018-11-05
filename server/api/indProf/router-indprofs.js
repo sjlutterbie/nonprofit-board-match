@@ -31,6 +31,30 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
     );
 });
 
+// GET all applications associated with an individual profile
+
+router.get('/:id/apps', (req, res) => {
+  
+  const indProf = req.params.id;
+
+  let promObj = IndProf.findById(indProf);
+  
+  promObj.exec()
+    .then(function(prof) {
+      res.status(200).send(prof);
+    })
+    .catch(function(err){
+      // Couldn't find profile
+      return res.status(422).json({
+        code: 422,
+        reason: 'ValidationError',
+        message: 'Invalid profile ID',
+        location: indProf
+      });
+    });
+  
+});
+
 // PUT (update) an individual profile
 
 router.put('/:id', jsonParser, jwtAuth, (req, res) => {
@@ -187,6 +211,10 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
   });
 
 });
+
+
+
+
   
 module.exports = {
   router

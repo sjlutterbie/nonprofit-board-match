@@ -4,7 +4,7 @@
 // Load required components
 const {indProfSchema, IndProf} = require('../../server/api/indProf');
 
-describe('IndProf API', function() {
+describe.only('IndProf API', function() {
   
   describe('Data model', function() {
   
@@ -82,6 +82,39 @@ describe('IndProf API', function() {
           }
         );
       });
+    });
+    
+    describe('GET /api/indprofs/:id/apps', function() {
+      
+      let testUrl = `/api/indprofs/foo/apps`;
+      
+      it('Should reject requests with no JWT', function() {
+        return chai.request(app)
+          .get(testUrl)
+          .then(function(res) {
+            expect(res).to.have.status(401);
+          });
+      });
+
+      it('Should reject users with an incorrect JWT', function() {
+        return chai.request(app)
+          .get(testUrl)
+          .set('authorization', `Bearer ${token}XX`)
+          .then(function(res) {
+            expect(res).to.have.status(401);
+          }
+        );
+      });
+      
+      it('Should reject user with an expired token', function() {
+        return chai.request(app)
+          .get(testUrl)
+          .set('authorization', `Bearer ${expiredToken}`)
+          .then(function(res) {
+            expect(res).to.have.status(401);
+          });
+      });
+      
     });
     
     describe('POST /api/indprofs', function() {

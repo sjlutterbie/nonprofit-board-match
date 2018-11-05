@@ -16,6 +16,11 @@ function getApplicationPromise(appId) {
 
 function getIndProfAppsPromise(indProfId) {
   
+  // A better route for this would be to go through indProf, and collect all
+  //  the applications associated with the indProf. Then, I can run a similar
+  //  view building route. I *think* this will be closer to the truth than
+  //  the current data I'm receiving.
+  
   let query = Application.find({indProf: indProfId})
     .populate(
       {
