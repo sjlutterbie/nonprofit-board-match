@@ -21,6 +21,7 @@
 
 body {
   font-family: 'Montserrat', 'Roboto', 'San Francisco', sans-serif;
+  color: var(--primary-dark);
 }
 
 h1 {
@@ -97,7 +98,6 @@ main {
     background-color: var(--primary-color);
     color: var(--secondary-color);
     border: none;
-    font-weight: bold;
     padding: 8px;
   }
 
@@ -212,10 +212,15 @@ main {
     }
     
     .login-form input[type="submit"] {
-      background-color: var(--secondary-light);
-      color: var(--on-secondary-light);
+      background-color: var(--secondary-color);
+      color: var(--on-secondary-color);
+      border: 2px solid var(--secondary-dark);
       width: 80%;
       margin: 4px;
+    }
+    
+    .login-form input[type="submit"]:hover {
+      background-color: var(--secondary-dark);
     }
 
     .login-box a {
@@ -235,10 +240,11 @@ main {
   }
 
   
-  .login-form .alert-area {
+  .alert-area {
     text-align: center;
     margin: 4px;
-    color: #f00;
+    color: var(--secondary-light);
+    font-size: 14px;
     font-weight: bold;
   }
   
