@@ -150,6 +150,16 @@ function staticMode(userData) {
               data-userid="${userData.userAccount}"
               data-profid="${userData._id}">Edit profile</button>
     </div>
+    
+    <div class="card profile-card">
+      <h2>LinkedIn Details</h2>
+      <h3>Coming soon!</h3>
+    </div>
+    
+    <div class="card profile-card">
+      <h2>Service experience</h2>
+      <h3>Coming soon!</h3>
+    </div>
   `;  
   
   return outputHTML;
