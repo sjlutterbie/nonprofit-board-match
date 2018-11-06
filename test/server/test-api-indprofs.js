@@ -4,7 +4,7 @@
 // Load required components
 const {indProfSchema, IndProf} = require('../../server/api/indProf');
 
-describe.only('IndProf API', function() {
+describe('IndProf API', function() {
   
   describe('Data model', function() {
   
@@ -84,7 +84,7 @@ describe.only('IndProf API', function() {
       });
     });
     
-    describe('GET /api/indprofs/:id/apps', function() {
+    describe.skip('GET /api/indprofs/:id/apps', function() {
       
       let testUrl = `/api/indprofs/foo/apps`;
       

@@ -4,7 +4,7 @@
 // Load required components
 const apps = require('../../server/portal/components/applications');
 
-describe.only('Component: applications', function() {
+describe('Component: applications', function() {
   
   describe('Controllers', function() {
     
