@@ -24,6 +24,10 @@ body {
   color: var(--primary-dark);
 }
 
+h1, h2, h3, h4 {
+  line-height: 1.5;
+}
+
 h1 {
   font-family: 'Slabo 27px', serif;
   font-size: 27px;
@@ -47,7 +51,8 @@ h4 {
 
 p {
   font-size: 14px;
-  line-height: 16px;
+  line-height: 1.25;
+  padding-bottom: 8px;
 }
 
 /* LAYOUT DEFAULTS */
@@ -99,6 +104,21 @@ main {
     color: var(--on-primary-color);
     border: none;
     padding: 8px;
+  }
+  
+  .button-primary {
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+  }
+  
+  .button-secondary {
+    background-color: var(--secondary-color);
+    color: var(--on-secondary-color);
+  }
+  
+  .label {
+    font-weight: bold;
+    color: var(--primary-color);
   }
 
   /* FORM COMPONENTS */
@@ -201,6 +221,7 @@ main {
     }
     
       .fieldset-container {
+        width: 100%;
         height: 100%;
       }
       
@@ -257,10 +278,11 @@ main {
       
   .fieldset-contents {
     height: 100%;
+    width: 100%;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center; /* space-between; */
   }
 
   
@@ -437,11 +459,12 @@ main {
     padding: 8px 4px;
   }
   
-  .contact-info .label {
+/*
+.contact-info .label {
     font-weight: bold;
     color: var(--primary-color);
   }
-
+*/
   .profile-card button {
     margin: auto;
   }
@@ -493,3 +516,49 @@ main {
   padding-bottom: 8px;
 }
 
+/* POSITIONS VIEW */
+
+  /* Application */
+  
+  .application-content {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border: 1px solid var(--secondary-color);
+    padding: 8px;
+  }
+  
+  .application-content h2 {
+    text-align: center;
+  }
+  
+  .application-form-wrapper form {
+    width: 100%;
+  }
+  
+  .application-form-wrapper fieldset {
+    width: 100%;
+  }
+
+  .application-form-wrapper legend, 
+  .application-form-wrapper label{
+    padding-bottom: 8px;
+    width: 100%;
+    text-align: center;
+    line-height: 1.5;
+  }
+  
+  .application-form-wrapper textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--primary-color);
+    background-color: var(--secondary-light);
+    color: var(--on-secondary-light);
+    padding: 4px;
+  }
+  
+  .static-covermessage {
+    padding-bottom: 8px;
+  }

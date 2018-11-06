@@ -354,10 +354,15 @@ $('html').on('submit', '.js-application-create', function(e){
   const posId = e.currentTarget.dataset.posid;
   const profId = e.currentTarget.dataset.profid;
   
+  // Convert linebreaks to HTML
+  const coverMessage = 
+    $(`form[data-posid="${posId}"] textarea[name="covermessage"]`)
+      .val().replace(/\n/g, "<br />");
+
+  
   // Compile form data
   const formData = {
-    coverMessage:
-      $(`form[data-posid="${posId}"] input[name="covermessage"]`).val(),
+    coverMessage: coverMessage,
     applicationDate: new Date(),
     position: posId,
     indProf: profId
@@ -587,7 +592,8 @@ $('html').on('click', '.js-application-withdraw', function(e) {
   deleteApplication(appId, localStorage.JWT)
     .then(function(res) {
       // Clear application view
-      $(`.position[data-posid="${posId}"]`).find('.application-content').html('');
+      $(`.position[data-posid="${posId}"]`).find('.application-content')
+        .html('').toggle();
       // Update Apply button
       updateAppViewApplyButton(posId,'Apply', 'apply', '');
       // Toggle button

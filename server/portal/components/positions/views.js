@@ -46,12 +46,12 @@ function staticMode(positions, profId) {
 
   
     const outputHtml = `
-      <div class="card">
+      <div class="card position-card">
         <div class="position" data-posid="${position._id}">
           <h2>${position.title}</h2>
           <h3>${position.orgProf.name}</h3>
           <h4>
-            Date created: ${moment(position.dateCreated).format('MMM D, YYYY')}
+            <span class="label">Date created:</span> ${moment(position.dateCreated).format('MMM D, YYYY')}
           </h4>
           <p>${position.description}</p>
           <div class="application-container">
