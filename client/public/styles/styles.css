@@ -534,11 +534,21 @@ main {
   padding-bottom: 8px;
 }
 
+.indprof-edit input[type="text"],
+.indprof-edit input[type="email"],
+.indprof-edit input[type="url"] {
+  margin-left: 4px;
+}
+
 .indprof-edit legend {
   width: 80%;
   text-align: center;
   padding-bottom: 8px;
 }
+
+  .indprof-create-buttons {
+    justify-content: center;
+  }
 
 /* POSITIONS VIEW */
 

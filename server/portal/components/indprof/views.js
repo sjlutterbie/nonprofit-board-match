@@ -79,11 +79,12 @@ function createMode(userData) {
   //  form with the associated userId, for cross-referencing
   
   let outputHTML = `
-    <div class="card">
-      <p>This is an HTML snippet (editable in component-indProf.js) that will
-         welcome a new user to the system, and instruct them to create their
-         individual profile to get started.</p>
-      <form class="js-indprof-create">
+    <div class="card edit-profile-card">
+      <p>Welcome to BoardMatch! First, please tell us a bit about yourself.
+      Once you've created your profile, you will be able to browse and apply to
+      board positions with local non-profits, and start giving back to your
+      community.</p>
+      <form class="indprof-edit js-indprof-create">
         <fieldset>
           <legend>Your profile</legend>
           <label for="firstname">First name:
@@ -92,17 +93,19 @@ function createMode(userData) {
           <label for="lastname">Last name:
             <input type="text" name="lastname" required>
           </label>
-          <label for="email">Email address:
+          <label for="email">Email:
             <input type="email" name="email" required>
           </label>
-          <label for="phone">Phone number:
+          <label for="phone">Phone:
             <input type="text" name="phone">
           </label>
-          <label for="linkedin">LinkedIn profile:
+          <label for="linkedin">LinkedIn:
             <input type="url" name="linkedin">
           </label>
           <input type="hidden" name="userid" value="${userData.userId}">
-          <input type="submit" class="js-create-indprof-submit" value="Submit">
+          <div class="form-actions-container indprof-create-buttons">
+            <input type="submit" class="js-create-indprof-submit" value="Submit">
+          </div>
         </fieldset>
       </form>
     </div>
