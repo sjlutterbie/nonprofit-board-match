@@ -32,7 +32,7 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
 });
 
 // GET all applications associated with an individual profile
-
+/*
 router.get('/:id/apps', jwtAuth, (req, res) => {
   
   const indProf = req.params.id;
@@ -54,7 +54,7 @@ router.get('/:id/apps', jwtAuth, (req, res) => {
     });
   
 });
-
+*/
 // PUT (update) an individual profile
 
 router.put('/:id', jsonParser, jwtAuth, (req, res) => {

@@ -130,12 +130,6 @@ router.get('/:id', jsonParser, jwtAuth, (req, res) => {
     );
 });
 
-// POST a new Application
-
-  // TODO: Creating a new application should update refs for:
-    // Relevant indProf
-    // Relevant position
-
 router.post('/', jsonParser, jwtAuth, (req, res) => {
   
   // Set required fields, detect missing fields

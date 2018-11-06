@@ -26,43 +26,56 @@
 
   <body>
     <div class="content-wrapper login-wrapper">
-      <h1>Welcome to BoardMatch</h1>
-      <div class="intro-images">
-        <img src="img/placeholder_image.png"/5%>
-        <img src="img/placeholder_image.png"/>
-        <img src="img/placeholder_image.png"/>
-      </div>
-      <main role="main" class="login-box">
-        <form class="login-form js-login-form">
-          <div class="fieldset-container">
-            <fieldset>
-              <div class="fieldset-contents">
-                <legend class="login-form-heading js-login-form-heading">Log In</legend>
-                <label for="username">Username
-                  <input type="text" name="username" required>
-                </label>
-                <p class="password-requirements js-password-requirements">
-                  Passwords must be at least 10 characters long
-                </p>
-                <label for="password">Password
-                  <input type="password" name="password" required>
-                </label>
-                <label for="password-repeat" class="js-repeat-password" hidden>Repeat password
-                  <input type="password" name="password-repeat">
-                </label>
-                <input type="submit" value="Log in" name="login-submit" class="js-login-submit">
-              </div>
-            </fieldset>
-          </div>
-        </form>
-        <p class="alert-area"></p>
-        <a href="#" class="create-account-link js-create-account-link login">Create account</a>
+      <main role="main">
+        <h1>Welcome to BoardMatch</h1>
   
-        <p class="default-credentials">
-          <span class="d-c-title">Demo user</span><br/>
-          <span class="d-c-label">Username:</span> NArmstrong<br/>
-          <span class="d-c-label">Password:</span> GiantLeapForMankind</p>
-        </p>
+        <div class="intro-images">
+          <div class="intro-image">
+            <i class="material-icons" aria-hidden="true">account_circle</i>
+            <p>Step 1: Create your profile</p>
+          </div>
+          <div class="intro-image">
+            <i class="material-icons" aria-hidden="true">chat</i>
+            <p>Step 2: Connect with non-profits</p>
+          </div>
+          <div class="intro-image">
+            <i class="material-icons" aria-hidden="true">favorite</i>
+            <p>Step 3: Help your community</p>
+          </div>  
+        </div>
+        <div class="login-box">
+          <h2>Get started!</h2>
+          <form class="login-form js-login-form">
+            <div class="fieldset-container">
+              <fieldset>
+                <div class="fieldset-contents">
+                  <legend class="login-form-heading js-login-form-heading">Log In</legend>
+                  <label for="username">Username
+                    <input type="text" name="username" required>
+                  </label>
+                  <p class="password-requirements js-password-requirements">
+                    Passwords must be at least 10 characters long
+                  </p>
+                  <label for="password">Password
+                    <input type="password" name="password" required>
+                  </label>
+                  <label for="password-repeat" class="js-repeat-password" hidden>Repeat password
+                    <input type="password" name="password-repeat">
+                  </label>
+                  <input type="submit" value="Log in" name="login-submit" class="js-login-submit">
+                </div>
+              </fieldset>
+            </div>
+          </form>
+          <p class="alert-area"></p>
+          <a href="#" class="create-account-link js-create-account-link login">Create account</a>
+    
+          <p class="default-credentials">
+            <span class="d-c-title">Demo user</span><br/>
+            <span class="d-c-label">Username:</span> NArmstrong<br/>
+            <span class="d-c-label">Password:</span> GiantLeapForMankind</p>
+          </p>
+        </div>
       </main>
     </div>
     
