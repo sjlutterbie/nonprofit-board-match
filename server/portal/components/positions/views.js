@@ -11,9 +11,21 @@ function staticMode(positions, profId) {
   
   let outputHtml = '';
   
-  positions.forEach(function(position) {
-    outputHtml += makeStaticPosition(position, profId);
-  });
+  if (positions.length === 0) {
+    
+    outputHtml = `
+      <div class="card no-items">
+        <h2>There are currently no open positions.</h2>
+        <h3>Please check back again, soon!</h3>
+      </div>
+    `;
+    
+  } else {
+    
+    positions.forEach(function(position) {
+      outputHtml += makeStaticPosition(position, profId);
+    });
+  }
   
   return outputHtml;
   

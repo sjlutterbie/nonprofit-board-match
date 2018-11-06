@@ -562,3 +562,8 @@ main {
   .static-covermessage {
     padding-bottom: 8px;
   }
+  
+  .no-items h2, h3 {
+    width: 100%;
+    text-align: center;
+  }
