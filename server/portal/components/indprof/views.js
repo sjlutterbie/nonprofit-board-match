@@ -45,17 +45,28 @@ function editMode(userData) {
             </label>
               <input type="hidden" name="profid" value="${userData._id}">
               <input type="hidden" name="userid" value="${userData.userAccount}">
-            <input type="button" class="js-indprof-cancel"
-                   data-profid="${userData._id}"
-                   data-userid="${userData.userAccount}"
-                   value="Cancel">
-            <input type="submit" class="js-indprof-submit"
-                   data-profid="${userData._id}"
-                   value="Submit">
-            
+            <div class="form-actions-container">
+              <input type="button" class="js-indprof-cancel"
+                     data-profid="${userData._id}"
+                     data-userid="${userData.userAccount}"
+                     value="Cancel">
+              <input type="submit" class="js-indprof-submit"
+                     data-profid="${userData._id}"
+                     value="Submit">
+            </div>
           </fieldset>
         </div>
       </form>
+    </div>
+    
+    <div class="card profile-card">
+      <h2>LinkedIn Details</h2>
+      <h3>Coming soon!</h3>
+    </div>
+    
+    <div class="card profile-card">
+      <h2>Service experience</h2>
+      <h3>Coming soon!</h3>
     </div>
   `;
   
@@ -94,6 +105,16 @@ function createMode(userData) {
           <input type="submit" class="js-create-indprof-submit" value="Submit">
         </fieldset>
       </form>
+    </div>
+    
+    <div class="card profile-card">
+      <h2>LinkedIn Details</h2>
+      <h3>Coming soon!</h3>
+    </div>
+    
+    <div class="card profile-card">
+      <h2>Service experience</h2>
+      <h3>Coming soon!</h3>
     </div>
   `;
 

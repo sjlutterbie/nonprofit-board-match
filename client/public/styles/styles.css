@@ -96,7 +96,7 @@ main {
   
   button {
     background-color: var(--primary-color);
-    color: var(--secondary-color);
+    color: var(--on-primary-color);
     border: none;
     padding: 8px;
   }
@@ -113,6 +113,29 @@ main {
   input[type="submit"] {
     border: none;
     padding: 8px;
+  }
+  
+  .form-actions-container {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  input[type="submit"], input[type="button"] {
+    border: none;
+    padding: 8px;
+  }
+  
+  input[type="submit"] {
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+  }
+  
+  input[type="button"] {
+    background-color: var(--secondary-color);
+    color: var(--on-secondary-color);
   }
   
 
@@ -469,3 +492,4 @@ main {
   text-align: center;
   padding-bottom: 8px;
 }
+
