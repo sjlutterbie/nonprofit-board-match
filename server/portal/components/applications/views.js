@@ -65,32 +65,46 @@ function listMode(apps, profId) {
   
   let outputHtml = '';
   
-  apps.forEach(function(application) {
-
-    outputHtml += `
-      <div class="card">
-        <div class="position" data-posid="${application.position._id}">
-          <h2>${application.position.title}</h2>
-          <h3>${application.position.orgProf.name}</h3>
-          <h4>
-            <span class="label">Date created:</span> ${moment(application.position.dateCreated)
-                                              .format('MMM D, YYYY')}
-          </h4>
-          <p>${application.position.description}</p>
-          <div class="application-container">
-            <div class="application-view"></div>
-            <div class="application-view-controls">
-              <button class="js-position-app-handler viewapp"
-                      data-appid="${application._id}"
-                      data-posid="${application.position._id}"
-                      data-profid="${profId}">View Application</button>
+  if (apps.length === 0) {
+    
+    // "No applications" message
+    
+    outputHtml = `
+      <div class="card no-items">
+        <h2>You haven't submitted any applications, yet.</h2>
+        <h3>Click the 'Positions' tab to view open positions.</h3>
+      </div>
+    `;
+    
+  } else {
+    
+    apps.forEach(function(application) {
+  
+      outputHtml += `
+        <div class="card">
+          <div class="position" data-posid="${application.position._id}">
+            <h2>${application.position.title}</h2>
+            <h3>${application.position.orgProf.name}</h3>
+            <h4>
+              <span class="label">Date created:</span> ${moment(application.position.dateCreated)
+                                                .format('MMM D, YYYY')}
+            </h4>
+            <p>${application.position.description}</p>
+            <div class="application-container">
+              <div class="application-view"></div>
+              <div class="application-view-controls">
+                <button class="js-position-app-handler viewapp"
+                        data-appid="${application._id}"
+                        data-posid="${application.position._id}"
+                        data-profid="${profId}">View Application</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    `;
-
-  });
+      `;
+  
+    });
+  }
 
   return outputHtml;
   

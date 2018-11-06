@@ -24,7 +24,13 @@ const indProfSchema  = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  }
+  },
+  applications: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Application'
+    }  
+  ]
 });
   
 const IndProf = mongoose.model('IndProf', indProfSchema);  

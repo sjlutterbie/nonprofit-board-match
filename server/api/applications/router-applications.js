@@ -29,23 +29,24 @@ router.delete('/:id', jsonParser, jwtAuth, (req, res) => {
             $pull: {applications: application._id}
           });
         Promise.all([posProm, indProm])
-        .then(
-          Application.findByIdAndDelete(req.params.id)
-        ).then(
-          // Success
-          function(application) {
-            return res.status(202).json({id: application._id});
-          },
-          // Failure
-          function(err) {
-            return res.status(500).json(
-              {
-                code: 500,
-                message: 'Internal server error'
-              }
-            );
-          }
-        );
+          .then(function(result) {
+              return Application.findByIdAndDelete(req.params.id).exec();
+          })
+          .then(
+            // Success
+            function(result) {
+              return res.status(202).json({id: application._id});
+            },
+            // Failure
+            function(err) {
+              return res.status(500).json(
+                {
+                  code: 500,
+                  message: 'Internal server error'
+                }
+              );
+            }
+          );
       },
       // Failure
       function(err) {
@@ -191,23 +192,26 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
               indProf: indProf
             }  
           )
-          .then(
-            function(_app) {
-              Position.findByIdAndUpdate(_app.position,
-              {$push: {applications: _app._id}})
-                .then(function(pos) {
-                 return res.status(201).json(_app);                  
-                });
-            },
-            function(err) {
-              return res.status(500).json(
-                {
-                  code: 500,
-                  message: 'Internal server error'
-                }
-              );
-            }
-          );
+          .then(function(_app) {
+            let posProm = Position.findByIdAndUpdate(_app.position,
+              {$push: {applications: _app._id}}
+            );
+            let indProfProm = IndProf.findByIdAndUpdate(_app.indProf,
+              {$push: {applications: _app._id}}
+            );
+            Promise.all([posProm, indProfProm])
+              .then(function(response) {
+                return res.status(201).json(_app);
+              });
+          })
+          .catch(function(err) {
+            return res.status(500).json(
+              {
+                code: 500,
+                message: 'Internal server error'
+              }
+            );
+          });
         },
         function(err) {
           return res.status(422).json({
