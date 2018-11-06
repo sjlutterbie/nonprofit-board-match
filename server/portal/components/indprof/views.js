@@ -116,23 +116,35 @@ function staticMode(userData) {
              alt="Default profile image"/>
         <p>${userData.firstName} ${userData.lastName}</p>
       </div>
+      
       <div class="contact-info">
-        <p><span class="label">Email:</span>
-          <a href="mailto:${userData.email}" target="_blank">
-            ${userData.email}
-          </a>
-        </p>
-        <p><span class="label">Phone:</span>
-          <a href="tel:${userData.phone}" target="_blank">
-            ${userData.phone}
-          </a>
-        </p>
-        <p><span class="label">LinkedIn:</span>
-          <a href="${userData.linkedIn}" target="_blank"
-             title="${userData.firstName} ${userData.lastName} on LinkedIn">
-            ${userData.linkedIn}
-          </a>
-        </p>
+        <table class="contact-info">
+          <tr>
+            <th scope="row">Email:</th>
+            <td>
+              <a href="mailto:${userData.email}" target="_blank">
+                ${userData.email}
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Phone:</th>
+            <td>
+              <a href="tel:${userData.phone}" target="_blank">
+                ${userData.phone}
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">LinkedIn:</th>
+            <td>
+              <a href="${userData.linkedIn}" target="_blank"
+                 title="${userData.firstName} ${userData.lastName} on LinkedIn">
+                  ${userData.linkedIn}
+              </a>
+            </td>
+          </tr>
+        </table>
       </div>
       <button class="edit-indprof js-edit-indprof" 
               data-userid="${userData.userAccount}"

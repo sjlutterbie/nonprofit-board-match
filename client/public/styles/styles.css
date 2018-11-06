@@ -31,22 +31,22 @@ h1 {
 }
 
 h2 {
-  font-size: 18px;
+  font-size: 22px;
   padding-bottom: 8px;
 }
 
 h3 {
-  font-size: 16px;
+  font-size: 18px;
   padding-bottom: 4px;
 }
 
 h4 {
-  font-size: 14px;
+  font-size: 16px;
   padding-bottom: 4px;
 }
 
 p {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 16px;
 }
 
@@ -295,6 +295,7 @@ main {
     
     .header-nav a {
       color: var(--secondary-color);
+      text-decoration: none;
     }
       
       .header-nav a:visited {
@@ -373,7 +374,7 @@ main {
     display: flex;
     flex-flow: column nowrap;
     align-items: start;
-    justify-content: start;
+    justify-content: center;
   }
 
   .profile-card h2 {
@@ -385,6 +386,7 @@ main {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    justify-content: center;
     width: 100%;
   } 
   
@@ -403,6 +405,11 @@ main {
   }
   
   .contact-info {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     padding: 8px 4px;
   }
   
@@ -414,3 +421,16 @@ main {
   .profile-card button {
     margin: auto;
   }
+  
+  
+  
+.contact-info th {
+  text-align: left;
+  font-weight: bold;
+  padding: 4px;
+}
+
+.contact-info td {
+  padding: 4px;
+  font-size: 12px;
+}
