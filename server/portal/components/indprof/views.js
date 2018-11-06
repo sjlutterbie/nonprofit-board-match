@@ -17,41 +17,44 @@ function editMode(userData) {
 
 
   const outputHTML = `
-    <div class="card">
-      <form class="js-indprof-edit">
-        <fieldset>
-          <legend>Your profile</legend>
-          <label for="firstname">First name:
-            <input type="text" name="firstname"
-                   value="${userData.firstName}" required>
-          </label>
-          <label for="lastname">Last name:
-            <input type="text" name="lastname"
-                   value="${userData.lastName}" required>
-          </label>
-          <label for="email">Email address:
-            <input type="email" name="email"
-                   value="${userData.email}" required>
-          </label>
-          <label for="phone">Phone number:
-            <input type="text" name="phone"
-                   value="${userData.phone}">
-          </label>
-          <label for="linkedin">LinkedIn profile:
-            <input type="url" name="linkedin"
-                   value="${userData.linkedIn}">
-          </label>
-            <input type="hidden" name="profid" value="${userData._id}">
-            <input type="hidden" name="userid" value="${userData.userAccount}">
-          <input type="button" class="js-indprof-cancel"
-                 data-profid="${userData._id}"
-                 data-userid="${userData.userAccount}"
-                 value="Cancel">
-          <input type="submit" class="js-indprof-submit"
-                 data-profid="${userData._id}"
-                 value="Submit">
-          
-        </fieldset>
+    <div class="card edit-profile-card">
+    <h2>Your profile</h2>
+      <form class="indprof-edit js-indprof-edit">
+        <div class="fieldset-container">
+          <fieldset>
+            <legend>Edit profile</legend>
+            <label for="firstname">First name:
+              <input type="text" name="firstname"
+                     value="${userData.firstName}" required>
+            </label>
+            <label for="lastname">Last name:
+              <input type="text" name="lastname"
+                     value="${userData.lastName}" required>
+            </label>
+            <label for="email">Email:
+              <input type="email" name="email"
+                     value="${userData.email}" required>
+            </label>
+            <label for="phone">Phone:
+              <input type="text" name="phone"
+                     value="${userData.phone}">
+            </label>
+            <label for="linkedin">LinkedIn:
+              <input type="url" name="linkedin"
+                     value="${userData.linkedIn}">
+            </label>
+              <input type="hidden" name="profid" value="${userData._id}">
+              <input type="hidden" name="userid" value="${userData.userAccount}">
+            <input type="button" class="js-indprof-cancel"
+                   data-profid="${userData._id}"
+                   data-userid="${userData.userAccount}"
+                   value="Cancel">
+            <input type="submit" class="js-indprof-submit"
+                   data-profid="${userData._id}"
+                   value="Submit">
+            
+          </fieldset>
+        </div>
       </form>
     </div>
   `;

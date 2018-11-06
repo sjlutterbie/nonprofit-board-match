@@ -103,9 +103,10 @@ main {
 
   /* FORM COMPONENTS */
   
-  input[type="text"], input[type="password"] {
-    background-color: var(--secondary-color);
-      color: var(--on-secondary-color);
+  input[type="text"], input[type="password"],
+  input[type="email"], input[type="url"] {
+    background-color: var(--secondary-light);
+      color: var(--on-secondary-light);
     border: none;
   }
 
@@ -439,4 +440,32 @@ main {
   width: 100%;
   text-align: center;
   font-style: italic;
+}
+
+/* Edit individual profile */
+
+.edit-profile-card {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+  .edit-profile-card .fieldset-container {
+    width: 100%;
+  }
+
+.indprof-edit label {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: space-between;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 8px;
+}
+
+.indprof-edit legend {
+  width: 80%;
+  text-align: center;
+  padding-bottom: 8px;
 }
