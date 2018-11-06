@@ -9,20 +9,30 @@
     <meta name="description" content="A platform for service-minded individuals
       and local non-profits in search of board-level support to connect.">
       
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Slabo+27px"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+
+    
     <!-- CSS Reset -->
     <link rel="stylesheet" type="text/css" href="styles/reset.css">
     
     <!-- Custom styles -->
-    <link rel="stylesheet" type="text/css" href="styles/layout.css">
-    <link rel="stylesheet" type="text/css" href="styles/typography.css">
-    
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+
   </head>
 
   <body>
     <div class="content-wrapper login-wrapper">
-      <main role="main" class="card login-box">
-        <h1>Welcome to BoardMatch</h1>
-        <p class="dev-notice">Note: This landing page used for development purposes.</p>
+      <h1>Welcome to BoardMatch</h1>
+      <div class="intro-images">
+        <img src="img/placeholder_image.png"/5%>
+        <img src="img/placeholder_image.png"/>
+        <img src="img/placeholder_image.png"/>
+      </div>
+      <main role="main" class="login-box">
         <form class="login-form js-login-form">
           <div class="fieldset-container">
             <fieldset>
@@ -32,7 +42,7 @@
                   <input type="text" name="username" required>
                 </label>
                 <p class="password-requirements js-password-requirements">
-                  Passwords must be between 10 - 74 characters
+                  Passwords must be at least 10 characters long
                 </p>
                 <label for="password">Password
                   <input type="password" name="password" required>

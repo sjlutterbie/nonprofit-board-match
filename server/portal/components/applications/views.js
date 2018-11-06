@@ -8,16 +8,18 @@ function staticMode(application, posId) {
   
   const outputHTML = `
     <div class="application-content">
-      <h3>Cover message</h3>
-      <h4>
-        Submitted: ${moment(application.dateCreated).format('MMM D, YYYY')}
-      </h4>
-      <p>${application.coverMessage}</p>
-      <button class="js-application-withdraw"
-              data-appid="${application._id}"
-              data-posid="${posId}">Withdraw Application</button>
-      <button class="js-application-hide"
-              data-posid="${posId}">Hide Application</button>
+      <h2>Your application</h2>
+      <h3>
+        <span class="label">Submitted:</span> ${moment(application.dateCreated).format('MMM D, YYYY')}
+      </h3>
+      <div class="static-covermessage">${application.coverMessage}</div>
+      <div class="form-actions-container">
+        <button class="button-secondary js-application-withdraw"
+                data-appid="${application._id}"
+                data-posid="${posId}">Withdraw</button>
+        <button class="button-primary js-application-hide"
+                data-posid="${posId}">Hide</button>
+      </div>
     </div>
   `;
   
@@ -28,20 +30,27 @@ function staticMode(application, posId) {
 function createMode(posId, profId) {
   
   const outputHTML = `
-    <div class="application-form-wrapper">
-      <form class="js-application-create"
+    <div class="application-content application-form-wrapper">
+      <form class="js-application-create" name="app-form-${posId}"
             data-posid="${posId}"
             data-profid="${profId}">
-        <fieldset>
-          <legend>Apply with a cover message</legend>
-          <label for="covermessage">Cover message
-            <input type="textarea" name="covermessage" required>
-          </label>
-          <input type="button" class="js-application-cancel"
-                 data-posid="${posId}" value="Cancel">
-          <input type="submit" class="js-application-submit"
-                 data-posid="${posId}" value="Submit">
-        </fieldset>
+        <div class="fieldset-container">
+          <fieldset>
+            <div class="fieldset-contents">
+              <legend>Apply with a cover message</legend>
+              <label for="covermessage">Cover message
+                <textarea form="app-form-${posId}" rows="5" wrap="soft"
+                       name="covermessage" required></textarea>
+              </label>
+              <div class="form-actions-container">
+                <input type="button" class="button-secondary js-application-cancel"
+                       data-posid="${posId}" value="Cancel">
+                <input type="submit" class="button-primary js-application-submit"
+                       data-posid="${posId}" value="Submit">
+              </div>
+            </div>
+          </fieldset>
+        </div>
       </form>
     </div>
   `;
@@ -64,7 +73,7 @@ function listMode(apps, profId) {
           <h2>${application.position.title}</h2>
           <h3>${application.position.orgProf.name}</h3>
           <h4>
-            Date created: ${moment(application.position.dateCreated)
+            <span class="label">Date created:</span> ${moment(application.position.dateCreated)
                                               .format('MMM D, YYYY')}
           </h4>
           <p>${application.position.description}</p>

@@ -84,7 +84,7 @@ describe('IndProf API', function() {
       });
     });
     
-    describe('GET /api/indprofs/:id/apps', function() {
+    describe.skip('GET /api/indprofs/:id/apps', function() {
       
       let testUrl = `/api/indprofs/foo/apps`;
       
