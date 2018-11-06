@@ -108,18 +108,35 @@ function staticMode(userData) {
   
   
   const outputHTML = `
-    <div class="card">
-    <h2>Your profile</h2>
-    <ul>
-      <li>First name: ${userData.firstName}</li>
-      <li>Last name: ${userData.lastName}</li>
-      <li>Email: ${userData.email}</li>
-      <li>Phone: ${userData.phone}</li>
-      <li>LinkedIn: ${userData.linkedIn}</li>
-    </ul>
-    <button class="js-edit-indprof" 
-            data-userid="${userData.userAccount}"
-            data-profid="${userData._id}">Edit profile</button>
+    <div class="card profile-card">
+      <h2>Your profile</h2>
+      <div class="photo-and-name">
+        <img class="profile-image"
+             src="/img/default_profile.png"
+             alt="Default profile image"/>
+        <p>${userData.firstName} ${userData.lastName}</p>
+      </div>
+      <div class="contact-info">
+        <p><span class="label">Email:</span>
+          <a href="mailto:${userData.email}" target="_blank">
+            ${userData.email}
+          </a>
+        </p>
+        <p><span class="label">Phone:</span>
+          <a href="tel:${userData.phone}" target="_blank">
+            ${userData.phone}
+          </a>
+        </p>
+        <p><span class="label">LinkedIn:</span>
+          <a href="${userData.linkedIn}" target="_blank"
+             title="${userData.firstName} ${userData.lastName} on LinkedIn">
+            ${userData.linkedIn}
+          </a>
+        </p>
+      </div>
+      <button class="edit-indprof js-edit-indprof" 
+              data-userid="${userData.userAccount}"
+              data-profid="${userData._id}">Edit profile</button>
     </div>
   `;  
   

@@ -85,6 +85,14 @@ main {
     border: 1px solid var(--primary-color);
     border-radius: 4px;
   }
+  
+  button {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    font-weight: bold;
+    padding: 8px;
+  }
 
   /* FORM COMPONENTS */
   
@@ -301,3 +309,50 @@ main {
     text-decoration: none;
   }
   
+  /* PROFILE VIEW */
+  
+  .profile-card {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: start;
+    justify-content: start;
+  }
+
+  .profile-card h2 {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .photo-and-name {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    width: 100%;
+  } 
+  
+  .photo-and-name img {
+    width: 75px;
+    height: 75px;
+  }
+  
+  .photo-and-name p {
+    font-size: 20px;
+  }
+  
+  .profile-image {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .contact-info {
+    padding: 8px 4px;
+  }
+  
+  .contact-info .label {
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  .profile-card button {
+    margin: auto;
+  }
