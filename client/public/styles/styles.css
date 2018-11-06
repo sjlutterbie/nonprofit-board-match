@@ -79,6 +79,11 @@ main {
 
 /* COMMON COMPONENTS */
 
+  .content-wrapper {
+    max-width: 1200px;
+    margin: 0px auto;
+  }
+
   .card {
     width: 100%;
     max-width: 600px;
@@ -346,6 +351,11 @@ main {
     flex-grow: 1;
   }
   
+  .tabnav-active, .tab-nav li:hover {
+    background-color: var(--secondary-dark);
+    color: var(--on-secondary-dark);
+  }
+
   .tab-nav a, tab-nav a:visited {
     color: var(--primary-color);
     text-decoration: none;

@@ -18,6 +18,15 @@ $('html').on('click', '.js-header-dropdown-icon', function(e) {
   
 });
 
+// Handle highlighting active tabNav menu item
+
+$('html').on('click', '.js-tabnav-option', function(e) {
+  e.preventDefault();
+  
+  $('.js-tabnav-option').removeClass('tabnav-active');
+  $(e.currentTarget).addClass('tabnav-active');
+  
+});
   
 // Handle click on tabNavMenu: Profile link
 
