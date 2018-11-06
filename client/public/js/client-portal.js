@@ -9,6 +9,16 @@ Handles user interactions within the Portal, which loads once the user has
    = MENU ITEMS =
    ============== */
   
+// Handle click on header-nav dropdown icon
+
+$('html').on('click', '.js-header-dropdown-icon', function(e) {
+  e.preventDefault();
+  
+  $('.js-header-dropdown').toggle();
+  
+});
+
+  
 // Handle click on tabNavMenu: Profile link
 
 $('html').on('click', '.js-tabnavmenu-profile', function(e) {
