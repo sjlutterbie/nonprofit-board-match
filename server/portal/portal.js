@@ -14,7 +14,9 @@ function buildPortal(userType, profId, userId, profile) {
     <header>
       <h1>Board Match Portal</h1>
       <nav class="header-nav js-header-nav">
-        <ul>
+        <i class="material-icons header-dropdown-icon
+                  js-header-dropdown-icon">menu</i>
+        <ul class="header-dropdown js-header-dropdown">
           <li>
             <a href="#">Contact</a></li>
           <li>
