@@ -459,12 +459,6 @@ main {
     padding: 8px 4px;
   }
   
-/*
-.contact-info .label {
-    font-weight: bold;
-    color: var(--primary-color);
-  }
-*/
   .profile-card button {
     margin: auto;
   }
@@ -529,6 +523,13 @@ main {
     border: 1px solid var(--secondary-color);
     padding: 8px;
   }
+  
+  .application-view-controls {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+  }
+  
   
   .application-content h2 {
     text-align: center;
