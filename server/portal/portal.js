@@ -22,9 +22,10 @@ function buildPortal(userType, profId, userId, profile) {
         </a>
         <ul class="header-dropdown js-header-dropdown">
           <li>
-            <a href="#">Contact</a></li>
+            <a href="mailto:simon@ltrbe.com"
+               target="_blank">Contact</a></li>
           <li>
-            <a href="#">Log out</a>
+            <a href="#" class="js-log-out">Log out</a>
           </li>
         </li>
       </nav>

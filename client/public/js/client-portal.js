@@ -9,6 +9,19 @@ Handles user interactions within the Portal, which loads once the user has
    = MENU ITEMS =
    ============== */
   
+// Handle click on log out button
+$('html').on('click', '.js-log-out', function(e) {
+  e.preventDefault();
+  
+  // Clear JWT
+  localStorage.setItem('JWT', '');
+  
+  // Re-direct to login page
+  window.location.href="/";
+  
+});
+  
+  
 // Handle click on header-nav dropdown icon
 
 $('html').on('click', '.js-header-dropdown-icon', function(e) {
