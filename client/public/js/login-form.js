@@ -26,6 +26,7 @@ $('html').on('click', '.js-create-account-link', e =>
       $('input[name="password-repeat"]').attr('required', true);
       $('.js-login-submit').val('Create Account');
       $('.js-create-account-link').text('Log In');
+      $('.default-credentials').hide();
     } else {
       // Convert 'Create Account' -> 'Log In'
       $('.js-login-form').removeClass('create-account');
@@ -35,6 +36,7 @@ $('html').on('click', '.js-create-account-link', e =>
       $('input[name="password-repeat"]').attr('required', false);
       $('.js-login-submit').val('Log In')
       $('.js-create-account-link').text('Create Account');
+      $('.default-credentials').show();
     }
   }
 
