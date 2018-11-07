@@ -167,7 +167,7 @@ function staticMode(userData) {
             <td>
               <a href="${userData.linkedIn}" target="_blank"
                  title="${userData.firstName} ${userData.lastName} on LinkedIn">
-                  ${userData.linkedIn}
+                  View Profile
               </a>
             </td>
           </tr>

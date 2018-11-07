@@ -8,6 +8,17 @@ Handles user interactions on the login form and "create individual profile"
 */
 
 
+// Handle click on "How it works" link
+
+$('html').on('click', '.js-how-it-works', function(e) {
+  e.preventDefault();
+  
+  $('.how-it-works').css('display', 'none');
+  $('.intro-images').css('display', 'flex');
+  
+  
+});
+
 // Handle click on "Create account" link (Toggle)
 
 $('html').on('click', '.js-create-account-link', e => 
