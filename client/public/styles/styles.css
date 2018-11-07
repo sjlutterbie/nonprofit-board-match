@@ -114,6 +114,13 @@ main {
     border-radius: 4px;
   }
   
+    .card li {
+      font-size: 14px;
+      list-style-type: circle;
+      list-style-position: inside;
+      line-height: 1.25;
+    }
+  
   button {
     background-color: var(--primary-color);
     color: var(--on-primary-color);
@@ -649,3 +656,4 @@ main {
     width: 100%;
     text-align: center;
   }
+  
