@@ -17,6 +17,7 @@ function editMode(userData) {
 
 
   const outputHTML = `
+    <h2>Profile</h2>
     <div class="card edit-profile-card">
     <h2>Your profile</h2>
       <form class="indprof-edit js-indprof-edit">
@@ -135,6 +136,7 @@ function staticMode(userData) {
   
   
   const outputHTML = `
+    <h2>Profile</h2>
     <div class="card profile-card">
       <h2>Your profile</h2>
       <div class="photo-and-name">
@@ -180,12 +182,12 @@ function staticMode(userData) {
     
     <div class="card profile-card">
       <h2>LinkedIn Details</h2>
-      <h3>Coming soon!</h3>
+      <h3 class="coming-soon">Coming soon!</h3>
     </div>
     
     <div class="card profile-card">
       <h2>Service experience</h2>
-      <h3>Coming soon!</h3>
+      <h3 class="coming-soon">Coming soon!</h3>
     </div>
   `;  
   

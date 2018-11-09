@@ -70,6 +70,7 @@ function listMode(apps, profId) {
     // "No applications" message
     
     outputHtml = `
+      <h2>Applications</h2>
       <div class="card no-items">
         <h2>You haven't submitted any applications, yet.</h2>
         <h3>Click the 'Positions' tab to view open positions.</h3>
@@ -81,6 +82,7 @@ function listMode(apps, profId) {
     apps.forEach(function(application) {
   
       outputHtml += `
+        <h2>Applications</h2>
         <div class="card">
           <div class="position" data-posid="${application.position._id}">
             <h2>${application.position.title}</h2>
@@ -89,7 +91,6 @@ function listMode(apps, profId) {
               <span class="label">Date created:</span> ${moment(application.position.dateCreated)
                                                 .format('MMM D, YYYY')}
             </h4>
-            <p>${application.position.description}</p>
             <div class="application-container">
               <div class="application-view"></div>
               <div class="application-view-controls">

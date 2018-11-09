@@ -9,11 +9,11 @@ function staticMode(positions, profId) {
   // Build a list of open positions.
   // For each open position, insert the data into an HTML template string
   
-  let outputHtml = '';
+  let outputHtml = '<h2>Positions</h2>';
   
   if (positions.length === 0) {
     
-    outputHtml = `
+    outputHtml += `
       <div class="card no-items">
         <h2>There are currently no open positions.</h2>
         <h3>Please check back again, soon!</h3>

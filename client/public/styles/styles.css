@@ -70,7 +70,7 @@ p {
 html, body {
   margin: 0px;
   height: 100%;
-  background: #fff;
+  background: #ddd;
 }
 
 .content-wrapper {
@@ -81,12 +81,16 @@ html, body {
 }
 
 main {
+  margin: 0;
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: center;
   padding: 8px;
   width: 100%;
+  background: #fff;
+  min-height: 100vh;
+  border: 1px solid var(--primary-color);
 }
 
 /* COMMON COMPONENTS */
@@ -244,7 +248,7 @@ main {
   
   .login-wrapper {
     justify-content: center;
-    padding: 8px;
+    padding: 0px;
   }
   
   .login-wrapper h1 {
@@ -556,7 +560,7 @@ main {
 
 .profile-card h3 {
   width: 100%;
-  text-align: center;
+  text-align: left;
   font-style: italic;
 }
 
@@ -652,8 +656,12 @@ main {
     padding-bottom: 8px;
   }
   
-  .no-items h2, h3 {
+  .no-items h2, .no-items h3 {
     width: 100%;
+    text-align: center;
+  }
+  
+  h3.coming-soon {
     text-align: center;
   }
   
