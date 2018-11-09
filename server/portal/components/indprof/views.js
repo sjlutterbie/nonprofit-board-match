@@ -181,7 +181,7 @@ function staticMode(userData) {
     </div>
     
     <div class="card profile-card">
-      <h2>LinkedIn Details</h2>
+      <h2>LinkedIn details</h2>
       <h3 class="coming-soon">Coming soon!</h3>
     </div>
     
