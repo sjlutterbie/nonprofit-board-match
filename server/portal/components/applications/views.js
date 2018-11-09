@@ -88,7 +88,7 @@ function listMode(apps, profId) {
             <h2>${application.position.title}</h2>
             <h3>${application.position.orgProf.name}</h3>
             <h4>
-              <span class="label">Date created:</span> ${moment(application.position.dateCreated)
+              <span class="label">Date submitted:</span> ${moment(application.position.dateCreated)
                                                 .format('MMM D, YYYY')}
             </h4>
             <div class="application-container">
