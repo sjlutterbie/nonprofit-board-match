@@ -40,7 +40,8 @@ function createMode(posId, profId) {
               <legend>Apply with a cover message</legend>
               <label for="covermessage">Cover message
                 <textarea form="app-form-${posId}" rows="5" wrap="soft"
-                       name="covermessage" required></textarea>
+                       name="covermessage" 
+                       placeholder="Use this space to write a brief message to accompany your profile. Upon submission, this message and your profile will be sent to the non-profit, for their consideration." required></textarea>
               </label>
               <div class="form-actions-container">
                 <input type="button" class="button-secondary js-application-cancel"
