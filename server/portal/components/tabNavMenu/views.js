@@ -12,24 +12,18 @@ function buildMenu(userType, userId, profId) {
 
   const outputHTML = `
     <ul>
-      <li class="js-tabnav-option tabnav-active">
-        <a href="#" data-usertype="${userType}"
+      <li class="js-tabnav-option js-tabnavmenu-profile tabnav-active"
+          data-usertype="${userType}"
                     data-profid="${profId}"
                     data-userid="${userId}"
-                    data-mode="static"
-                    class="js-tabnavmenu-profile">Profile</a>
-      </li>
-      <li class="js-tabnav-option">
-        <a href="#" data-usertype="${userType}"
+                    data-mode="static">Profile</li>
+      <li class="js-tabnav-option js-tabnavmenu-positions"
+          data-usertype="${userType}"
                     data-userid="${userId}"
-                    data-profid="${profId}"
-                    class="js-tabnavmenu-positions">Positions</a>
-      </li>
-      <li class="js-tabnav-option">
-        <a href="#" data-usertype="${userType}"
-                    data-profid="${profId}"
-                    class="js-tabnavmenu-applications">Applications</a>
-      </li>
+                    data-profid="${profId}">Positions</li>
+      <li class="js-tabnav-option js-tabnavmenu-applications"
+          data-usertype="${userType}"
+          data-profid="${profId}">Applications</li>
     </ul>`;
   
   return outputHTML;
