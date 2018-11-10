@@ -84,7 +84,8 @@ function createMode(userData) {
   
   let outputHTML = `
     <div class="card edit-profile-card">
-      <p>Welcome to BoardMatch! First, please tell us a bit about yourself.
+      <p>Welcome to BoardMatch! First, please create your public profile, which
+      will be shared with local non-profits when you apply to join their boards.
       Once you've created your profile, you will be able to browse and apply to
       board positions with local non-profits, and start giving back to your
       community.</p>
