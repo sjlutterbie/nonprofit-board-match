@@ -61,7 +61,12 @@ function staticMode(positions, profId) {
       <div class="card position-card">
         <div class="position" data-posid="${position._id}">
           <h2>${position.title}</h2>
-          <h3>${position.orgProf.name}</h3>
+          <h3>
+            <a href="${position.orgProf.website}"
+               title="${position.orgProf.name}" target="_blank">
+              ${position.orgProf.name}
+            </a>
+          </h3>
           <h4>
             <span class="label">Date created:</span> ${moment(position.dateCreated).format('MMM D, YYYY')}
           </h4>

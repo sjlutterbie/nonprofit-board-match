@@ -86,10 +86,16 @@ function listMode(apps, profId) {
         <div class="card">
           <div class="position" data-posid="${application.position._id}">
             <h2>${application.position.title}</h2>
-            <h3>${application.position.orgProf.name}</h3>
+            <h3>
+              <a href="${application.position.orgProf.website}"
+                 title="${application.position.orgProf.name}" target="_blank">
+                ${application.position.orgProf.name}
+              </a>
+            </h3>
             <h4>
-              <span class="label">Submitted:</span> ${moment(application.position.dateCreated)
-                                                .format('MMM D, YYYY')}
+              <span class="label">Submitted:</span>&nbsp;
+                ${moment(application.position.dateCreated)
+                .format('MMM D, YYYY')}
             </h4>
             <div class="application-container">
               <div class="application-view"></div>
