@@ -434,6 +434,8 @@ main {
     
     @media screen and (max-width: 450px) {
 
+
+
       .header-nav ul {
         display: none;
         position: absolute;
@@ -447,9 +449,10 @@ main {
         margin-right: 8px;
         line-height: 2;
       }
+
       
     }
-    
+
     @media screen and (min-width: 450px) {
       
       .header-dropdown-icon {
