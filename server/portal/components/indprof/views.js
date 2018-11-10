@@ -24,23 +24,26 @@ function editMode(userData) {
         <div class="fieldset-container">
           <fieldset>
             <legend>Edit profile</legend>
-            <label for="firstname">First name:
+            <p class="required-fields">
+              Fields with an asterisk (*) are required"
+            </p>
+            <label for="firstname">First name*
               <input type="text" name="firstname"
                      value="${userData.firstName}" required>
             </label>
-            <label for="lastname">Last name:
+            <label for="lastname">Last name*
               <input type="text" name="lastname"
                      value="${userData.lastName}" required>
             </label>
-            <label for="email">Email:
+            <label for="email">Email*
               <input type="email" name="email"
                      value="${userData.email}" required>
             </label>
-            <label for="phone">Phone:
+            <label for="phone">Phone
               <input type="text" name="phone"
                      value="${userData.phone}">
             </label>
-            <label for="linkedin">LinkedIn:
+            <label for="linkedin">LinkedIn
               <input type="url" name="linkedin"
                      value="${userData.linkedIn}">
             </label>
@@ -62,12 +65,12 @@ function editMode(userData) {
     
     <div class="card profile-card">
       <h2>LinkedIn Details</h2>
-      <h3>Coming soon!</h3>
+      <h3 class="coming-soon">Coming soon!</h3>
     </div>
     
     <div class="card profile-card">
       <h2>Service experience</h2>
-      <h3>Coming soon!</h3>
+      <h3 class="coming-soon">Coming soon!</h3>
     </div>
   `;
   
@@ -88,19 +91,22 @@ function createMode(userData) {
       <form class="indprof-edit js-indprof-create">
         <fieldset>
           <legend>Your profile</legend>
-          <label for="firstname">First name:
+          <p class="required-fields">
+            Fields with an asterisk (*) are required"
+          </p>
+          <label for="firstname">First name*
             <input type="text" name="firstname" required>
           </label>
-          <label for="lastname">Last name:
+          <label for="lastname">Last name*
             <input type="text" name="lastname" required>
           </label>
-          <label for="email">Email:
+          <label for="email">Email*
             <input type="email" name="email" required>
           </label>
-          <label for="phone">Phone:
+          <label for="phone">Phone
             <input type="text" name="phone">
           </label>
-          <label for="linkedin">LinkedIn:
+          <label for="linkedin">LinkedIn
             <input type="url" name="linkedin">
           </label>
           <input type="hidden" name="userid" value="${userData.userId}">
@@ -113,12 +119,12 @@ function createMode(userData) {
     
     <div class="card profile-card">
       <h2>LinkedIn Details</h2>
-      <h3>Coming soon!</h3>
+      <h3 class="coming-soon">Coming soon!</h3>
     </div>
     
     <div class="card profile-card">
       <h2>Service experience</h2>
-      <h3>Coming soon!</h3>
+      <h3 class="coming-soon">Coming soon!</h3>
     </div>
   `;
 
