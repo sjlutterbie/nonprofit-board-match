@@ -187,6 +187,11 @@ main {
     color: var(--on-secondary-color);
   }
   
+  p.required-fields {
+    text-align: center;
+    color: #f00;
+  }
+  
 
 /* CUSTOMIZATIONS */
 
@@ -361,7 +366,7 @@ main {
   .alert-area {
     text-align: center;
     margin: 4px;
-    color: var(--secondary-light);
+    color: #f00;
     font-size: 14px;
     font-weight: bold;
   }
