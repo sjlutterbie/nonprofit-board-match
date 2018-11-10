@@ -157,6 +157,7 @@ main {
       color: var(--on-form-input-area);
     border: none;
     height: 35px;
+    padding: 4px;
   }
 
   input[type="submit"] {

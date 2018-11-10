@@ -45,6 +45,7 @@ function editMode(userData) {
             </label>
             <label for="linkedin">LinkedIn
               <input type="url" name="linkedin"
+                     placeholder="http://www.linkedin.com/in/john-doe"
                      value="${userData.linkedIn}">
             </label>
               <input type="hidden" name="profid" value="${userData._id}">
@@ -108,7 +109,8 @@ function createMode(userData) {
             <input type="text" name="phone">
           </label>
           <label for="linkedin">LinkedIn
-            <input type="url" name="linkedin">
+            <input type="url" name="linkedin"
+                   placeholder="http://www.linkedin.com/in/john-doe">
           </label>
           <input type="hidden" name="userid" value="${userData.userId}">
           <div class="form-actions-container indprof-create-buttons">
