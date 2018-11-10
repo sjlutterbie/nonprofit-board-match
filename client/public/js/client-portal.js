@@ -601,6 +601,10 @@ $('html').on('click', '.js-application-withdraw', function(e) {
   const appId = e.currentTarget.dataset.appid;
   const posId = e.currentTarget.dataset.posid;
   
+  // Confirm intent to delete. Otherwise, exit function.
+  let conf = confirm('Are you sure you want to withdraw this application?');
+  if(!conf) { return; }
+  
   // Execute request (promise for async)
   deleteApplication(appId, localStorage.JWT)
     .then(function(res) {
