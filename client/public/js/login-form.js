@@ -7,7 +7,6 @@ Handles user interactions on the login form and "create individual profile"
   client-portal.js
 */
 
-
 // Handle click on "How it works" link
 
 $('html').on('click', '.js-how-it-works', function(e) {
@@ -15,7 +14,6 @@ $('html').on('click', '.js-how-it-works', function(e) {
   
   $('.how-it-works').css('display', 'none');
   $('.intro-images').css('display', 'flex');
-  
   
 });
 

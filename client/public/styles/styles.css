@@ -193,7 +193,6 @@ main {
     color: #f00;
   }
   
-
 /* CUSTOMIZATIONS */
 
   /* LOGIN PAGE */
@@ -226,7 +225,6 @@ main {
     justify-content: center;
   }
   
-  
   .intro-image {
     display: flex;
     flex-flow: column nowrap;
@@ -247,7 +245,6 @@ main {
   .intro-image p {
     font-size: 16px;  
   }
-  
 
   .login-wrapper h1 {
     line-height: calc(27px * 2);
@@ -264,7 +261,6 @@ main {
     color: var(--primary-color);
     text-align: center;
   }
-
 
   .login-box {
     display: flex;
@@ -363,7 +359,6 @@ main {
     justify-content: center; /* space-between; */
   }
 
-  
   .alert-area {
     text-align: center;
     margin: 4px;
@@ -569,8 +564,6 @@ main {
     margin: auto;
   }
   
-  
-  
 .contact-info th {
   text-align: left;
   font-weight: bold;
@@ -688,4 +681,3 @@ main {
   h3.coming-soon {
     text-align: center;
   }
-  

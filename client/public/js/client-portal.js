@@ -102,7 +102,6 @@ $('html').on('click', '.js-tabnavmenu-positions', function(e) {
   
 });
 
-
   function loadPositions(event, authToken) {
     // Load Positions View via GET call to /portal/components/positions
 
@@ -372,7 +371,6 @@ $('html').on('submit', '.js-application-create', function(e){
     $(`form[data-posid="${posId}"] textarea[name="covermessage"]`)
       .val().replace(/\n/g, "<br />");
 
-  
   // Compile form data
   const formData = {
     coverMessage: coverMessage,

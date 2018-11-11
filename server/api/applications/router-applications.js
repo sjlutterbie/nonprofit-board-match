@@ -228,9 +228,4 @@ router.post('/', jsonParser, jwtAuth, (req, res) => {
   );
 });
 
-
-
-
-
-
 module.exports = { router };
