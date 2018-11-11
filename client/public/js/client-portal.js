@@ -27,7 +27,7 @@ $('html').on('click', '.js-log-out', function(e) {
 $('html').on('click', '.js-header-dropdown-icon', function(e) {
   e.preventDefault();
   
-  $('.js-header-dropdown').toggle();
+  $('.js-header-dropdown').toggleClass('responsive-dropdown');
   
 });
 

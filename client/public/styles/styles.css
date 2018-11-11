@@ -434,10 +434,16 @@ main {
     
     @media screen and (max-width: 450px) {
 
+      .header-dropdown-icon {
+        display: block;
+      }    
 
-
-      .header-nav ul {
+      .header-dropdown {
         display: none;
+      }
+
+      .header-dropdown.responsive-dropdown {
+        display: block;
         position: absolute;
         z-index: 2;
         text-align: right;
@@ -448,15 +454,23 @@ main {
         padding: 8px;
         margin-right: 8px;
         line-height: 2;
+        font-size: 24px;
       }
-
       
     }
 
     @media screen and (min-width: 450px) {
       
+      responsive-dropdown {
+        display: none;
+      }
+      
       .header-dropdown-icon {
         display: none;
+      }
+      
+      .header-dropdown {
+        display: block;
       }
       
       .header-nav ul {
