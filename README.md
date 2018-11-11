@@ -36,28 +36,22 @@ involved in its creation.
 
 ## Screenshots
 
-### Wireframe stage
-
-_The following screenshots were captured after the initial functional build was
-complete, but incorporating only minimal CSS styling._
-
-
-#### Login & Account Creation views
+### Login & Account Creation views
 
 ![Account login](screenshots/nbm-screenshots-login.png "Account login")
 ![Account creation](screenshots/nbm-screenshots-createAccount.png "Account creation")
 
-#### Profile & Edit Profile views
+### Profile & Edit Profile views
 
 ![View profile](screenshots/nbm-screenshots-profile.png "View profile")
 ![Edit profile](screenshots/nbm-screenshots-editProfile.png "Edit profile")
 
-#### Open Positions & Apply views
+### Open Positions & Apply views
 
 ![Open positions](screenshots/nbm-screenshots-positions.png "Open positions")
 ![Apply](screenshots/nbm-screenshots-application.png "Appy to open position")
 
-#### Submitted application record
+### Submitted application record
 
 ![Application](screenshots/nbm-screenshots-submitted.png "Application")
 
@@ -82,10 +76,6 @@ complete, but incorporating only minimal CSS styling._
   * Travis-CI
   * Git(Hub)
   
-## Live Demo (current deployment)
-
-<https://serene-chamber-93065.herokuapp.com>
-
 ## Development Roadmap
 
 When transitioning this app from prototype to production, the following items
@@ -113,6 +103,10 @@ When transitioning this app from prototype to production, the following items
   * Email notification of application submission
   * Individual  profiles included with application submission
   * Application management for organizational users
+
+## Live Demo (current deployment)
+
+<https://serene-chamber-93065.herokuapp.com>
 
 ## Wireframe Readme (pre-CSS documentation)
 
