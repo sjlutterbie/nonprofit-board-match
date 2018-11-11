@@ -25,7 +25,7 @@ strengthen my core full-stack development capabilities. In particular, I focused
 on the following skills:
 
 * Test-driven development (TDD)
-* Component-based web app designed
+* Component-based web app design
 * Server-side APIs providing full CRUD capabilities
 * Using `promises` to manage complex asynchronous function chains
 
