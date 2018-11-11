@@ -44,18 +44,19 @@ complete, but incorporating only minimal CSS styling._
 
 #### Login & Account Creation views
 
-![Account login](screenshots/wireframe-accountLogin.png "Account login")
-![Account creation](screenshots/wireframe-createAccount.png "Account creation")
+![Account login](screenshots/nbm-screenshots-login.png "Account login")
+![Account creation](screenshots/nbm-screenshots-createAccount.png "Account creation")
 
 #### Profile & Edit Profile views
 
-![View profile](screenshots/wireframe-viewProfile.png "View profile")
-![Edit profile](screenshots/wireframe-editProfile.png "Edit profile")
+![View profile](screenshots/nbm-screenshots-profile.png "View profile")
+![Edit profile](screenshots/nbm-screenshots-editProfile.png "Edit profile")
 
 #### Open Positions & Apply views
 
-![Open positions](screenshots/wireframe-positionView.png "Open positions")
-![Application](screenshots/wireframe-positionWithApply.png "Application")
+![Open positions](screenshots/nbm-screenshots-positionView.png "Open positions")
+![Apply](screenshots/nmb-screenshots/application.png "Appy to open position")
+![Application](screenshots/nbm-screenshots-submitted.png "Application")
 
 ## Technologies used
 
