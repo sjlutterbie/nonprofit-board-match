@@ -81,35 +81,3 @@ complete, but incorporating only minimal CSS styling._
 ## Live Demo (current deployment)
 
 <https://serene-chamber-93065.herokuapp.com>
-
-## Development Roadmap
-
-When transitioning this app from prototype to production, the following items
-(among others) would be included on the development roadmap:
-
-* General
-  * Rebuild front-end using `React`, plus `React Native` mobile interface
-* Landing page & login  
-  * Google/Facebook OAuth login pathways
-  * Full landing page and supporting website
-* Individual profiles
-  * Upload custom profile photos
-  * LinkedIn API integration
-  * More content-rich individual profile information
-  * "Additional experience" component, w/ "Add/remove experience" functionality
-  * Upload PDF/DOCX resumes
-* Organization management
-  * User-editable organization profiles
-  * More content-rich orgnization profile information
-  * User-creatable open positions
-* Positions
-  * More content-rich position descriptions, including organiation logos
-  * Positions can be opened/closed by organization manager
-* Applications
-  * Email notification of application submission
-  * Individual  profiles included with application submission
-  * Application management for organizational users
-
-## Wireframe Readme (pre-CSS documentation)
-
-[README-wireframes.md](./README-wireframes.md)
