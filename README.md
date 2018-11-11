@@ -54,8 +54,8 @@ complete, but incorporating only minimal CSS styling._
 
 #### Open Positions & Apply views
 
-![Open positions](screenshots/nbm-screenshots-positionView.png "Open positions")
-![Apply](screenshots/nmb-screenshots/application.png "Appy to open position")
+![Open positions](screenshots/nbm-screenshots-positions.png "Open positions")
+![Apply](screenshots/nmb-screenshots-application.png "Appy to open position")
 ![Application](screenshots/nbm-screenshots-submitted.png "Application")
 
 ## Technologies used
