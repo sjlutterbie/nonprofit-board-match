@@ -56,6 +56,9 @@ complete, but incorporating only minimal CSS styling._
 
 ![Open positions](screenshots/nbm-screenshots-positions.png "Open positions")
 ![Apply](screenshots/nbm-screenshots-application.png "Appy to open position")
+
+#### Submitted application record
+
 ![Application](screenshots/nbm-screenshots-submitted.png "Application")
 
 ## Technologies used
