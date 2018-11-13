@@ -5,6 +5,20 @@ __[Live demo of current build (Heroku)](https://serene-chamber-93065.herokuapp.c
 A platform for connecting service-oriented individuals with local non-profit
 organizations in search of board-level support.
 
+Non-profits, especially those operating at a community level, rely heavily on
+support from their Board members to achieve their goals. Dedicated individuals
+contribute their time, expertise, and money, to give back to their community.
+
+However, many non-profits struggle to find board members; in many communities, the
+same few individuals serve on multiple boards, or rotate between boards. This is,
+in a large part, due to a general unawareness about the opportunity, accessibility,
+and value, of joining a local non-profit as a board member.
+
+Nonprofit Board Match provides a hub for local non-profits to announce when they have
+open board positions, and for service-minded individuals to connect with said non-profits,
+and find opportunities to give back to their community of which they may not have been
+aware.
+
 _Note: This is a "minimum viable product" prototype for a larger application.
 This application was built using `Node.js, Express, and MongDB`. The full platform
 would be built using a framework, such as `React [+Native]`._
