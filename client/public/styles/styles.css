@@ -61,6 +61,14 @@ p {
   padding-bottom: 8px;
 }
 
+a {
+  color: var(--primary-color);
+}
+
+a:visited {
+  color: var(--primary-color);
+}
+
 /* LAYOUT DEFAULTS */
 
 * {
@@ -637,6 +645,10 @@ main {
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-end;
+  }
+  
+  .application-view-controls button {
+    font-size: 24px;
   }
   
   
